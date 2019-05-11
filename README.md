@@ -1,2 +1,2 @@
-# BabylonJS-FPS-Theasis
+# Theasis
 FPS game created using BabylonJS
