@@ -1,23 +1,23 @@
 /* eslint-disable semi */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-irregular-whitespace */
-import * as BABYLON from '@babylonjs/core/Legacy/legacy'
-import '@babylonjs/core/Meshes/meshBuilder'
-import { GridMaterial } from '@babylonjs/materials'
-import { _BabylonLoaderRegistered, BoundingBox } from '@babylonjs/core/Legacy/legacy'
-import '@babylonjs/loaders/OBJ';
+import * as BABYLON from "@babylonjs/core/Legacy/legacy"
+import "@babylonjs/core/Meshes/meshBuilder"
+import { GridMaterial } from "@babylonjs/materials"
+import { _BabylonLoaderRegistered, BoundingBox } from "@babylonjs/core/Legacy/legacy"
+import "@babylonjs/loaders/OBJ";
 
 let game;
 
 class Engine{
     constructor(){
         // Scene setup
-        this.canvas = document.getElementById('renderCanvas');
+        this.canvas = document.getElementById("renderCanvas");
         this.engine = new BABYLON.Engine(this.canvas);       
         this.scene = new BABYLON.Scene(this.engine);
         
         // Camera setup
-        this.camera = new BABYLON.FreeCamera('FreeCamera', new BABYLON.Vector3(0, -7.99, -20), this.scene);        
+        this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, -7.99, -20), this.scene);        
         this.camera.attachControl(this.canvas, true);
         this.camera.speed = 0.2;       
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
@@ -34,7 +34,7 @@ class Engine{
     checkJump(context){
         // Check if player/camera is on ground/crate and set its ability to jump        
         this.camera.onCollide = function (colMesh) {
-            if (colMesh.uniqueId === context.scene.getMeshByName('ground').uniqueId || colMesh.uniqueId === context.scene.getMeshByName('crate'.uniqueId)) {          
+            if (colMesh.uniqueId === context.scene.getMeshByName("ground").uniqueId || colMesh.uniqueId === context.scene.getMeshByName("crate".uniqueId)) {          
                 context.camera.canJump = true;
             }
         }    
@@ -45,35 +45,35 @@ function main(){
     game = new Engine()
     
     // Add lights to the scene
-    var light0 = new BABYLON.DirectionalLight('Omni', new BABYLON.Vector3(-2, -5, 2), game.scene)
-    var light1 = new BABYLON.PointLight('Omni', new BABYLON.Vector3(2, -5, -2), game.scene)
+    var light0 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(-2, -5, 2), game.scene)
+    var light1 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(2, -5, -2), game.scene)
     
     // Add ground with grid texture   
-    var ground = BABYLON.Mesh.CreatePlane('ground', 20.0, game.scene)
-    ground.material = new GridMaterial('groundMaterial', game.scene)    
+    var ground = BABYLON.Mesh.CreatePlane("ground", 20.0, game.scene)
+    ground.material = new GridMaterial("groundMaterial", game.scene)    
     ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1)
     ground.material.backFaceCulling = false
     ground.position = new BABYLON.Vector3(5, -10, -15)
     ground.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0)     
 
 
-    // Finally, say which mesh will be collisionable    
-    
+    // Finally, say which mesh will be collisionable   
     ground.checkCollisions = true;
     
 
 
     var assetsManager = new BABYLON.AssetsManager(game.scene);
-    var meshTask = assetsManager.addMeshTask('skull task', '', './assets/models/', 'dummy.babylon');
+    var meshTask = assetsManager.addMeshTask("dummy model loading", "", "./assets/models/", "dummy.babylon");
+    //var meshTask2 = assetsManager.addMeshTask("skull model loading", "", "./assets/models/", "skull.babylon");
 
     meshTask.onSuccess = function (task) {
-        task.loadedMeshes[0].parent = game.scene.getMeshByName('ground');
+        task.loadedMeshes[0].parent = game.scene.getMeshByName("ground");
         task.loadedMeshes[0].setPositionWithLocalVector(new BABYLON.Vector3(0, 8, 0)) // x == z , y == z, z == y from player's view
         task.loadedMeshes[0].rotation = new BABYLON.Vector3(-Math.PI / 2, 0, 0) ;  
         task.loadedMeshes[0].scaling = new BABYLON.Vector3(1, 1, 1);
- 
+
         //Simple invisble crate that acts as a hitbox to avoid expensive pixel-perfect collision
-        var box = BABYLON.MeshBuilder.CreateBox('myBox', {height: 1.5, width: 0.50, depth: 1}, game.scene);
+        var box = BABYLON.MeshBuilder.CreateBox("myBox", {height: 1.5, width: 0.50, depth: 1}, game.scene);
         box.isVisible = false;    
         box.setPositionWithLocalVector(new BABYLON.Vector3(0, 1, 0))
         box.showBoundingBox = true;
@@ -89,12 +89,12 @@ function main(){
     
   
     // Add crosshair as plane   
-    var crosshair = BABYLON.Mesh.CreatePlane('crosshair', 0.05, game.scene)
-    crosshair.material = new BABYLON.StandardMaterial('Mat', game.scene) 
-    crosshair.material.diffuseTexture = new BABYLON.Texture('./assets/textures/crosshair.png', game.scene)
+    /*var crosshair = BABYLON.Mesh.CreatePlane("crosshair", 0.05, game.scene)
+    crosshair.material = new BABYLON.StandardMaterial("Mat", game.scene) 
+    crosshair.material.diffuseTexture = new BABYLON.Texture("./assets/textures/crosshair.png", game.scene)
     crosshair.material.diffuseTexture.hasAlpha = true    
     crosshair.position = new BABYLON.Vector3(0, 0, 1.1)    
-    crosshair.parent = game.camera; 
+    crosshair.parent = game.camera;*/ 
 }
 
 
@@ -104,16 +104,16 @@ function pointerLock(){
     game.scene.onPointerDown = function (evt) {
 
         if (document.pointerLockElement !== game.canvas) {
-            console.log('Was Already locked: ', document.pointerLockElement === game.canvas)
+            console.log("Was Already locked: ", document.pointerLockElement === game.canvas)
 
             if (!isLocked) {
                 game.canvas.requestPointerLock = game.canvas.requestPointerLock || game.canvas.msRequestPointerLock || game.canvas.mozRequestPointerLock || game.canvas.webkitRequestPointerLock || false
+                
                 if (game.canvas.requestPointerLock) {
                     game.canvas.requestPointerLock()
                 }
             }
         }
-
         //continue with shooting requests or whatever :P
         //evt === 0 (left mouse click)
         //evt === 1 (mouse wheel click (not scrolling))
@@ -135,10 +135,10 @@ function pointerLock(){
     }
 
     // Attach events to the document
-    document.addEventListener('pointerlockchange', pointerlockchange, false)
-    document.addEventListener('mspointerlockchange', pointerlockchange, false)
-    document.addEventListener('mozpointerlockchange', pointerlockchange, false)
-    document.addEventListener('webkitpointerlockchange', pointerlockchange, false)
+    document.addEventListener("pointerlockchange", pointerlockchange, false)
+    document.addEventListener("mspointerlockchange", pointerlockchange, false)
+    document.addEventListener("mozpointerlockchange", pointerlockchange, false)
+    document.addEventListener("webkitpointerlockchange", pointerlockchange, false)
 }
 
 
@@ -192,10 +192,10 @@ function cameraManager(){
                 }
             }
 
-            element.addEventListener('keydown', this._onKeyDown, false)
-            element.addEventListener('keyup', this._onKeyUp, false)
+            element.addEventListener("keydown", this._onKeyDown, false)
+            element.addEventListener("keyup", this._onKeyUp, false)
             BABYLON.Tools.RegisterTopRootEvents([
-                { name: 'blur', handler: this._onLostFocus }
+                { name: "blur", handler: this._onLostFocus }
             ])
         }
     }
@@ -203,10 +203,10 @@ function cameraManager(){
     // Unhook
     FreeCameraKeyboardRotateInput.prototype.detachControl = function (element) {
         if (this._onKeyDown) {
-            element.removeEventListener('keydown', this._onKeyDown)
-            element.removeEventListener('keyup', this._onKeyUp)
+            element.removeEventListener("keydown", this._onKeyDown)
+            element.removeEventListener("keyup", this._onKeyUp)
             BABYLON.Tools.UnregisterTopRootEvents([
-                { name: 'blur', handler: this._onLostFocus }
+                { name: "blur", handler: this._onLostFocus }
             ])
             this._keys = []
             this._onKeyDown = null
@@ -251,13 +251,13 @@ function cameraManager(){
     }   
 
     FreeCameraKeyboardRotateInput.prototype.getTypeName = function () {
-        return 'FreeCameraKeyboardRotateInput'
+        return "FreeCameraKeyboardRotateInput"
     }
     FreeCameraKeyboardRotateInput.prototype._onLostFocus = function (e) {
         this._keys = []
     }
     FreeCameraKeyboardRotateInput.prototype.getSimpleName = function () {
-        return 'keyboardRotate'
+        return "keyboardRotate"
     }
 
     // Connect to camera:
@@ -274,6 +274,14 @@ function render(){
 
 
 main();
+//When click event is raised
+window.addEventListener("click", function () {
+    // We try to pick an object
+    var pickResult = game.scene.pick(game.scene.pointerX, game.scene.pointerY);
+    //console.log(pickResult.pickedMesh.name);
+    //game.scene.getMeshByName.pickResult.pickedMesh.isVisible = true;
+
+ }),
 pointerLock();
 cameraManager();
 render();
