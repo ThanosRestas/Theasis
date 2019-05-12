@@ -54,47 +54,58 @@ function main(){
     ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1)
     ground.material.backFaceCulling = false
     ground.position = new BABYLON.Vector3(5, -10, -15)
-    ground.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0)     
-
+    ground.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0)
 
     // Finally, say which mesh will be collisionable   
     ground.checkCollisions = true;
-    
-
 
     var assetsManager = new BABYLON.AssetsManager(game.scene);
-    var meshTask = assetsManager.addMeshTask("dummy model loading", "", "./assets/models/", "dummy.babylon");
-    //var meshTask2 = assetsManager.addMeshTask("skull model loading", "", "./assets/models/", "skull.babylon");
-
-    meshTask.onSuccess = function (task) {
-        task.loadedMeshes[0].parent = game.scene.getMeshByName("ground");
-        task.loadedMeshes[0].setPositionWithLocalVector(new BABYLON.Vector3(0, 8, 0)) // x == z , y == z, z == y from player's view
-        task.loadedMeshes[0].rotation = new BABYLON.Vector3(-Math.PI / 2, 0, 0) ;  
-        task.loadedMeshes[0].scaling = new BABYLON.Vector3(1, 1, 1);
-
-        //Simple invisble crate that acts as a hitbox to avoid expensive pixel-perfect collision
-        var box = BABYLON.MeshBuilder.CreateBox("myBox", {height: 1.5, width: 0.50, depth: 1}, game.scene);
-        box.isVisible = false;    
-        box.setPositionWithLocalVector(new BABYLON.Vector3(0, 1, 0))
-        box.showBoundingBox = true;
-        box.parent =  task.loadedMeshes[0];
-        box.checkCollisions = true;
-
-    }
-    meshTask.onError = function (task, message, exception) {
-        console.log(message, exception);
-    }
-
-    assetsManager.load();
     
-  
-    // Add crosshair as plane   
-    /*var crosshair = BABYLON.Mesh.CreatePlane("crosshair", 0.05, game.scene)
-    crosshair.material = new BABYLON.StandardMaterial("Mat", game.scene) 
-    crosshair.material.diffuseTexture = new BABYLON.Texture("./assets/textures/crosshair.png", game.scene)
-    crosshair.material.diffuseTexture.hasAlpha = true    
-    crosshair.position = new BABYLON.Vector3(0, 0, 1.1)    
-    crosshair.parent = game.camera;*/ 
+    // Called when a single task has been sucessfull
+    assetsManager.onTaskSuccessObservable.add(function(task) {
+        if(task.name == "task"){
+            task.loadedMeshes[0].parent = game.scene.getMeshByName("ground");
+            task.loadedMeshes[0].setPositionWithLocalVector(new BABYLON.Vector3(0, 8, 0)) // x == z , y == z, z == y from player's view
+            task.loadedMeshes[0].rotation = new BABYLON.Vector3(-Math.PI / 2, 0, 0) ;          
+    
+            //Simple invisble crate that acts as a hitbox to avoid expensive pixel-perfect collision
+            var box = BABYLON.MeshBuilder.CreateBox("myBox", {height: 1.5, width: 0.50, depth: 1}, game.scene);
+            box.isVisible = false;    
+            box.setPositionWithLocalVector(new BABYLON.Vector3(0, 1, 0))
+            box.showBoundingBox = true;
+            box.parent =  task.loadedMeshes[0];
+            box.checkCollisions = true;
+        }
+        else if( task.name == "task2"){
+            task.loadedMeshes[0].parent = game.scene.getMeshByName("ground");
+            task.loadedMeshes[0].setPositionWithLocalVector(new BABYLON.Vector3(-6, 8, -4)) // x == z , y == z, z == y from player's view
+            task.loadedMeshes[0].rotation = new BABYLON.Vector3(-Math.PI / 2, 0, 0) ; 
+            task.loadedMeshes[0].scaling = new  BABYLON.Vector3( 0.1,  0.1,  0.1) ;         
+        }
+        else if( task.name == "task3"){
+            task.loadedMeshes[0].parent = game.camera;
+            task.loadedMeshes[0].setPositionWithLocalVector(new BABYLON.Vector3(2, -1.5, 4)) // x == z , y == z, z == y from player's view
+            task.loadedMeshes[0].rotation = new BABYLON.Vector3( Math.PI, -0.2, 0) ; 
+            task.loadedMeshes[0].scaling = new  BABYLON.Vector3( 0.1,  0.1,  0.1) ;         
+        }
+        //console.log('task successful', task);
+    });
+
+    // Called when all tasks in the assetsManger are done
+    assetsManager.onTasksDoneObservable.add(function(tasks) {
+        var errors = tasks.filter(function(task) {return task.taskState === BABYLON.AssetTaskState.ERROR});
+        var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR});
+
+        //console.log(tasks);
+    }); 
+
+    // We add single tasks to the assetsManager
+    assetsManager.addMeshTask("task", "", "../assets/models/", "dummy.babylon");
+    assetsManager.addMeshTask("task2", "", "../assets/models/", "skull.babylon");
+    assetsManager.addMeshTask("task3", "", "../assets/models/", "deagle.obj");
+
+    // Now let the assetsManger load/excecute every task
+    assetsManager.load();     
 }
 
 
@@ -281,7 +292,7 @@ window.addEventListener("click", function () {
     //console.log(pickResult.pickedMesh.name);
     //game.scene.getMeshByName.pickResult.pickedMesh.isVisible = true;
 
- }),
+}),
 pointerLock();
 cameraManager();
 render();
