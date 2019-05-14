@@ -4,7 +4,7 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy"
 import "@babylonjs/core/Meshes/meshBuilder"
 import { GridMaterial } from "@babylonjs/materials"
-import { _BabylonLoaderRegistered, BoundingBox } from "@babylonjs/core/Legacy/legacy"
+import { _BabylonLoaderRegistered, BoundingBox, RotationGizmo } from "@babylonjs/core/Legacy/legacy"
 import "@babylonjs/loaders/OBJ";
 
 let game;
@@ -15,6 +15,7 @@ class Engine{
         this.canvas = document.getElementById("renderCanvas");
         this.engine = new BABYLON.Engine(this.canvas);       
         this.scene = new BABYLON.Scene(this.engine);
+        this.active = false;
         
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2.01, -8), this.scene);        
@@ -22,7 +23,7 @@ class Engine{
         this.camera.speed = 0.2;       
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
         this.camera.checkCollisions = true;
-        this.camera.applyGravity = true; 
+        //this.camera.applyGravity = true; 
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true
@@ -31,7 +32,7 @@ class Engine{
 }
 
 function main(){
-    game = new Engine();      
+    game = new Engine();   
 }
 
 
@@ -49,7 +50,15 @@ function assetLoader(){
         var ground = game.scene.getMeshByName("ground");
         ground.material = new GridMaterial("groundMaterial", game.scene)    
         ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1)
-        ground.material.backFaceCulling = false 
+        ground.material.backFaceCulling = false
+        
+        var gun = game.scene.getMeshByName("SMDImport");
+        gun.parent = game.camera;        
+        gun.rotation.z =  Math.PI;        
+        gun.rotation.y = -Math.PI;
+        gun.scaling = new BABYLON.Vector3( 0.1, 0.1, 0.1);
+        gun.position = new BABYLON.Vector3(1, -1, 1);
+          
     }); 
     // Called when all tasks in the assetsManger are done
     assetsManager.onTasksDoneObservable.add(function(tasks) {
@@ -60,7 +69,9 @@ function assetLoader(){
     });
 
     // We add single tasks to the assetsManager
-    assetsManager.addMeshTask("task", "", "../assets/models/", "test3.babylon"); 
+    assetsManager.addMeshTask("task", "", "../assets/models/", "test4.babylon");
+    assetsManager.addMeshTask("task", "", "../assets/models/", "deagle.obj");
+
     // Now let the assetsManger load/excecute every task
     assetsManager.load();
 }
@@ -95,9 +106,12 @@ function pointerLock(){
         // If the user is already locked
         if (!controlEnabled) {
             game.camera.detachControl(game.canvas)
+            game.active = false;
             isLocked = false
+            
         } else {
             game.camera.attachControl(game.canvas)
+            game.active = true;
             isLocked = true
         }
     }
@@ -244,14 +258,19 @@ function render(){
 //When click event is raised
 window.addEventListener("click", function () {
     // We try to pick an object
-    var pickResult = game.scene.pick(game.scene.pointerX, game.scene.pointerY);
+    var width  =  game.scene.getEngine().getRenderWidth();
+    var height = game.scene.getEngine().getRenderHeight();
+    //var pickResult = game.scene.pick(game.scene.pointerX, game.scene.pointerY);
+    var pickResult = game.scene.pick(width/2, height/2);
     var model = pickResult.pickedMesh;
-
-    if(pickResult !== null && model !== null){
+    //range max range == z = 60
+    if(game.active == true && pickResult !== null && model !== null){
         console.log(model.name);
         game.scene.getMeshByName(model.name).dispose();
     }
 }),
+
+
 
 main();
 assetLoader();
