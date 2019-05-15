@@ -23,7 +23,7 @@ class Engine{
         this.camera.speed = 0.2;       
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
         this.camera.checkCollisions = true;
-        //this.camera.applyGravity = true; 
+        this.camera.applyGravity = true; 
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true
