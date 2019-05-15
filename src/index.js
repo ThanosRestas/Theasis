@@ -27,7 +27,7 @@ class Engine{
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true
-        this.scene.gravity = new BABYLON.Vector3(0, -1, 0)  
+        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0)  
     }
 }
 
@@ -69,7 +69,7 @@ function assetLoader(){
     });
 
     // We add single tasks to the assetsManager
-    assetsManager.addMeshTask("task", "", "../assets/models/", "test4.babylon");
+    assetsManager.addMeshTask("task", "", "../assets/models/", "test5.babylon");
     assetsManager.addMeshTask("task", "", "../assets/models/", "deagle.obj");
 
     // Now let the assetsManger load/excecute every task
