@@ -255,6 +255,9 @@ function render(){
     })   
 }
 
+
+
+
 //When click event is raised
 window.addEventListener("click", function () {
     // We try to pick an object
@@ -267,8 +270,46 @@ window.addEventListener("click", function () {
     if(game.active == true && pickResult !== null && model !== null){
         console.log(model.name);
         game.scene.getMeshByName(model.name).dispose();
+        
     }
-}),
+
+    //Animate the gun
+    var array = game.camera.getChildren();
+    var gun = array[0];
+    //console.log(array[0]);
+    // The initial rotation is the initial mesh rotation
+    var start = gun.rotation;
+    var end = start.clone();
+    // The actual rotation of the mesh
+    end.x += Math.PI/10;
+
+    // Create the Animation object
+    var display = new BABYLON.Animation(
+        "fire",
+        "rotation",
+        60,
+        BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+
+    // Animations keys
+    var keys = [{
+        frame: 0,
+        value: start
+    },{
+        frame: 10,
+        value: end
+    },{
+        frame: 100,
+        value: start
+    }];
+
+    display.setKeys(keys);
+
+    gun.animations.push(display);
+    
+    game.scene.beginAnimation(gun, 0, 100, false);
+    
+})
 
 
 
