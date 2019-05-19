@@ -3,10 +3,8 @@
 /* eslint-disable no-irregular-whitespace */
 import * as BABYLON from "@babylonjs/core/Legacy/legacy"
 import "@babylonjs/core/Meshes/meshBuilder"
-import { GridMaterial } from "@babylonjs/materials"
 import { _BabylonLoaderRegistered, BoundingBox, RotationGizmo } from "@babylonjs/core/Legacy/legacy"
 import "@babylonjs/loaders/OBJ";
-
 import Engine from "./engine";
 import Character from "./character";
 
@@ -16,7 +14,7 @@ function main(){
     game = new Engine();      
     player = new Character(game);
 
-    game.assetManager1();
+    game.assetManager();
     game.pointerLock();    
     player.characterController();    
     game.render();

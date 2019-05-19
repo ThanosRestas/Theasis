@@ -125,7 +125,7 @@ export default class Character{
         
         // Shooting
 
-        /*//When click event is raised
+        //When click event is raised
         window.addEventListener("click", function () {
             // We try to pick an object
             var width  =  game.scene.getEngine().getRenderWidth()
@@ -176,7 +176,7 @@ export default class Character{
     
             game.scene.beginAnimation(gun, 0, 100, false)
     
-        })*/
+        })
 
     }    
 }

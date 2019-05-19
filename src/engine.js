@@ -1,3 +1,6 @@
+import { GridMaterial } from "@babylonjs/materials"
+
+
 export default class Engine{
     constructor(){
         // Scene setup
@@ -20,7 +23,7 @@ export default class Engine{
         
     }
 
-    assetManager1(){
+    assetManager(){
 
         var camera = this.camera;
         var scene = this.scene;
@@ -32,21 +35,21 @@ export default class Engine{
         var assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
-            //console.log("task successful", task);
+            //console.log("task successful", task);            
 
             // Setting ground material
-            var ground = scene.getMeshByName("ground");
+            var ground = scene.getMeshByName("ground");           
             ground.material = new GridMaterial("groundMaterial", scene)    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1)
             ground.material.backFaceCulling = false
             
-            var gun = scene.getMeshByName("SMDImport");
-            console.log("yo");
-            //gun.parent = camera;        
-            //gun.rotation.z =  Math.PI;        
-            //gun.rotation.y = -Math.PI;
-            //gun.scaling = new BABYLON.Vector3( 0.1, 0.1, 0.1);
-            //gun.position = new BABYLON.Vector3(1, -1, 1);
+            var gun = scene.getMeshByName("SMDImport");                     
+            gun.parent = camera;        
+            gun.rotation.z =  Math.PI;        
+            gun.rotation.y = -Math.PI;
+        
+            gun.scaling = new BABYLON.Vector3( 0.1, 0.1, 0.1);
+            gun.position = new BABYLON.Vector3(1, -1, 1);
             
         }); 
         
