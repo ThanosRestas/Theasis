@@ -101,13 +101,11 @@ export default class Engine{
     
             // If the user is already locked
             if (!controlEnabled) {
-                camera.detachControl(canvas)
-                this.active = false;
+                camera.detachControl(canvas)                
                 isLocked = false
                 
             } else {
-                camera.attachControl(canvas)
-                this.active = true;
+                camera.attachControl(canvas)                
                 isLocked = true
             }
         }

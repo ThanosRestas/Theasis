@@ -127,15 +127,16 @@ export default class Character{
 
         //When click event is raised
         window.addEventListener("click", function () {
+           
             // We try to pick an object
             var width  =  game.scene.getEngine().getRenderWidth()
-            var height = game.scene.getEngine().getRenderHeight()
-            //var pickResult = game.scene.pick(game.scene.pointerX, game.scene.pointerY);
+            var height = game.scene.getEngine().getRenderHeight()            
+            
             var pickResult = game.scene.pick(width/2, height/2)
             var model = pickResult.pickedMesh
             //range max range == z = 60
-            if(game.active == true && pickResult !== null && model !== null){
-                console.log(model.name)
+            if(pickResult !== null && model !== null){
+                console.log(model.name);
                 game.scene.getMeshByName(model.name).dispose()
         
             }
