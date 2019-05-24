@@ -15,7 +15,7 @@ export default class Engine{
         this.camera.speed = 0.2;       
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
         this.camera.checkCollisions = true;
-        this.camera.applyGravity = true; 
+        //this.camera.applyGravity = true; 
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true
@@ -62,7 +62,7 @@ export default class Engine{
         });
 
         // We add single tasks to the assetsManager
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test5.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test6.babylon");
         assetsManager.addMeshTask("task", "", "../assets/models/", "deagle.obj");
 
         // Now let the assetsManger load/excecute every task

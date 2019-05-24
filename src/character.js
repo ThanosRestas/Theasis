@@ -7,12 +7,46 @@ export default class Character{
         this.health = 0
         this.energy = 0
         this.ammunition = 0
-    }    
+    }
+    
+  
 
     characterController(){
-        var camera = this.camera 
-        var game = this.game;
+        var camera = this.camera;
+        var game = this.game;       
 
+        /*//Setting up the ray
+        // We try to pick an object
+        var width  =  game.scene.getEngine().getRenderWidth()
+        var height = game.scene.getEngine().getRenderHeight()            
+        
+       
+        var origin = game.camera.position;
+        var forward = new BABYLON.Vector3(0, 0, 1);
+
+        // vec to local
+        var m = camera.getWorldMatrix();
+        var v = BABYLON.Vector3.TransformCoordinates(forward, m);
+
+        //forward = this.vecToLocal(forward, camera.position);
+        forward = v;
+
+        var direction = forward.subtract(origin);
+        direction = BABYLON.Vector3.Normalize(direction);
+        
+        var length = 10000;
+        var ray = new BABYLON.Ray(origin, direction, length);
+        
+        let rayHelper = new BABYLON.RayHelper(ray);		
+        rayHelper.show(game.scene);
+
+        var hit = game.scene.pickWithRay(ray);
+
+        if (hit.pickedMesh){
+            console.log(hit.pickedMesh);
+        }*/
+        
+        
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {
             this._keys = []
@@ -121,27 +155,28 @@ export default class Character{
         }
     
         // Connect to camera:
-        this.camera.inputs.add(new FreeCameraKeyboardRotateInput()) 
-        
-        // Shooting
+        this.camera.inputs.add(new FreeCameraKeyboardRotateInput())  
 
         //When click event is raised
-        window.addEventListener("click", function () {
-           
+        window.addEventListener("click", function () {       
+
+
             // We try to pick an object
             var width  =  game.scene.getEngine().getRenderWidth()
-            var height = game.scene.getEngine().getRenderHeight()            
+            var height = game.scene.getEngine().getRenderHeight()    
+
             
-            var pickResult = game.scene.pick(width/2, height/2)
-            var model = pickResult.pickedMesh
-            //range max range == z = 60
-            if(pickResult !== null && model !== null){
+            var ray = game.camera.getForwardRay(10000);
+            var hit = game.scene.pickWithRay(ray);
+            var model = hit.pickedMesh;
+
+            if(hit !== null && model !== null){
                 console.log(model.name);
                 game.scene.getMeshByName(model.name).dispose()
         
             }
 
-            //Animate the gun
+            /*//Animate the gun
             var array = camera.getChildren()
             var gun = array[0]
             //console.log(array[0]);
@@ -149,7 +184,7 @@ export default class Character{
             var start = gun.rotation
             var end = start.clone()
             // The actual rotation of the mesh
-            end.x += Math.PI/10
+            end.x += Math.PI/10           
 
             // Create the Animation object
             var display = new BABYLON.Animation(
@@ -175,9 +210,11 @@ export default class Character{
 
             gun.animations.push(display)
     
-            game.scene.beginAnimation(gun, 0, 100, false)
+            game.scene.beginAnimation(gun, 0, 100, false)*/               
+                     
     
         })
 
     }    
 }
+
