@@ -8,14 +8,20 @@ import "@babylonjs/loaders/OBJ";
 import Engine from "./engine";
 import Character from "./character";
 
+
+
 let game, player;
 
 function main(){
-    game = new Engine();      
-    player = new Character(game);
+    
+    game = new Engine();
+      
 
     game.assetManager();
-    game.pointerLock();    
+    game.pointerLock();
+    player = new Character(game);    
+    
+
     player.characterController();    
     game.render();
 }

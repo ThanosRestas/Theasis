@@ -11,7 +11,7 @@ module.exports = {
         indent: ['error', 4],
         'linebreak-style': ['error', 'windows'],
         quotes: ['error', 'double'],
-        semi: ['error', 'never']
+        semi: ['error', 'always']
     },
     globals: {
         module: true,

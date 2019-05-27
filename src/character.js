@@ -1,51 +1,18 @@
+import Weapon from "./weapon"
+
 export default class Character{
     constructor(game){
         this.game = game;
         this.scene = game.scene
         this.camera = game.camera
-
+        
         this.health = 0
         this.energy = 0
-        this.ammunition = 0
+        this.ammunition = 0      
     }
+
     
-  
-
-    characterController(){
-        var camera = this.camera;
-        var game = this.game;       
-
-        /*//Setting up the ray
-        // We try to pick an object
-        var width  =  game.scene.getEngine().getRenderWidth()
-        var height = game.scene.getEngine().getRenderHeight()            
-        
-       
-        var origin = game.camera.position;
-        var forward = new BABYLON.Vector3(0, 0, 1);
-
-        // vec to local
-        var m = camera.getWorldMatrix();
-        var v = BABYLON.Vector3.TransformCoordinates(forward, m);
-
-        //forward = this.vecToLocal(forward, camera.position);
-        forward = v;
-
-        var direction = forward.subtract(origin);
-        direction = BABYLON.Vector3.Normalize(direction);
-        
-        var length = 10000;
-        var ray = new BABYLON.Ray(origin, direction, length);
-        
-        let rayHelper = new BABYLON.RayHelper(ray);		
-        rayHelper.show(game.scene);
-
-        var hit = game.scene.pickWithRay(ray);
-
-        if (hit.pickedMesh){
-            console.log(hit.pickedMesh);
-        }*/
-        
+    characterController () {      
         
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {
@@ -119,27 +86,27 @@ export default class Character{
                 // Keyboard
                 for (var index = 0; index < this._keys.length; index++) {
                     var keyCode = this._keys[index]
-                    var speed = camera._computeLocalCameraSpeed()                
+                    var speed = this.camera._computeLocalCameraSpeed()                
                     if (this.keysLeft.indexOf(keyCode) !== -1) {                    
-                        camera._localDirection.copyFromFloats(-speed, 0, 0)
+                        this.camera._localDirection.copyFromFloats(-speed, 0, 0)
                     }
                     else if (this.keysRight.indexOf(keyCode) !== -1) {
-                        camera._localDirection.copyFromFloats(+speed, 0, 0)
+                        this.camera._localDirection.copyFromFloats(+speed, 0, 0)
                     }
                     else if (this.keysBackward.indexOf(keyCode) !== -1){
-                        camera._localDirection.copyFromFloats(0, 0, -speed)
+                        this.camera._localDirection.copyFromFloats(0, 0, -speed)
                     }
                     else if (this.keysForward.indexOf(keyCode) !== -1){
-                        camera._localDirection.copyFromFloats(0, 0, +speed)
+                        this.camera._localDirection.copyFromFloats(0, 0, +speed)
                     }
                
-                    if (camera.getScene().useRightHandedSystem) {
-                        camera._localDirection.z *= -1
+                    if (this.camera.getScene().useRightHandedSystem) {
+                        this.camera._localDirection.z *= -1
                     }
     
-                    camera.getViewMatrix().invertToRef(camera._cameraTransformMatrix)
-                    BABYLON.Vector3.TransformNormalToRef(camera._localDirection, camera._cameraTransformMatrix, camera._transformedDirection)
-                    camera.cameraDirection.addInPlace(camera._transformedDirection)                
+                    this.camera.getViewMatrix().invertToRef(this.camera._cameraTransformMatrix)
+                    BABYLON.Vector3.TransformNormalToRef(this.camera._localDirection, this.camera._cameraTransformMatrix, this.camera._transformedDirection)
+                    this.camera.cameraDirection.addInPlace(this.camera._transformedDirection)                
                 }            
             }        
         }   
@@ -155,66 +122,7 @@ export default class Character{
         }
     
         // Connect to camera:
-        this.camera.inputs.add(new FreeCameraKeyboardRotateInput())  
-
-        //When click event is raised
-        window.addEventListener("click", function () {       
-
-
-            // We try to pick an object
-            var width  =  game.scene.getEngine().getRenderWidth()
-            var height = game.scene.getEngine().getRenderHeight()    
-
-            
-            var ray = game.camera.getForwardRay(10000);
-            var hit = game.scene.pickWithRay(ray);
-            var model = hit.pickedMesh;
-
-            if(hit !== null && model !== null){
-                console.log(model.name);
-                game.scene.getMeshByName(model.name).dispose()
-        
-            }
-
-            /*//Animate the gun
-            var array = camera.getChildren()
-            var gun = array[0]
-            //console.log(array[0]);
-            // The initial rotation is the initial mesh rotation
-            var start = gun.rotation
-            var end = start.clone()
-            // The actual rotation of the mesh
-            end.x += Math.PI/10           
-
-            // Create the Animation object
-            var display = new BABYLON.Animation(
-                "fire",
-                "rotation",
-                60,
-                BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-                BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT)
-
-            // Animations keys
-            var keys = [{
-                frame: 0,
-                value: start
-            },{
-                frame: 10,
-                value: end
-            },{
-                frame: 100,
-                value: start
-            }]
-
-            display.setKeys(keys)
-
-            gun.animations.push(display)
-    
-            game.scene.beginAnimation(gun, 0, 100, false)*/               
-                     
-    
-        })
-
-    }    
+        this.camera.inputs.add(new FreeCameraKeyboardRotateInput());  
+    }
 }
 

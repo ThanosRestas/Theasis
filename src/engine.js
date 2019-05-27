@@ -15,11 +15,14 @@ export default class Engine{
         this.camera.speed = 0.2;       
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
         this.camera.checkCollisions = true;
-        //this.camera.applyGravity = true; 
+        this.camera.applyGravity = true; 
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true
-        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0)        
+        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0)
+        
+        //Shooting
+        this.shoot = false;
         
     }
 
@@ -93,8 +96,24 @@ export default class Engine{
             //evt === 0 (left mouse click)
             //evt === 1 (mouse wheel click (not scrolling))
             //evt === 2 (right mouse click)
+
+            if(evt.button == 0){
+
+                let array = camera.getChildren();
+                //console.log(array[0]);
+                 
+                let ray = camera.getForwardRay(10000);
+                let hit = scene.pickWithRay(ray);
+                let model = hit.pickedMesh;                  
+        
+                if(hit !== null && model !== null){
+                    console.log(model.name);
+                    scene.getMeshByName(model.name).dispose();       
+                }                               
+            }            
         }
-    
+       
+
         // Event listener when the pointerlock is updated (or removed by pressing ESC for example).
         var pointerlockchange = function () {
             var controlEnabled = document.pointerLockElement || document.mozPointerLockElement || document.webkitPointerLockElement || document.msPointerLockElement || false
@@ -103,10 +122,14 @@ export default class Engine{
             if (!controlEnabled) {
                 camera.detachControl(canvas)                
                 isLocked = false
+                this.active = false
+                //console.log(this.active);
                 
             } else {
                 camera.attachControl(canvas)                
                 isLocked = true
+                this.active = true;
+                //console.log(this.active);
             }
         }
     
