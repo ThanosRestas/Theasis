@@ -12,22 +12,20 @@ import Character from "./character";
 
 let game, player;
 
-function main(){
-    
+function main(){    
     game = new Engine();
-      
+    player = new Character(game);
+    
+    game.player = player;
 
+    game.pointerLock();
     game.assetManager();
     game.pointerLock();
-    player = new Character(game);    
-    
 
     player.characterController();    
     game.render();
+    
 }
-
-
-
 
 main();
 

@@ -5,10 +5,10 @@ export default class Character{
         this.game = game;
         this.scene = game.scene
         this.camera = game.camera
+
+        this.weapon = 0;
         
-        this.health = 0
-        this.energy = 0
-        this.ammunition = 0      
+           
     }
 
     

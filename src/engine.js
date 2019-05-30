@@ -1,4 +1,5 @@
-import { GridMaterial } from "@babylonjs/materials"
+import { GridMaterial } from "@babylonjs/materials";
+import Weapon from "./weapon";
 
 
 export default class Engine{
@@ -7,7 +8,7 @@ export default class Engine{
         this.canvas = document.getElementById("renderCanvas");
         this.engine = new BABYLON.Engine(this.canvas);       
         this.scene = new BABYLON.Scene(this.engine);
-        this.active = false;
+        
         
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2.01, -8), this.scene);        
@@ -18,23 +19,22 @@ export default class Engine{
         this.camera.applyGravity = true; 
 
         // Enable collisions and gravity in scene
-        this.scene.collisionsEnabled = true
-        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0)
-        
-        //Shooting
-        this.shoot = false;
-        
-    }
+        this.scene.collisionsEnabled = true;
+        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0);
+
+        // Entities
+        this.player = 0;
+}
 
     assetManager(){
-
         var camera = this.camera;
         var scene = this.scene;
-
+        var player = this.player;
         // Add lights to the scene
-        var light0 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(-2, -5, 2), scene)
-        var light1 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(2, -5, -2), scene) 
+        var light0 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(-2, -5, 2), scene);
+        var light1 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(2, -5, -2), scene); 
 
+        // Asset loading
         var assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
@@ -42,25 +42,27 @@ export default class Engine{
 
             // Setting ground material
             var ground = scene.getMeshByName("ground");           
-            ground.material = new GridMaterial("groundMaterial", scene)    
-            ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1)
-            ground.material.backFaceCulling = false
-            
-            var gun = scene.getMeshByName("SMDImport");                     
+            ground.material = new GridMaterial("groundMaterial", scene);    
+            ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
+            ground.material.backFaceCulling = false;            
+
+            //Setting up the weapon's mesh in the scene
+            var gun = scene.getMeshByName("SMDImport");// Pistol                             
             gun.parent = camera;        
             gun.rotation.z =  Math.PI;        
-            gun.rotation.y = -Math.PI;
-        
+            gun.rotation.y = -Math.PI;        
             gun.scaling = new BABYLON.Vector3( 0.1, 0.1, 0.1);
             gun.position = new BABYLON.Vector3(1, -1, 1);
-            
-        }); 
-        
+
+            // Setting up the weapon's object in the player            
+            player.weapon = new Weapon("deagle", gun, gun.rotation);            
+            //player.weapon.setAnimations();
+        });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
 
-            var errors = tasks.filter(function(task) {return task.taskState === BABYLON.AssetTaskState.ERROR});
-            var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR}); 
+            var errors = tasks.filter(function(task) {return task.taskState === BABYLON.AssetTaskState.ERROR;});
+            var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR;}); 
             //console.log(tasks);
         });
 
@@ -77,18 +79,19 @@ export default class Engine{
         var canvas = this.canvas;
         var scene = this.scene;
         var camera = this.camera;
-        var isLocked = false
+        var player = this.player;
+        var isLocked = false;
     
         scene.onPointerDown = function (evt) {
     
             if (document.pointerLockElement !== canvas) {
-                console.log("Was Already locked: ", document.pointerLockElement === canvas)
+                console.log("Was Already locked: ", document.pointerLockElement === canvas);
     
                 if (!isLocked) {
-                    canvas.requestPointerLock = canvas.requestPointerLock || canvas.msRequestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock || false
+                    canvas.requestPointerLock = canvas.requestPointerLock || canvas.msRequestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock || false;
                     
                     if (canvas.requestPointerLock) {
-                        canvas.requestPointerLock()
+                        canvas.requestPointerLock();
                     }
                 }
             }
@@ -97,53 +100,52 @@ export default class Engine{
             //evt === 1 (mouse wheel click (not scrolling))
             //evt === 2 (right mouse click)
 
-            if(evt.button == 0){
+            if(evt.button == 0){             
 
-                let array = camera.getChildren();
-                //console.log(array[0]);
-                 
+                //Play current Weapon's animation
+                scene.beginAnimation(player.weapon.mesh, 0, 100, false); 
+                
+                // Destroy camera's ray target
                 let ray = camera.getForwardRay(10000);
                 let hit = scene.pickWithRay(ray);
-                let model = hit.pickedMesh;                  
+                let model = hit.pickedMesh;             
         
                 if(hit !== null && model !== null){
-                    console.log(model.name);
+                    console.log("Target Destroyed :" + model.name);
                     scene.getMeshByName(model.name).dispose();       
                 }                               
             }            
-        }
-       
+        };   
+        
 
         // Event listener when the pointerlock is updated (or removed by pressing ESC for example).
         var pointerlockchange = function () {
-            var controlEnabled = document.pointerLockElement || document.mozPointerLockElement || document.webkitPointerLockElement || document.msPointerLockElement || false
-    
+            var controlEnabled = document.pointerLockElement || document.mozPointerLockElement || document.webkitPointerLockElement || document.msPointerLockElement || false;
+            
             // If the user is already locked
             if (!controlEnabled) {
-                camera.detachControl(canvas)                
-                isLocked = false
-                this.active = false
-                //console.log(this.active);
+                camera.detachControl(canvas);                
+                isLocked = false;
                 
             } else {
-                camera.attachControl(canvas)                
-                isLocked = true
+                camera.attachControl(canvas);                
+                isLocked = true;
                 this.active = true;
-                //console.log(this.active);
             }
-        }
+        };
     
         // Attach events to the document
-        document.addEventListener("pointerlockchange", pointerlockchange, false)
-        document.addEventListener("mspointerlockchange", pointerlockchange, false)
-        document.addEventListener("mozpointerlockchange", pointerlockchange, false)
-        document.addEventListener("webkitpointerlockchange", pointerlockchange, false)
+        document.addEventListener("pointerlockchange", pointerlockchange, false);
+        document.addEventListener("mspointerlockchange", pointerlockchange, false);
+        document.addEventListener("mozpointerlockchange", pointerlockchange, false);
+        document.addEventListener("webkitpointerlockchange", pointerlockchange, false);
     }
 
     render(){
         // Render every frame
         this.engine.runRenderLoop(() => {
-            this.scene.render()                        
-        })    
+            
+            this.scene.render();                        
+        });    
     }
 }

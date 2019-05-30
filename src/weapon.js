@@ -1,5 +1,33 @@
 export default class Weapon{
-    constructor(mesh){
-        this.mesh = mesh;       
+    constructor(name, mesh, start, display){
+        this.name = name;
+        this.mesh = mesh;
+        
+        // Animation properties
+        this.start = start;
+        this.end = start.clone();
+        this.end.x += Math.PI/10;
+
+        // Setting up keys based on start-end values
+        this.keys = [{frame: 0,value: this.start},{frame: 10,value: this.end},{frame: 100,value: this.start}];
+
+        this.display = new BABYLON.Animation(
+            "fire",
+            "rotation",
+            60,
+            BABYLON.Animation.ANIMATIONTYPE_VECTOR3,            
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);           
+        
+        
+        this.setAnimations();        
     }
+
+    setAnimations(){
+        this.display.setKeys(this.keys);
+        
+
+        this.mesh.animations.push(this.display);
+
+        console.log("Animations Created for:" + this.name);
+    }  
 }
