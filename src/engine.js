@@ -1,6 +1,6 @@
 import { GridMaterial } from "@babylonjs/materials";
 import Weapon from "./weapon";
-
+import * as GUI from "@babylonjs/gui";
 
 export default class Engine{
     constructor(){
@@ -8,7 +8,9 @@ export default class Engine{
         this.canvas = document.getElementById("renderCanvas");
         this.engine = new BABYLON.Engine(this.canvas);       
         this.scene = new BABYLON.Scene(this.engine);
-        
+
+        // Entities
+        this.player;        
         
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2.01, -8), this.scene);        
@@ -20,16 +22,16 @@ export default class Engine{
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true;
-        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0);
+        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0);       
 
-        // Entities
-        this.player = 0;
-}
+        this.hud = this.hudManager();
+    }
 
     assetManager(){
         var camera = this.camera;
         var scene = this.scene;
         var player = this.player;
+
         // Add lights to the scene
         var light0 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(-2, -5, 2), scene);
         var light1 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(2, -5, -2), scene); 
@@ -56,7 +58,6 @@ export default class Engine{
 
             // Setting up the weapon's object in the player            
             player.weapon = new Weapon("deagle", gun, gun.rotation);            
-            //player.weapon.setAnimations();
         });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
@@ -74,16 +75,20 @@ export default class Engine{
         assetsManager.load();
     }
 
-
     pointerLock(){
         var canvas = this.canvas;
         var scene = this.scene;
         var camera = this.camera;
         var player = this.player;
-        var isLocked = false;
-    
+        var hud = this.hud;
+        var isLocked = false;   
+ 
         scene.onPointerDown = function (evt) {
-    
+            
+            // Getting the current weapon and settings the ammo info
+            var currentWeapon = player.weapon;
+            hud[2].text = String(currentWeapon.ammo);
+
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
     
@@ -103,7 +108,10 @@ export default class Engine{
             if(evt.button == 0){             
 
                 //Play current Weapon's animation
-                scene.beginAnimation(player.weapon.mesh, 0, 100, false); 
+                scene.beginAnimation(player.weapon.mesh, 0, 100, false);
+                // Remove ammunition
+                player.weapon.ammo -= 1;
+                
                 
                 // Destroy camera's ray target
                 let ray = camera.getForwardRay(10000);
@@ -115,8 +123,7 @@ export default class Engine{
                     scene.getMeshByName(model.name).dispose();       
                 }                               
             }            
-        };   
-        
+        };          
 
         // Event listener when the pointerlock is updated (or removed by pressing ESC for example).
         var pointerlockchange = function () {
@@ -139,6 +146,51 @@ export default class Engine{
         document.addEventListener("mspointerlockchange", pointerlockchange, false);
         document.addEventListener("mozpointerlockchange", pointerlockchange, false);
         document.addEventListener("webkitpointerlockchange", pointerlockchange, false);
+    }
+
+    hudManager(){
+        // GUI setup
+        var advancedTexture = new GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this.scene);
+
+        // Array filled with our three info bars
+        var hudComponents = [];
+
+        // Health bar
+        var healthBar = new GUI.Rectangle("healthBar");
+        healthBar.left = -500;
+        healthBar.top = 400;
+        healthBar.width = 0.2;
+        healthBar.height = "20px";
+        healthBar.cornerRadius = 20;
+        healthBar.color = "white";
+        healthBar.thickness = 4;
+        healthBar.background = "red";
+        advancedTexture.addControl(healthBar);
+        
+        // Energy Bar
+        var energyBar = new GUI.Rectangle("energyBar");
+        energyBar.left = -500;
+        energyBar.top = 430;
+        energyBar.width = 0.2;
+        energyBar.height = "20px";
+        energyBar.cornerRadius = 20;
+        energyBar.color = "white";
+        energyBar.thickness = 4;
+        energyBar.background = "blue";
+        advancedTexture.addControl(energyBar); 
+
+        // Ammo bar
+        var ammoBar = new GUI.TextBlock();
+        ammoBar.text = "AMMO";
+        ammoBar.color = "white";
+        ammoBar.fontSize = 24;
+        ammoBar.top = 350;
+        ammoBar.left = -500;
+        advancedTexture.addControl(ammoBar);
+
+        hudComponents.push(healthBar, energyBar, ammoBar);
+
+        return hudComponents;
     }
 
     render(){

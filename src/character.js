@@ -6,11 +6,13 @@ export default class Character{
         this.scene = game.scene
         this.camera = game.camera
 
-        this.weapon = 0;
-        
-           
-    }
+        this.health = 100;
+        this.energy = 100;
 
+
+        // Change into weapon array to store all weapons
+        this.weapon;          
+    }
     
     characterController () {      
         
