@@ -34,7 +34,8 @@ export default class Engine{
 
         // Add lights to the scene
         var light0 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(-2, -5, 2), scene);
-        var light1 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(2, -5, -2), scene); 
+        var light2 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(2, -5, 2), scene);
+        var light3 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(2, -5, -2), scene); 
 
         // Asset loading
         var assetsManager = new BABYLON.AssetsManager(scene);     
@@ -46,18 +47,10 @@ export default class Engine{
             var ground = scene.getMeshByName("ground");           
             ground.material = new GridMaterial("groundMaterial", scene);    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
-            ground.material.backFaceCulling = false;            
+            ground.material.backFaceCulling = false; 
 
-            //Setting up the weapon's mesh in the scene
-            var gun = scene.getMeshByName("SMDImport");// Pistol                             
-            gun.parent = camera;        
-            gun.rotation.z =  Math.PI;        
-            gun.rotation.y = -Math.PI;        
-            gun.scaling = new BABYLON.Vector3( 0.1, 0.1, 0.1);
-            gun.position = new BABYLON.Vector3(1, -1, 1);
-
-            // Setting up the weapon's object in the player            
-            player.weapon = new Weapon("deagle", gun, gun.rotation);            
+            // Add the pistol mesh in the scene
+            addPistol(player, scene, camera);           
         });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
@@ -68,8 +61,10 @@ export default class Engine{
         });
 
         // We add single tasks to the assetsManager
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test6.babylon");
-        assetsManager.addMeshTask("task", "", "../assets/models/", "deagle.obj");
+        // Level design load
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test8.babylon");
+        // Props load        
+        assetsManager.addMeshTask("task", "", "../assets/models/", "Pistol.obj");
 
         // Now let the assetsManger load/excecute every task
         assetsManager.load();
@@ -200,4 +195,31 @@ export default class Engine{
             this.scene.render();                        
         });    
     }
+}
+
+function addPistol(player, scene, camera){
+
+    // Picking each part of the pistol in the scene
+    var part1 = scene.getMeshByName("Pistol_Cube.002");
+    var part2 = scene.getMeshByName("_mm1");
+    var part3 = scene.getMeshByName("_mm2");
+    var part4 = scene.getMeshByName("_mm3");
+    var part5 = scene.getMeshByName("_mm4");
+
+    // Combinging them in a single node
+    var gun2 = new BABYLON.TransformNode("root");
+    part1.parent = gun2;
+    part2.parent = gun2;
+    part3.parent = gun2;
+    part4.parent = gun2;
+    part5.parent = gun2; 
+
+    // Set its position on the player
+    gun2.parent = camera; 
+    gun2.scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
+    gun2.rotation.y = -Math.PI;
+    gun2.position = new BABYLON.Vector3(1, -1, 3);
+    
+    // Setting up the weapon's object in the player            
+    player.weapon = new Weapon("deagle", gun2, gun2.rotation); 
 }
