@@ -13,7 +13,7 @@ export default class Engine{
         this.player;        
         
         // Camera setup
-        this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2.01, -8), this.scene);        
+        this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2.01, -8), this.scene);        
         this.camera.attachControl(this.canvas, true);
         this.camera.speed = 0.2;       
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
@@ -62,9 +62,12 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test8.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test10.babylon");
         // Props load        
         assetsManager.addMeshTask("task", "", "../assets/models/", "Pistol.obj");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "tree_circle.obj");
+
+
 
         // Now let the assetsManger load/excecute every task
         assetsManager.load();
@@ -81,8 +84,9 @@ export default class Engine{
         scene.onPointerDown = function (evt) {
             
             // Getting the current weapon and settings the ammo info
-            var currentWeapon = player.weapon;
+            var currentWeapon = player.weapon;            
             hud[2].text = String(currentWeapon.ammo);
+            
 
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);

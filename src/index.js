@@ -17,7 +17,7 @@ function main(){
     
     game.assetManager();
     game.pointerLock();
-    player.characterController();    
+    player.characterController(game.hud);    
     game.render();    
 }
 

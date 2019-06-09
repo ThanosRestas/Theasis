@@ -7,14 +7,21 @@ export default class Character{
         this.camera = game.camera
 
         this.health = 100;
-        this.energy = 100;
+        this.energy = 20;
 
 
         // Change into weapon array to store all weapons
         this.weapon;          
     }
     
-    characterController () {      
+    characterController (hud) { 
+          
+        let camera = this.camera;
+        let energy = this.energy;
+        let energyHud = hud[1];
+        
+
+        //hud[1].width = 0.1;
         
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {
@@ -30,7 +37,7 @@ export default class Character{
             var _this = this
             if (!this._onKeyDown) {
                 element.tabIndex = 1
-                this._onKeyDown = function (evt) {
+                this._onKeyDown = function (evt) {                    
                     if (_this.keysLeft.indexOf(evt.keyCode) !== -1 ||
                         _this.keysRight.indexOf(evt.keyCode) !== -1 || 
                         _this.keysForward.indexOf(evt.keyCode) !== -1 || 
@@ -42,6 +49,15 @@ export default class Character{
                         if (!noPreventDefault) {
                             evt.preventDefault()
                         }
+
+                        // Energy Deprecation with each movement
+                        if(energy >= 1){
+                            energy -= 0.02;
+                        }
+                        // Setting the energy bar's width accordingly
+                        energyHud.width = energy/100;
+                        // Lessen camera speed because of the fatigue - Disabled for tasting purposes
+                        //camera.speed = energy/100;                   
                     }
                 }
                 this._onKeyUp = function (evt) {
@@ -124,7 +140,7 @@ export default class Character{
         }
     
         // Connect to camera:
-        this.camera.inputs.add(new FreeCameraKeyboardRotateInput());  
+        this.camera.inputs.add(new FreeCameraKeyboardRotateInput());       
     }
 }
 
