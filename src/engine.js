@@ -47,7 +47,9 @@ export default class Engine{
             var ground = scene.getMeshByName("ground");           
             ground.material = new GridMaterial("groundMaterial", scene);    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
-            ground.material.backFaceCulling = false; 
+            ground.material.backFaceCulling = false;
+
+
 
             // Add the pistol mesh in the scene
             addPistol(player, scene, camera);           
@@ -62,10 +64,10 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test10.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test20.babylon");
         // Props load        
         assetsManager.addMeshTask("task", "", "../assets/models/", "Pistol.obj");
-        assetsManager.addMeshTask("task", "", "../assets/models/", "tree_circle.obj");
+        //assetsManager.addMeshTask("task", "", "../assets/models/", "tree_circle.obj");
 
 
 
@@ -109,15 +111,14 @@ export default class Engine{
                 //Play current Weapon's animation
                 scene.beginAnimation(player.weapon.mesh, 0, 100, false);
                 // Remove ammunition
-                player.weapon.ammo -= 1;
-                
+                player.weapon.ammo -= 1;               
                 
                 // Destroy camera's ray target
                 let ray = camera.getForwardRay(10000);
                 let hit = scene.pickWithRay(ray);
                 let model = hit.pickedMesh;             
         
-                if(hit !== null && model !== null){
+                if(hit !== null && model !== null && model.name != "ground"){
                     console.log("Target Destroyed :" + model.name);
                     scene.getMeshByName(model.name).dispose();       
                 }                               
@@ -194,9 +195,8 @@ export default class Engine{
 
     render(){
         // Render every frame
-        this.engine.runRenderLoop(() => {
-            
-            this.scene.render();                        
+        this.engine.runRenderLoop(() => {                       
+            this.scene.render();            
         });    
     }
 }

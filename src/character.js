@@ -6,7 +6,7 @@ export default class Character{
         this.scene = game.scene
         this.camera = game.camera
 
-        this.health = 100;
+        this.health = 20;
         this.energy = 20;
 
 
@@ -18,9 +18,25 @@ export default class Character{
           
         let camera = this.camera;
         let energy = this.energy;
+        let scene = this.scene;
         let energyHud = hud[1];
-        
+        let healthHud = hud[0];
+        let health = this.health;
 
+        // Detect collision between player and enemy and damange health
+        camera.onCollide = function (colMesh) {
+            // First check if there are any of the hitable meshes in the scene still and then check collision
+            if (scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
+                console.log("Enemy hit");
+                // Health deprecation with every collision with an enemy
+                if(health >= 1){
+                    health -= 0.02;
+                }
+                // Setting the health bar's width accordingly
+                healthHud.width = health/100;            
+            }
+        }
+        
         //hud[1].width = 0.1;
         
         // Create our own manager:
