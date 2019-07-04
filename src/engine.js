@@ -33,9 +33,9 @@ export default class Engine{
         var player = this.player;
 
         // Add lights to the scene
-        var light0 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(-2, -5, 2), scene);
-        var light2 = new BABYLON.DirectionalLight("Omni", new BABYLON.Vector3(2, -5, 2), scene);
-        var light3 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(2, -5, -2), scene); 
+        var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
+        light4.intensity = 2;
+
 
         // Asset loading
         var assetsManager = new BABYLON.AssetsManager(scene);     
@@ -64,10 +64,9 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test20.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test31.babylon");
         // Props load        
-        assetsManager.addMeshTask("task", "", "../assets/models/", "Pistol.obj");
-        //assetsManager.addMeshTask("task", "", "../assets/models/", "tree_circle.obj");
+        assetsManager.addMeshTask("task", "", "../assets/models/weapons/", "Pistol.obj");      
 
 
 
