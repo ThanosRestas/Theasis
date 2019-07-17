@@ -1,3 +1,4 @@
+import * as BABYLON from "@babylonjs/core/Legacy/legacy"
 import { GridMaterial } from "@babylonjs/materials";
 import Weapon from "./weapon";
 import * as GUI from "@babylonjs/gui";
@@ -22,7 +23,7 @@ export default class Engine{
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true;
-        this.scene.gravity = new BABYLON.Vector3(0, -0.05, 0);       
+        this.scene.gravity = new BABYLON.Vector3(0, -0.5, 0);       
 
         this.hud = this.hudManager();
     }
@@ -35,7 +36,6 @@ export default class Engine{
         // Add lights to the scene
         var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
         light4.intensity = 2;
-
 
         // Asset loading
         var assetsManager = new BABYLON.AssetsManager(scene);     
@@ -64,7 +64,7 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test31.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test45.babylon");
         // Props load        
         assetsManager.addMeshTask("task", "", "../assets/models/weapons/", "Pistol.obj");      
 

@@ -19,6 +19,8 @@ function main(){
     game.pointerLock();
     player.characterController(game.hud);    
     game.render();  
+
+    //var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
     
     
 }

@@ -1,4 +1,6 @@
 import Weapon from "./weapon"
+import * as BABYLON from "@babylonjs/core/Legacy/legacy"
+import { MultiPointerScaleBehavior } from "@babylonjs/core/Legacy/legacy";
 
 export default class Character{
     constructor(game){
@@ -30,11 +32,29 @@ export default class Character{
                 console.log("Enemy hit");
                 // Health deprecation with every collision with an enemy
                 if(health >= 1){
-                    health -= 0.02;
-                }
-                // Setting the health bar's width accordingly
-                healthHud.width = health/100;            
+                    health -= 0.20;
+                }                           
             }
+            else if(scene.getMeshByName("healthPack")!== null && colMesh.name == scene.getMeshByName("healthPackCollision").name){
+                console.log("Health pack acquired");
+                // Remove the health pack from the scene and restore 10% health to the player
+                scene.getMeshByName(colMesh.parent.name).dispose();
+                if(health < 20){
+                    health += 0.5;
+                }      
+            }
+            else if(scene.getMeshByName("energyPack")!== null && colMesh.name == scene.getMeshByName("energyPackCollision").name){
+                console.log("Energy pack acquired");
+                // Remove the energy pack from the scene and restore 20% energy to the player
+                scene.getMeshByName(colMesh.parent.name).dispose();
+                if(energy < 20){
+                    energy += 5;
+                }      
+            }
+                        
+            // Setting the health bar's width accordingly
+            healthHud.width = health/100;
+            energyHud.width = energy/100;
         }
         
         //hud[1].width = 0.1;
