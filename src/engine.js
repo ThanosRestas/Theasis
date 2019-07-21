@@ -64,9 +64,9 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test45.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test50.babylon");
         // Props load        
-        assetsManager.addMeshTask("task", "", "../assets/models/weapons/", "Pistol.obj");      
+        //assetsManager.addMeshTask("task", "", "../assets/models/weapons/", "Pistol.obj");      
 
 
 
@@ -200,23 +200,11 @@ export default class Engine{
     }
 }
 
-function addPistol(player, scene, camera){
-
-    // Picking each part of the pistol in the scene
-    var part1 = scene.getMeshByName("Pistol_Cube.002");
-    var part2 = scene.getMeshByName("_mm1");
-    var part3 = scene.getMeshByName("_mm2");
-    var part4 = scene.getMeshByName("_mm3");
-    var part5 = scene.getMeshByName("_mm4");
+function addPistol(player, scene, camera){    
 
     // Combinging them in a single node
-    var gun2 = new BABYLON.TransformNode("root");
-    part1.parent = gun2;
-    part2.parent = gun2;
-    part3.parent = gun2;
-    part4.parent = gun2;
-    part5.parent = gun2; 
-
+    var gun2 =  scene.getMeshByName("pistol");
+    
     // Set its position on the player
     gun2.parent = camera; 
     gun2.scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
