@@ -15,7 +15,7 @@ export default class Character{
 
 
         // Change into weapon array to store all weapons
-        this.weapon ;
+        //this.weapon = 0;
               
     }
     

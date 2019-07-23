@@ -83,8 +83,8 @@ export default class Engine{
         scene.onPointerDown = function (evt) {
             
             // Getting the current weapon and settings the ammo info
-            let currentWeapon = player.weapon;            
-            hud[2].text = String(currentWeapon.ammo);
+            //let currentWeapon = player.weapon;            
+            hud[2].text = String(player.gunLoadout[0].ammo);
             
 
             if (document.pointerLockElement !== canvas) {
@@ -106,9 +106,9 @@ export default class Engine{
             if(evt.button == 0){             
 
                 //Play current Weapon's animation
-                scene.beginAnimation(player.weapon.mesh, 0, 100, false);
+                scene.beginAnimation(player.gunLoadout[0].mesh, 0, 100, false);
                 // Remove ammunition
-                player.weapon.ammo -= 1;               
+                player.gunLoadout[0].ammo -= 1;               
                 
                 // Destroy camera's ray target
                 let ray = camera.getForwardRay(10000);
@@ -206,10 +206,10 @@ function addPistol(player, scene, camera){
     player.gunLoadout.push(scene.getMeshByName("shotgun"));
     
     // Set pistol's attributes for proper positioning
-    //gunLoadout[0].parent = camera; 
-    //gunLoadout[0].scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
-    //gunLoadout[0].rotation.y = -Math.PI;
-    //gunLoadout[0].position = new BABYLON.Vector3(1, -1, 3);
+    player.gunLoadout[0].parent = camera; 
+    player.gunLoadout[0].scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
+    player.gunLoadout[0].rotation.y = -Math.PI;
+    player.gunLoadout[0].position = new BABYLON.Vector3(1, -1, 3);
 
     // Set shotgun's attributes for proper positioning
     player.gunLoadout[1].parent = camera;    
@@ -224,7 +224,7 @@ function addPistol(player, scene, camera){
 
     
     // Setting up the weapon's object in the player            
-    //player.weapon = new Weapon("deagle", gunLoadout[0], gunLoadout[0].rotation);
-    player.weapon = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
+    player.gunLoadout[0] = new Weapon("deagle", player.gunLoadout[0], player.gunLoadout[0].rotation);
+    //player.weapon = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
     //player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);  
 }
