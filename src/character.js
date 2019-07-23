@@ -5,15 +5,18 @@ import { MultiPointerScaleBehavior } from "@babylonjs/core/Legacy/legacy";
 export default class Character{
     constructor(game){
         this.game = game;
-        this.scene = game.scene
-        this.camera = game.camera
+        this.scene = game.scene;
+        this.camera = game.camera;
+
+        this.gunLoadout = [];
 
         this.health = 20;
         this.energy = 20;
 
 
         // Change into weapon array to store all weapons
-        this.weapon;          
+        this.weapon ;
+              
     }
     
     characterController (hud) { 
@@ -29,9 +32,9 @@ export default class Character{
         // Detect collision between player and enemy and damange health
         camera.onCollide = function (colMesh) {
             
-            /*if(colMesh.name != "ground"){
+            if(colMesh.name != "ground"){
                 console.log("Collision detected");
-            }*/            
+            }            
 
             // First check if there are any of the hitable meshes in the scene still and then check collision
             if (scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {

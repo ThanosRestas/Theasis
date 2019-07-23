@@ -49,9 +49,7 @@ export default class Engine{
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             ground.material.backFaceCulling = false;
 
-
-
-            // Add the pistol mesh in the scene
+            // Add the weapon meshes to the scene
             addPistol(player, scene, camera);           
         });         
         // Called when all tasks in the assetsManger are done
@@ -64,28 +62,28 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test69.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test70.babylon");
         // Props load        
         //assetsManager.addMeshTask("task", "", "../assets/models/weapons/", "Pistol.obj");      
 
 
 
-        // Now let the assetsManger load/excecute every task
+        // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
 
     pointerLock(){
-        var canvas = this.canvas;
-        var scene = this.scene;
-        var camera = this.camera;
-        var player = this.player;
-        var hud = this.hud;
-        var isLocked = false;   
+        let canvas = this.canvas;
+        let scene = this.scene;
+        let camera = this.camera;
+        let player = this.player;
+        let hud = this.hud;
+        let isLocked = false;   
  
         scene.onPointerDown = function (evt) {
             
             // Getting the current weapon and settings the ammo info
-            var currentWeapon = player.weapon;            
+            let currentWeapon = player.weapon;            
             hud[2].text = String(currentWeapon.ammo);
             
 
@@ -203,23 +201,30 @@ export default class Engine{
 function addPistol(player, scene, camera){    
 
     // Getting the gun models from the scene and load them into the loadout
-    var gunLoadout = [];
-    gunLoadout.push(scene.getMeshByName("pistol"));
-    //gunLoadout.push(scene.getMeshByName("shotgun"));
+    //player.gunLoadout = [];
+    player.gunLoadout.push(scene.getMeshByName("pistol"));
+    player.gunLoadout.push(scene.getMeshByName("shotgun"));
     
     // Set pistol's attributes for proper positioning
-    gunLoadout[0].parent = camera; 
-    gunLoadout[0].scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
-    gunLoadout[0].rotation.y = -Math.PI;
-    gunLoadout[0].position = new BABYLON.Vector3(1, -1, 3);
-
-    // Set shotgun's attributes for proper positioning
-    //gunLoadout[1].parent = camera; 
+    //gunLoadout[0].parent = camera; 
     //gunLoadout[0].scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
     //gunLoadout[0].rotation.y = -Math.PI;
-    //gunLoadout[1].position = new BABYLON.Vector3(1, -1, 3);
+    //gunLoadout[0].position = new BABYLON.Vector3(1, -1, 3);
+
+    // Set shotgun's attributes for proper positioning
+    player.gunLoadout[1].parent = camera;    
+    player.gunLoadout[1].position = new BABYLON.Vector3(1, -1, 5);
+    
+
+    // Make invisible the gun dummy model and its children
+    player.gunLoadout[1].visibility = false; 
+    player.gunLoadout[1].getChildren().forEach(function(_child) {
+        _child.visibility = false;
+    }, this);
 
     
     // Setting up the weapon's object in the player            
-    player.weapon = new Weapon("deagle", gunLoadout[0], gunLoadout[0].rotation); 
+    //player.weapon = new Weapon("deagle", gunLoadout[0], gunLoadout[0].rotation);
+    player.weapon = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
+    //player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);  
 }

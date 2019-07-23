@@ -1,5 +1,7 @@
+import * as BABYLON from "@babylonjs/core/Legacy/legacy"
+
 export default class Weapon{
-    constructor(name, mesh, start, display){
+    constructor(name, mesh, start){
         // Weapon properties
         this.name = name;
         this.mesh = mesh;
@@ -8,10 +10,11 @@ export default class Weapon{
         // Animation properties
         this.start = start;
         this.end = start.clone();
-        this.end.x += Math.PI/10;
+        this.end.x -= Math.PI/10;// - if shotgun + if pistol
 
         // Setting up keys based on start-end values
         this.keys = [{frame: 0,value: this.start},{frame: 10,value: this.end},{frame: 100,value: this.start}];
+        //this.keys = keys;
 
         // Setting up the animation object
         this.display = new BABYLON.Animation(
