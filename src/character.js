@@ -24,9 +24,15 @@ export default class Character{
         let energyHud = hud[1];
         let healthHud = hud[0];
         let health = this.health;
+        //let weapon = this.weapon;
 
         // Detect collision between player and enemy and damange health
         camera.onCollide = function (colMesh) {
+            
+            /*if(colMesh.name != "ground"){
+                console.log("Collision detected");
+            }*/            
+
             // First check if there are any of the hitable meshes in the scene still and then check collision
             if (scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
                 console.log("Enemy hit");
@@ -34,16 +40,16 @@ export default class Character{
                 if(health >= 1){
                     health -= 0.20;
                 }                           
-            }
-            else if(scene.getMeshByName("healthPack")!== null && colMesh.name == scene.getMeshByName("healthPackCollision").name){
+            }            
+            else if(scene.getMeshByName("healthPack")!== null && colMesh== scene.getMeshByName("healthPackCollision")){
                 console.log("Health pack acquired");
                 // Remove the health pack from the scene and restore 10% health to the player
                 scene.getMeshByName(colMesh.parent.name).dispose();
                 if(health < 20){
                     health += 0.5;
                 }      
-            }
-            else if(scene.getMeshByName("energyPack")!== null && colMesh.name == scene.getMeshByName("energyPackCollision").name){
+            }            
+            else if(scene.getMeshByName("energyPack")!== null && colMesh == scene.getMeshByName("energyPackCollision")){
                 console.log("Energy pack acquired");
                 // Remove the energy pack from the scene and restore 20% energy to the player
                 scene.getMeshByName(colMesh.parent.name).dispose();
@@ -51,6 +57,7 @@ export default class Character{
                     energy += 5;
                 }      
             }
+         
                         
             // Setting the health bar's width accordingly
             healthHud.width = health/100;

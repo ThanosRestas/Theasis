@@ -23,7 +23,7 @@ export default class Engine{
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true;
-        this.scene.gravity = new BABYLON.Vector3(0, -0.5, 0);       
+        this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);       
 
         this.hud = this.hudManager();
     }
@@ -64,7 +64,7 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test50.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test69.babylon");
         // Props load        
         //assetsManager.addMeshTask("task", "", "../assets/models/weapons/", "Pistol.obj");      
 
@@ -202,15 +202,24 @@ export default class Engine{
 
 function addPistol(player, scene, camera){    
 
-    // Combinging them in a single node
-    var gun2 =  scene.getMeshByName("pistol");
+    // Getting the gun models from the scene and load them into the loadout
+    var gunLoadout = [];
+    gunLoadout.push(scene.getMeshByName("pistol"));
+    //gunLoadout.push(scene.getMeshByName("shotgun"));
     
-    // Set its position on the player
-    gun2.parent = camera; 
-    gun2.scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
-    gun2.rotation.y = -Math.PI;
-    gun2.position = new BABYLON.Vector3(1, -1, 3);
+    // Set pistol's attributes for proper positioning
+    gunLoadout[0].parent = camera; 
+    gunLoadout[0].scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
+    gunLoadout[0].rotation.y = -Math.PI;
+    gunLoadout[0].position = new BABYLON.Vector3(1, -1, 3);
+
+    // Set shotgun's attributes for proper positioning
+    //gunLoadout[1].parent = camera; 
+    //gunLoadout[0].scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
+    //gunLoadout[0].rotation.y = -Math.PI;
+    //gunLoadout[1].position = new BABYLON.Vector3(1, -1, 3);
+
     
     // Setting up the weapon's object in the player            
-    player.weapon = new Weapon("deagle", gun2, gun2.rotation); 
+    player.weapon = new Weapon("deagle", gunLoadout[0], gunLoadout[0].rotation); 
 }
