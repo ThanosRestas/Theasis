@@ -210,7 +210,8 @@ export default class Character{
 }
 
 function weaponSwitch(gunLoadout, currentWeapon){
-    
+
+    //Making every weapon invisible - not in use 
     for(let i=0; i<2; i++){
         gunLoadout[i].mesh.visibility = false; 
         gunLoadout[i].mesh.getChildren().forEach(function(_child) {
@@ -218,6 +219,7 @@ function weaponSwitch(gunLoadout, currentWeapon){
         }, this);
     }
 
+    // Make desired weapon visible - in use
     gunLoadout[currentWeapon].mesh.visibility = true; 
     gunLoadout[currentWeapon].mesh.getChildren().forEach(function(_child) {
         _child.visibility = true;
