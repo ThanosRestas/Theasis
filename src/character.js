@@ -15,7 +15,7 @@ export default class Character{
 
 
         // Change into weapon array to store all weapons
-        //this.weapon = 0;
+        this.currentWeapon = 0;
               
     }
     
@@ -24,10 +24,11 @@ export default class Character{
         let camera = this.camera;
         let energy = this.energy;
         let scene = this.scene;
+        let gunLoadout = this.gunLoadout;
         let energyHud = hud[1];
         let healthHud = hud[0];
         let health = this.health;
-        //let weapon = this.weapon;
+        let currentWeapon = this.currentWeapon;
 
         // Detect collision between player and enemy and damange health
         camera.onCollide = function (colMesh) {
@@ -65,9 +66,7 @@ export default class Character{
             // Setting the health bar's width accordingly
             healthHud.width = health/100;
             energyHud.width = energy/100;
-        }
-        
-        //hud[1].width = 0.1;
+        }     
         
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {
@@ -186,7 +185,43 @@ export default class Character{
         }
     
         // Connect to camera:
-        this.camera.inputs.add(new FreeCameraKeyboardRotateInput());       
+        this.camera.inputs.add(new FreeCameraKeyboardRotateInput());
+        
+        //Weapon switching observable
+        scene.onKeyboardObservable.add((kbInfo) => {
+            switch (kbInfo.type) {
+            case BABYLON.KeyboardEventTypes.KEYDOWN:
+                switch (kbInfo.event.key) {                    
+                case "1":
+                    console.log("Pistol selected");
+                    currentWeapon = 0;
+                    weaponSwitch(gunLoadout, currentWeapon);
+                    break;
+
+                case "2":
+                    console.log("Shotgun selected");
+                    currentWeapon = 1;
+                    weaponSwitch(gunLoadout, currentWeapon);                               
+                }
+                break;
+            }
+        });     
+    }   
+}
+
+function weaponSwitch(gunLoadout, currentWeapon){
+    
+    for(let i=0; i<2; i++){
+        gunLoadout[i].mesh.visibility = false; 
+        gunLoadout[i].mesh.getChildren().forEach(function(_child) {
+            _child.visibility = false;
+        }, this);
     }
+
+    gunLoadout[currentWeapon].mesh.visibility = true; 
+    gunLoadout[currentWeapon].mesh.getChildren().forEach(function(_child) {
+        _child.visibility = true;
+    }, this);
+
 }
 

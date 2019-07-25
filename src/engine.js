@@ -83,8 +83,8 @@ export default class Engine{
         scene.onPointerDown = function (evt) {
             
             // Getting the current weapon and settings the ammo info
-            //let currentWeapon = player.weapon;            
-            hud[2].text = String(player.gunLoadout[0].ammo);
+            let currentWeapon = player.currentWeapon;            
+            hud[2].text = String(player.gunLoadout[currentWeapon].ammo);
             
 
             if (document.pointerLockElement !== canvas) {
@@ -217,14 +217,22 @@ function addPistol(player, scene, camera){
     
 
     // Make invisible the gun dummy model and its children
+
+    player.gunLoadout[0].visibility = false; 
+    player.gunLoadout[0].getChildren().forEach(function(_child) {
+        _child.visibility = false;
+    }, this);
+
     player.gunLoadout[1].visibility = false; 
     player.gunLoadout[1].getChildren().forEach(function(_child) {
         _child.visibility = false;
     }, this);
 
     
+
+    
     // Setting up the weapon's object in the player            
     player.gunLoadout[0] = new Weapon("deagle", player.gunLoadout[0], player.gunLoadout[0].rotation);
-    //player.weapon = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
+    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
     //player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);  
 }
