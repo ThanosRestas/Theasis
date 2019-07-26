@@ -63,11 +63,6 @@ export default class Engine{
         // We add single tasks to the assetsManager
         // Level design load
         assetsManager.addMeshTask("task", "", "../assets/models/", "test70.babylon");
-        // Props load        
-        //assetsManager.addMeshTask("task", "", "../assets/models/weapons/", "Pistol.obj");      
-
-
-
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -78,17 +73,11 @@ export default class Engine{
         let camera = this.camera;
         let player = this.player;
         let hud = this.hud;
-        let isLocked = false;
-        
-
-        //hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);
+        let isLocked = false;        
  
-        scene.onPointerDown = function (evt) {
-            
+        scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
-            let currentWeapon = player.currentWeapon;
-            hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);
-            //console.log(currentWeapon);           
+            let currentWeapon = player.currentWeapon;                
 
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
@@ -106,13 +95,15 @@ export default class Engine{
             //evt === 1 (mouse wheel click (not scrolling))
             //evt === 2 (right mouse click)
 
-            if(evt.button == 0){             
+            if(evt.button == 0){               
 
                 //Play current Weapon's animation
                 scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);
                 
                 // Remove ammunition
-                player.gunLoadout[currentWeapon].ammo -= 1;               
+                player.gunLoadout[currentWeapon].ammo -= 1;
+                // Update HUD
+                hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);               
                 
                 // Destroy camera's ray target in 1000 distance
                 let ray = camera.getForwardRay(10000);
@@ -147,6 +138,9 @@ export default class Engine{
         document.addEventListener("mspointerlockchange", pointerlockchange, false);
         document.addEventListener("mozpointerlockchange", pointerlockchange, false);
         document.addEventListener("webkitpointerlockchange", pointerlockchange, false);
+
+        this.player = player;
+        //hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);
     }
 
     hudManager(){

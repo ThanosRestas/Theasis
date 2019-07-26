@@ -211,7 +211,8 @@ export default class Character{
             }
         });
         
-        //ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+        
+        
     
     }  
 }
