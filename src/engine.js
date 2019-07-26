@@ -78,14 +78,17 @@ export default class Engine{
         let camera = this.camera;
         let player = this.player;
         let hud = this.hud;
-        let isLocked = false;   
+        let isLocked = false;
+        
+
+        //hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);
  
         scene.onPointerDown = function (evt) {
             
-            // Getting the current weapon and settings the ammo info
-            let currentWeapon = player.currentWeapon;            
-            hud[2].text = String(player.gunLoadout[currentWeapon].ammo);
-            
+            // Getting the current weapon and setting the ammo info
+            let currentWeapon = player.currentWeapon;
+            hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);
+            //console.log(currentWeapon);           
 
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
@@ -106,11 +109,12 @@ export default class Engine{
             if(evt.button == 0){             
 
                 //Play current Weapon's animation
-                scene.beginAnimation(player.gunLoadout[0].mesh, 0, 100, false);
-                // Remove ammunition
-                player.gunLoadout[0].ammo -= 1;               
+                scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);
                 
-                // Destroy camera's ray target
+                // Remove ammunition
+                player.gunLoadout[currentWeapon].ammo -= 1;               
+                
+                // Destroy camera's ray target in 1000 distance
                 let ray = camera.getForwardRay(10000);
                 let hit = scene.pickWithRay(ray);
                 let model = hit.pickedMesh;             
@@ -146,6 +150,9 @@ export default class Engine{
     }
 
     hudManager(){
+
+        let player = this.player;
+
         // GUI setup
         var advancedTexture = new GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this.scene);
 
@@ -178,7 +185,8 @@ export default class Engine{
 
         // Ammo bar
         var ammoBar = new GUI.TextBlock();
-        ammoBar.text = "AMMO";
+        //ammoBar.text = String(player.gunLoadout[player.currentWeapon].ammo);
+        //ammoBar.text 
         ammoBar.color = "white";
         ammoBar.fontSize = 24;
         ammoBar.top = 350;
@@ -226,9 +234,7 @@ function addPistol(player, scene, camera){
     player.gunLoadout[1].visibility = false; 
     player.gunLoadout[1].getChildren().forEach(function(_child) {
         _child.visibility = false;
-    }, this);
-
-    
+    }, this);    
 
     
     // Setting up the weapon's object in the player            

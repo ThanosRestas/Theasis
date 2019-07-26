@@ -25,10 +25,11 @@ export default class Character{
         let energy = this.energy;
         let scene = this.scene;
         let gunLoadout = this.gunLoadout;
-        let energyHud = hud[1];
         let healthHud = hud[0];
+        let energyHud = hud[1];
+        let ammoHud = hud[2];        
         let health = this.health;
-        let currentWeapon = this.currentWeapon;
+        //let currentWeapon = this.currentWeapon ;
 
         // Detect collision between player and enemy and damange health
         camera.onCollide = function (colMesh) {
@@ -194,23 +195,28 @@ export default class Character{
                 switch (kbInfo.event.key) {                    
                 case "1":
                     console.log("Pistol selected");
-                    currentWeapon = 0;
-                    weaponSwitch(gunLoadout, currentWeapon);
+                    this.currentWeapon = 0;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);                    
                     break;
 
                 case "2":
                     console.log("Shotgun selected");
-                    currentWeapon = 1;
-                    weaponSwitch(gunLoadout, currentWeapon);                               
+                    this.currentWeapon = 1;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    break;                               
                 }
                 break;
             }
-        });     
-    }   
+        });
+        
+        //ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+    
+    }  
 }
 
 function weaponSwitch(gunLoadout, currentWeapon){
-
     //Making every weapon invisible - not in use 
     for(let i=0; i<2; i++){
         gunLoadout[i].mesh.visibility = false; 
@@ -218,12 +224,10 @@ function weaponSwitch(gunLoadout, currentWeapon){
             _child.visibility = false;
         }, this);
     }
-
     // Make desired weapon visible - in use
     gunLoadout[currentWeapon].mesh.visibility = true; 
     gunLoadout[currentWeapon].mesh.getChildren().forEach(function(_child) {
         _child.visibility = true;
     }, this);
-
 }
 

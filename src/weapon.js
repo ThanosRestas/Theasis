@@ -29,6 +29,8 @@ export default class Weapon{
     }
 
     setAnimations(){
+        // Implement animations for each weapon with if/else conditions that check the name
+        // and use the appropriate animations 
         this.display.setKeys(this.keys);
         this.mesh.animations.push(this.display);
         console.log("Animations Created for: " + this.name);
