@@ -5,34 +5,35 @@ export default class Weapon{
         // Weapon properties
         this.name = name;
         this.mesh = mesh;
-        this.ammo = 30;
-        
+        this.ammo = 30;        
         // Animation properties
-        this.start = start;
-        this.end = start.clone();
-        this.end.x -= Math.PI/10;// - if shotgun + if pistol
-
+        this.start = start;      
+        // Create the proper animation per gun upon object creation
+        this.setAnimations();        
+    }
+    setAnimations(){        
+        // Setting the end position of the animation(usually the same as the start)
+        var end = this.start.clone();
+        // Setting appropriate end position according to gun model
+        if(this.name == "pistol"){
+            end.x += Math.PI/10;
+        }
+        else if(this.name == "shotgun"){
+            end.x -= Math.PI/10;
+        }     
         // Setting up keys based on start-end values
-        this.keys = [{frame: 0,value: this.start},{frame: 10,value: this.end},{frame: 100,value: this.start}];
-        //this.keys = keys;
-
+        var keys = [{frame: 0,value: this.start},{frame: 10,value: end},{frame: 100,value: this.start}];
         // Setting up the animation object
-        this.display = new BABYLON.Animation(
+        var display = new BABYLON.Animation(
             "fire",
             "rotation",
             60,
             BABYLON.Animation.ANIMATIONTYPE_VECTOR3,            
-            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);           
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);  
         
-        
-        this.setAnimations();        
-    }
+        display.setKeys(keys);
 
-    setAnimations(){
-        // Implement animations for each weapon with if/else conditions that check the name
-        // and use the appropriate animations 
-        this.display.setKeys(this.keys);
-        this.mesh.animations.push(this.display);
+        this.mesh.animations.push(display);
         console.log("Animations Created for: " + this.name);
     }  
 }

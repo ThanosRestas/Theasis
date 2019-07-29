@@ -94,29 +94,24 @@ export default class Engine{
             //evt === 0 (left mouse click)
             //evt === 1 (mouse wheel click (not scrolling))
             //evt === 2 (right mouse click)
-
-            if(evt.button == 0){               
-
+            if(evt.button == 0){ 
                 //Play current Weapon's animation
-                scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);
-                
+                scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);                
                 // Remove ammunition
                 player.gunLoadout[currentWeapon].ammo -= 1;
                 // Update HUD
                 hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);               
-                
                 // Destroy camera's ray target in 1000 distance
                 let ray = camera.getForwardRay(10000);
                 let hit = scene.pickWithRay(ray);
                 let model = hit.pickedMesh;             
-        
+                // Exempt ground from the be shot at
                 if(hit !== null && model !== null && model.name != "ground"){
                     console.log("Target Destroyed :" + model.name);
                     scene.getMeshByName(model.name).dispose();       
                 }                               
             }            
-        };          
-
+        }; 
         // Event listener when the pointerlock is updated (or removed by pressing ESC for example).
         var pointerlockchange = function () {
             var controlEnabled = document.pointerLockElement || document.mozPointerLockElement || document.webkitPointerLockElement || document.msPointerLockElement || false;
@@ -232,7 +227,7 @@ function addPistol(player, scene, camera){
 
     
     // Setting up the weapon's object in the player            
-    player.gunLoadout[0] = new Weapon("deagle", player.gunLoadout[0], player.gunLoadout[0].rotation);
+    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], player.gunLoadout[0].rotation);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
     //player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);  
 }
