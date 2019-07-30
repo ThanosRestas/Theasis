@@ -205,7 +205,14 @@ export default class Character{
                     this.currentWeapon = 1;
                     ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
                     weaponSwitch(gunLoadout,  this.currentWeapon);
-                    break;                               
+                    break;                
+                
+                case "3":
+                    console.log("Ak47 selected");
+                    this.currentWeapon = 2;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    break;     
                 }
                 break;
             }
@@ -219,7 +226,7 @@ export default class Character{
 
 function weaponSwitch(gunLoadout, currentWeapon){
     //Making every weapon invisible - not in use 
-    for(let i=0; i<2; i++){
+    for(let i=0; i< gunLoadout.length; i++){
         gunLoadout[i].mesh.visibility = false; 
         gunLoadout[i].mesh.getChildren().forEach(function(_child) {
             _child.visibility = false;

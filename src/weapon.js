@@ -19,7 +19,10 @@ export default class Weapon{
             end.x += Math.PI/10;
         }
         else if(this.name == "shotgun"){
-            end.x -= Math.PI/10;
+            end.z += Math.PI/30;
+        }
+        else if(this.name == "ak47"){
+            end.z += Math.PI/100;        
         }     
         // Setting up keys based on start-end values
         var keys = [{frame: 0,value: this.start},{frame: 10,value: end},{frame: 100,value: this.start}];

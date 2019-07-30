@@ -62,7 +62,7 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test70.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test82.babylon");
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -201,6 +201,7 @@ function addPistol(player, scene, camera){
     //player.gunLoadout = [];
     player.gunLoadout.push(scene.getMeshByName("pistol"));
     player.gunLoadout.push(scene.getMeshByName("shotgun"));
+    player.gunLoadout.push(scene.getMeshByName("ak47"));
     
     // Set pistol's attributes for proper positioning
     player.gunLoadout[0].parent = camera; 
@@ -210,24 +211,25 @@ function addPistol(player, scene, camera){
 
     // Set shotgun's attributes for proper positioning
     player.gunLoadout[1].parent = camera;    
-    player.gunLoadout[1].position = new BABYLON.Vector3(1, -1, 5);
+    player.gunLoadout[1].position = new BABYLON.Vector3(0.7, -1, 1.5);
+    player.gunLoadout[1].rotation.y -= 2;
+
+    // Set ak47's attributes for proper positioning
+    player.gunLoadout[2].parent = camera;    
+    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -1, 1.5);
+    player.gunLoadout[2].rotation.y -= 1.5;
     
 
-    // Make invisible the gun dummy model and its children
-
-    player.gunLoadout[0].visibility = false; 
-    player.gunLoadout[0].getChildren().forEach(function(_child) {
-        _child.visibility = false;
-    }, this);
-
-    player.gunLoadout[1].visibility = false; 
-    player.gunLoadout[1].getChildren().forEach(function(_child) {
-        _child.visibility = false;
-    }, this);    
-
-    
+    for(var i=0; i<player.gunLoadout.length;i++){
+        // Make invisible the gun dummy model and its children
+        player.gunLoadout[i].visibility = false; 
+        player.gunLoadout[i].getChildren().forEach(function(_child) {
+            _child.visibility = false;
+        }, this);
+    }  
+        
     // Setting up the weapon's object in the player            
     player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], player.gunLoadout[0].rotation);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
-    //player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);  
+    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2],  player.gunLoadout[2].rotation);      
 }
