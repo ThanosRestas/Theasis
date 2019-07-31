@@ -62,7 +62,7 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test82.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test84.babylon");
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -98,7 +98,7 @@ export default class Engine{
                 //Play current Weapon's animation
                 scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);                
                 // Remove ammunition
-                player.gunLoadout[currentWeapon].ammo -= 1;
+                player.gunLoadout[currentWeapon].ammo -= 1;                
                 // Update HUD
                 hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);               
                 // Destroy camera's ray target in 1000 distance
@@ -197,29 +197,26 @@ export default class Engine{
 
 function addPistol(player, scene, camera){    
 
-    // Getting the gun models from the scene and load them into the loadout
-    //player.gunLoadout = [];
+    // Getting the gun models from the scene and load them into the loadout    
     player.gunLoadout.push(scene.getMeshByName("pistol"));
     player.gunLoadout.push(scene.getMeshByName("shotgun"));
     player.gunLoadout.push(scene.getMeshByName("ak47"));
     
     // Set pistol's attributes for proper positioning
-    player.gunLoadout[0].parent = camera; 
-    player.gunLoadout[0].scaling = new BABYLON.Vector3( 0.5, 0.5, 0.5);
-    player.gunLoadout[0].rotation.y = -Math.PI;
+    player.gunLoadout[0].parent = camera;    
+    player.gunLoadout[0].rotation.y = Math.PI/2;    
     player.gunLoadout[0].position = new BABYLON.Vector3(1, -1, 3);
 
-    // Set shotgun's attributes for proper positioning
-    player.gunLoadout[1].parent = camera;    
-    player.gunLoadout[1].position = new BABYLON.Vector3(0.7, -1, 1.5);
-    player.gunLoadout[1].rotation.y -= 2;
+    // Set shotgun's attributes for proper positioning  
+    player.gunLoadout[1].parent = camera;
+    player.gunLoadout[1].rotation.y = -Math.PI/2;    
+    player.gunLoadout[1].position = new BABYLON.Vector3(1, -1, 3);    
 
     // Set ak47's attributes for proper positioning
-    player.gunLoadout[2].parent = camera;    
-    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -1, 1.5);
-    player.gunLoadout[2].rotation.y -= 1.5;
+    player.gunLoadout[2].parent = camera;
+    player.gunLoadout[2].rotation.y = -Math.PI/2;    
+    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -1, 1.5);   
     
-
     for(var i=0; i<player.gunLoadout.length;i++){
         // Make invisible the gun dummy model and its children
         player.gunLoadout[i].visibility = false; 

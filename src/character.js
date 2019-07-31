@@ -204,7 +204,7 @@ export default class Character{
                     console.log("Shotgun selected");
                     this.currentWeapon = 1;
                     ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
-                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);                    
                     break;                
                 
                 case "3":

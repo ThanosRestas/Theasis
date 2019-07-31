@@ -16,10 +16,10 @@ export default class Weapon{
         var end = this.start.clone();
         // Setting appropriate end position according to gun model
         if(this.name == "pistol"){
-            end.x += Math.PI/10;
+            end.z -= Math.PI/10;
         }
         else if(this.name == "shotgun"){
-            end.z += Math.PI/30;
+            end.z += Math.PI/20;
         }
         else if(this.name == "ak47"){
             end.z += Math.PI/100;        
