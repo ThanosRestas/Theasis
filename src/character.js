@@ -46,7 +46,7 @@ export default class Character{
                     health -= 0.20;
                 }                           
             }            
-            else if(scene.getMeshByName("healthPack")!== null && colMesh== scene.getMeshByName("healthPackCollision")){
+            else if(scene.getMeshByName("healthPack")!== null && colMesh == scene.getMeshByName("healthPackCollision")){
                 console.log("Health pack acquired");
                 // Remove the health pack from the scene and restore 10% health to the player
                 scene.getMeshByName(colMesh.parent.name).dispose();
@@ -216,11 +216,8 @@ export default class Character{
                 }
                 break;
             }
-        });
-        
-        
-        
-    
+        });       
+
     }  
 }
 

@@ -2,6 +2,7 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy"
 import { GridMaterial } from "@babylonjs/materials";
 import Weapon from "./weapon";
 import * as GUI from "@babylonjs/gui";
+import Enemy from "./enemy";
 
 export default class Engine{
     constructor(){
@@ -11,7 +12,8 @@ export default class Engine{
         this.scene = new BABYLON.Scene(this.engine);
 
         // Entities
-        this.player;        
+        this.player;
+        this.enemyList = [];        
         
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2.01, -8), this.scene);        
@@ -25,6 +27,7 @@ export default class Engine{
         this.scene.collisionsEnabled = true;
         this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);       
 
+        // HUD setup
         this.hud = this.hudManager();
     }
 
@@ -32,6 +35,7 @@ export default class Engine{
         var camera = this.camera;
         var scene = this.scene;
         var player = this.player;
+        var enemyList = this.enemyList;
 
         // Add lights to the scene
         var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
@@ -49,6 +53,9 @@ export default class Engine{
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             ground.material.backFaceCulling = false;
 
+
+            // Add enemy meshes to the scene
+            addEnemy(enemyList, scene);
             // Add the weapon meshes to the scene
             addPistol(player, scene, camera);           
         });         
@@ -62,7 +69,7 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test84.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test93.babylon");
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -98,7 +105,10 @@ export default class Engine{
                 //Play current Weapon's animation
                 scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);                
                 // Remove ammunition
-                player.gunLoadout[currentWeapon].ammo -= 1;                
+                if(player.gunLoadout[currentWeapon].ammo > 0){
+                    player.gunLoadout[currentWeapon].ammo -= 1;     
+                }
+                           
                 // Update HUD
                 hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);               
                 // Destroy camera's ray target in 1000 distance
@@ -187,6 +197,18 @@ export default class Engine{
         return hudComponents;
     }
 
+    enemyManager(){
+
+        let scene = this.scene;
+        let camera = this.camera;
+        let player = this.player;
+        let enemyList = this.enemyList;
+
+
+
+
+    }
+
     render(){
         // Render every frame
         this.engine.runRenderLoop(() => {                       
@@ -229,4 +251,13 @@ function addPistol(player, scene, camera){
     player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], player.gunLoadout[0].rotation);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
     player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2],  player.gunLoadout[2].rotation);      
+}
+
+function addEnemy(enemyList, scene){
+
+    enemyList.push(scene.getMeshByName("skull"));
+
+    enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
+
+
 }

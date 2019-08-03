@@ -7,12 +7,14 @@ import { _BabylonLoaderRegistered, BoundingBox, RotationGizmo, Camera } from "@b
 import "@babylonjs/loaders/OBJ";
 import Engine from "./engine";
 import Character from "./character";
+import Enemy from "./enemy";
 
-let game, player;
+let game, player, enemy;
 
 function main(){    
     game = new Engine();
-    player = new Character(game);    
+    player = new Character(game);
+    //enemy = new Enemy(game);    
     game.player = player;
     
     game.assetManager();
@@ -20,9 +22,7 @@ function main(){
     player.characterController(game.hud);    
     game.render();  
 
-    //var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
-    
-    
+   
 }
 
 main();
