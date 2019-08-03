@@ -69,7 +69,7 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test93.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test94.babylon");
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -195,19 +195,7 @@ export default class Engine{
         hudComponents.push(healthBar, energyBar, ammoBar);
 
         return hudComponents;
-    }
-
-    enemyManager(){
-
-        let scene = this.scene;
-        let camera = this.camera;
-        let player = this.player;
-        let enemyList = this.enemyList;
-
-
-
-
-    }
+    } 
 
     render(){
         // Render every frame

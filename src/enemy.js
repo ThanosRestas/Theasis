@@ -17,15 +17,26 @@ export default class Enemy{
 
     move(){        
         let mesh = this.mesh;
-        if(mesh){
-            
-            console.log("yoyooyo")
-            this.scene.registerBeforeRender(function(){
-            
-                mesh.rotate(BABYLON.Axis.Y, Math.PI / 64,BABYLON.Space.LOCAL);
-                mesh.translate(BABYLON.Axis.Y, 0.02, BABYLON.Space.WORLD);
+        let scene = this.scene;
+        let camera = scene.activeCamera;
 
-                
+        if(mesh){ 
+
+            this.scene.registerBeforeRender(function(){ 
+                let initVec = mesh.position.clone();
+                let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
+                let targetVec = camera.position.subtract(initVec);
+                let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
+
+                // Move enemy towards the player
+                if(distVec > 0){
+                    distVec -= 0.1;
+                    //mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);
+                     
+                }
+                mesh.lookAt(camera.position)   
+             
+                                      
           
             });   
 
