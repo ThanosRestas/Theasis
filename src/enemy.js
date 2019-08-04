@@ -22,7 +22,7 @@ export default class Enemy{
         let camera = scene.activeCamera;
 
         if(mesh){
-            this.scene.registerBeforeRender(function(){
+            scene.registerBeforeRender(function(){
                 // Calculating distances between the enemy and the player
                 let initVec = mesh.position.clone();
                 let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
@@ -46,7 +46,8 @@ export default class Enemy{
         let scene = this.scene;       
 
         if(mesh){            
-            scene.registerBeforeRender(function(){                
+            scene.registerBeforeRender(function(){
+                               
                 console.log("Health:" + health);
                 if(health == 0){
                     scene.getMeshByName(mesh.name).dispose();

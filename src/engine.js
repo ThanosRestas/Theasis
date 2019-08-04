@@ -120,12 +120,12 @@ export default class Engine{
                 // Exempt ground from the be shot at
                 if(hit !== null && model !== null && model.name != "ground"){
 
-                    for(let i=0; i<enemyList.length ; i++){
+                    for(let i= 0; i < enemyList.length ; i++){
                         if(enemyList[i].name == model.name){
                             console.log("Target Hit :" + model.name + " Health :" + enemyList[i].health );
-                             enemyList[i].health -= 1;
+                            enemyList[i].health -= 1;
                         }
-                    }                  
+                    }   
 
                     //scene.getMeshByName(model.name).dispose();       
                 }                               
