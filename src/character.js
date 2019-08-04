@@ -46,7 +46,8 @@ export default class Character{
                     health -= 0.20;
                 }                           
             }            
-            else if(scene.getMeshByName("healthPack")!== null && colMesh == scene.getMeshByName("healthPackCollision")){
+            
+            if(scene.getMeshByName("healthPack")!== null && colMesh == scene.getMeshByName("healthPackCollision")){
                 console.log("Health pack acquired");
                 // Remove the health pack from the scene and restore 10% health to the player
                 scene.getMeshByName(colMesh.parent.name).dispose();
@@ -54,7 +55,8 @@ export default class Character{
                     health += 0.5;
                 }      
             }            
-            else if(scene.getMeshByName("energyPack")!== null && colMesh == scene.getMeshByName("energyPackCollision")){
+            
+            if(scene.getMeshByName("energyPack")!== null && colMesh == scene.getMeshByName("energyPackCollision")){
                 console.log("Energy pack acquired");
                 // Remove the energy pack from the scene and restore 20% energy to the player
                 scene.getMeshByName(colMesh.parent.name).dispose();

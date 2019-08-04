@@ -69,7 +69,7 @@ export default class Engine{
 
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test94.babylon");
+        assetsManager.addMeshTask("task", "", "../assets/models/", "test106.babylon");
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -80,11 +80,13 @@ export default class Engine{
         let camera = this.camera;
         let player = this.player;
         let hud = this.hud;
-        let isLocked = false;        
+        let isLocked = false;
+        let enemyList = this.enemyList;        
  
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
-            let currentWeapon = player.currentWeapon;                
+            let currentWeapon = player.currentWeapon;
+            //let enemyList = this.enemyList;                
 
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
@@ -117,8 +119,15 @@ export default class Engine{
                 let model = hit.pickedMesh;             
                 // Exempt ground from the be shot at
                 if(hit !== null && model !== null && model.name != "ground"){
-                    console.log("Target Destroyed :" + model.name);
-                    scene.getMeshByName(model.name).dispose();       
+
+                    for(let i=0; i<enemyList.length ; i++){
+                        if(enemyList[i].name == model.name){
+                            console.log("Target Hit :" + model.name + " Health :" + enemyList[i].health );
+                             enemyList[i].health -= 1;
+                        }
+                    }                  
+
+                    //scene.getMeshByName(model.name).dispose();       
                 }                               
             }            
         }; 
