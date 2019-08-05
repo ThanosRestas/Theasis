@@ -13,7 +13,7 @@ export default class Enemy{
         this.health = 5;
         
         this.move();
-        this.destroy();
+        //this.destroy();
     }
 
     move(){        
@@ -43,16 +43,6 @@ export default class Enemy{
     destroy(){
         let mesh = this.mesh;
         let health = this.health;
-        let scene = this.scene;       
-
-        if(mesh){            
-            scene.registerBeforeRender(function(){
-                               
-                console.log("Health:" + health);
-                if(health == 0){
-                    scene.getMeshByName(mesh.name).dispose();
-                }    
-            });
-        }
+        let scene = this.scene;  
     }
 }

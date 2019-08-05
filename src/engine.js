@@ -124,6 +124,9 @@ export default class Engine{
                         if(enemyList[i].name == model.name){
                             console.log("Target Hit :" + model.name + " Health :" + enemyList[i].health );
                             enemyList[i].health -= 1;
+                            if(enemyList[i].health == 0){
+                                enemyList[i].mesh.dispose();
+                            }
                         }
                     }   
 
