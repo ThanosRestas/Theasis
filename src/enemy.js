@@ -40,9 +40,22 @@ export default class Enemy{
         }
     }
 
-    destroy(){
+    destroy(sprayer){
         let mesh = this.mesh;
-        let health = this.health;
-        let scene = this.scene;  
-    }
+        // Get the position of the mesh to be used for explosion
+        let explodeLocation = mesh.getAbsolutePosition();
+        // Destroy the mesh      
+        mesh.dispose();  
+        // Set explosion debris-levels
+        let particleSystemManualEmitCount = 5000; 
+        // Now lets call a soon-to-be-coded generateExplosion function...
+        generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);
+    }   
+}
+
+function generateExplosion(sprayer, puffsize, where) {
+    // Set the spray nozzle to a vector3 where the ship got destroyed
+    sprayer.emitter = where;
+    // We set this value to 5000, earlier, activating idle particle system     
+    sprayer.manualEmitCount = puffsize;  
 }

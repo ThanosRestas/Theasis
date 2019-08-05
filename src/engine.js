@@ -29,6 +29,13 @@ export default class Engine{
 
         // HUD setup
         this.hud = this.hudManager();
+
+        // Particle system setup
+        this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
+        this.particleSystem.particleTexture = new BABYLON.Texture("../assets/textures/flare.png", this.scene);
+        this.particleSystem.emitRate = 0;        
+        this.particleSystem.start();
+       
     }
 
     assetManager(){
@@ -81,7 +88,8 @@ export default class Engine{
         let player = this.player;
         let hud = this.hud;
         let isLocked = false;
-        let enemyList = this.enemyList;        
+        let enemyList = this.enemyList;
+        let particleSystem = this.particleSystem;        
  
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
@@ -109,8 +117,7 @@ export default class Engine{
                 // Remove ammunition
                 if(player.gunLoadout[currentWeapon].ammo > 0){
                     player.gunLoadout[currentWeapon].ammo -= 1;     
-                }
-                           
+                }                           
                 // Update HUD
                 hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);               
                 // Destroy camera's ray target in 1000 distance
@@ -124,13 +131,11 @@ export default class Engine{
                         if(enemyList[i].name == model.name){
                             console.log("Target Hit :" + model.name + " Health :" + enemyList[i].health );
                             enemyList[i].health -= 1;
-                            if(enemyList[i].health == 0){
-                                enemyList[i].mesh.dispose();
+                            if(enemyList[i].health == 0){                               
+                                enemyList[i].destroy(particleSystem);
                             }
                         }
-                    }   
-
-                    //scene.getMeshByName(model.name).dispose();       
+                    }                      
                 }                               
             }            
         }; 
@@ -258,6 +263,5 @@ function addEnemy(enemyList, scene){
     enemyList.push(scene.getMeshByName("skull"));
 
     enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
-
-
 }
+

@@ -14,7 +14,7 @@ let game, player, enemy;
 function main(){    
     game = new Engine();
     player = new Character(game);
-    //enemy = new Enemy(game);    
+      
     game.player = player;
     
     game.assetManager();
