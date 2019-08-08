@@ -16,6 +16,8 @@ export default class Enemy{
         this.health = 5;
         
         this.projectile = new BABYLON.Mesh.CreateSphere("bullet", 16, 0.5, this.scene);
+        this.projectile.position = this.mesh.position.clone();
+        
        
     }
 
@@ -45,8 +47,8 @@ export default class Enemy{
         let mesh = this.mesh;       
         let scene = this.scene;
         let camera = scene.activeCamera;
-        let projectile = this.projectile;     
-
+        let projectile = this.projectile;
+        
         if(mesh){       
            
             // Calculating distances between the enemy and the player
@@ -55,7 +57,13 @@ export default class Enemy{
             let targetVec = camera.position.subtract(initVec);
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec); // Target to shoot at  
             
-            projectile.translate(new BABYLON.Vector3(0, 0, 5), 0.1, BABYLON.Space.WORLD);  
+            if(distVec > 10){
+                distVec -= 0.1;
+                //projectile.translate(new BABYLON.Vector3(0, 0, 5), 0.1, BABYLON.Space.WORLD);
+                projectile.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);
+                
+            }
+             
                               
             
         }      
