@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@babylonjs/gui": "^4.0.3",
-    "babylonjs-loaders": "^4.0.3"
+    "babylonjs-loaders": "^4.0.3",
+    "cannon": "^0.6.2"
   }
 }

@@ -1,8 +1,16 @@
-import * as BABYLON from "@babylonjs/core/Legacy/legacy"
+import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { GridMaterial } from "@babylonjs/materials";
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
+
+//mport CannonJSPlugin from "@babylonjs/core/Physics/Plugins";
+//import * as cannon from "CANNON";
+
+
 import Weapon from "./weapon";
 import * as GUI from "@babylonjs/gui";
 import Enemy from "./enemy";
+
+
 
 export default class Engine{
     constructor(){
@@ -25,7 +33,11 @@ export default class Engine{
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true;
-        this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);       
+        this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
+        
+        // Enable physics
+        //this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
+        //this.scene.enablePhysics();
 
         // HUD setup
         this.hud = this.hudManager();
@@ -34,8 +46,7 @@ export default class Engine{
         this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
         this.particleSystem.particleTexture = new BABYLON.Texture("../assets/textures/flare.png", this.scene);
         this.particleSystem.emitRate = 0;        
-        this.particleSystem.start();
-       
+        this.particleSystem.start();       
     }
 
     assetManager(){
@@ -252,7 +263,7 @@ function addPistol(player, scene, camera){
         }, this);
     }  
         
-    // Setting up the weapon's object in the player            
+    // Setting up the weapon's object on the player            
     player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], player.gunLoadout[0].rotation);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
     player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2],  player.gunLoadout[2].rotation);      
@@ -263,5 +274,11 @@ function addEnemy(enemyList, scene){
     enemyList.push(scene.getMeshByName("skull"));
 
     enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
+
+    //Adding up the move() functions of each enemy to the render ovservable
+    for(let i=0; i<enemyList.length; i++){
+        scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
+        scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
+    }    
 }
 
