@@ -12,11 +12,17 @@ export default class Enemy{
         this.scene = scene;
         // Enemy properties
         this.name = name;
-        this.mesh = mesh;        
+        this.mesh = mesh;
+        //this.mesh.visibility = false;        
         this.health = 5;
         
+        // Enemy shooting setup
         this.projectile = new BABYLON.Mesh.CreateSphere("bullet", 16, 0.5, this.scene);
+        //this.projectile = new BABYLON.Mesh.CreateBox("box", {height: 50}, scene);
         this.projectile.position = this.mesh.position.clone();
+        // Creating the animation for the bullet
+        this.setAnimations();
+
         
        
     }
@@ -49,21 +55,22 @@ export default class Enemy{
         let camera = scene.activeCamera;
         let projectile = this.projectile;
         
-        if(mesh){       
-           
+        if(mesh){          
             // Calculating distances between the enemy and the player
-            let initVec = projectile.position.clone();// Enemy position
-            let distVec = BABYLON.Vector3.Distance(camera.position, projectile.position);// Distance between player and enemy                
-            let targetVec = camera.position.subtract(initVec);
-            let targetVecNorm = BABYLON.Vector3.Normalize(targetVec); // Target to shoot at  
+            //let initVec = projectile.position.clone();// Enemy position
+            //let distVec = BABYLON.Vector3.Distance(camera.position, projectile.position);// Distance between player and enemy                
+            //let targetVec = camera.position.subtract(initVec);
+            //let targetVecNorm = BABYLON.Vector3.Normalize(targetVec); // Target to shoot at  
             
-            if(distVec > 10){
+            // Follow the player
+            /*if(distVec > 10){
                 distVec -= 0.1;
                 //projectile.translate(new BABYLON.Vector3(0, 0, 5), 0.1, BABYLON.Space.WORLD);
                 projectile.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);
                 
-            }
-             
+            }*/         
+
+            //this.scene.beginAnimation(this.projectile, 0, 100, false);
                               
             
         }      
@@ -77,9 +84,37 @@ export default class Enemy{
         mesh.dispose();  
         // Set explosion debris-levels
         let particleSystemManualEmitCount = 5000;               
-        // Now lets call a soon-to-be-coded generateExplosion function...
+        // Now lets call a  generateExplosion function...
         generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);
     }
+
+    setAnimations(){ 
+        
+        let scene = this.scene;
+        var frameRate = 60;
+        // Setting the end position of the animation
+        //var start = this.projectile.position;
+        //var end = start.clone();
+        //end.x += 5;        
+  
+        // Setting up keys based on start-end values
+        var keys = [{frame: 0,value: 2},{frame: 10, value: -2},{frame: 2 * frameRate,value: 2}];
+        // Setting up the animation object
+        var display = new BABYLON.Animation(
+            "move",
+            "position.x",
+            frameRate,
+            BABYLON.Animation.ANIMATIONTYPE_FLOAT,            
+            BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);  
+        
+        display.setKeys(keys);        
+
+        scene.beginDirectAnimation(this.projectile, [display], 0, 2 * frameRate, true);
+
+        console.log("Animations Created for : Enemy Projectile ");
+
+
+    }  
     
    
 }
@@ -89,23 +124,4 @@ function generateExplosion(sprayer, puffsize, where) {
     sprayer.emitter = where;
     // We set this value to 5000, earlier, activating idle particle system     
     sprayer.manualEmitCount = puffsize;  
-}
-
-/*function transformForce(mesh, vec) {
-    var mymatrix = new BABYLON.Matrix();
-    mesh.rotationQuaternion.toRotationMatrix(mymatrix);
-    return BABYLON.Vector3.TransformNormal(vec, mymatrix);
-};
-
-function translate(mesh, direction, power) {
-    mesh.physicsImpostor.setLinearVelocity(
-        mesh.physicsImpostor.getLinearVelocity().add(direction.scale(power)
-        )
-    );
-}*/
-
-function vecToLocal(vector, mesh){
-    var m = mesh.getWorldMatrix();
-    var v = BABYLON.Vector3.TransformCoordinates(vector, m);
-    return v;		 
 }
