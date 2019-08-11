@@ -1,9 +1,6 @@
-import * as BABYLON from "@babylonjs/core/Legacy/legacy"
+import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
-
-
-
-
+import Bullet from "./bullet";
 
 export default class Enemy{
     constructor(scene, name, mesh){
@@ -17,11 +14,11 @@ export default class Enemy{
         this.health = 5;
         
         // Enemy shooting setup
-        this.projectile = new BABYLON.Mesh.CreateSphere("bullet", 16, 0.5, this.scene);
-        //this.projectile = new BABYLON.Mesh.CreateBox("box", {height: 50}, scene);
-        this.projectile.position = this.mesh.position.clone();
+        this.projectile = new Bullet(this.scene, this.mesh);
+        //this.projectile.setAnimations();
+        
         // Creating the animation for the bullet
-        this.setAnimations();
+        //this.setAnimations();
 
         
        
@@ -71,6 +68,12 @@ export default class Enemy{
             }*/         
 
             //this.scene.beginAnimation(this.projectile, 0, 100, false);
+
+            //this.projectile = new Bullet(this.scene, this.mesh);
+
+            if(scene.getMeshByName("bullet") == null){
+                projectile = new Bullet(scene, mesh);
+            }
                               
             
         }      
@@ -88,17 +91,13 @@ export default class Enemy{
         generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);
     }
 
-    setAnimations(){ 
-        
+    setAnimations(){        
         let scene = this.scene;
-        var frameRate = 60;
-        // Setting the end position of the animation
-        //var start = this.projectile.position;
-        //var end = start.clone();
-        //end.x += 5;        
-  
+        let projectileInstance = this.projectile.createInstance();
+        var frameRate = 60;        
+     
         // Setting up keys based on start-end values
-        var keys = [{frame: 0,value: 2},{frame: 10, value: -2},{frame: 2 * frameRate,value: 2}];
+        var keys = [{frame: 0, value: 0},{frame: 50, value: 2},{frame: 100, value: 4}];
         // Setting up the animation object
         var display = new BABYLON.Animation(
             "move",
@@ -106,16 +105,20 @@ export default class Enemy{
             frameRate,
             BABYLON.Animation.ANIMATIONTYPE_FLOAT,            
             BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);  
-        
-        display.setKeys(keys);        
-
-        scene.beginDirectAnimation(this.projectile, [display], 0, 2 * frameRate, true);
-
+        // Push the keys to athe animations
+        display.setKeys(keys);         
+        projectileInstance.animations.push(display);
         console.log("Animations Created for : Enemy Projectile ");
-
-
-    }  
-    
+        
+        //var animation = scene.beginDirectAnimation(this.projectile, [display], 0, 2 * frameRate, true);
+        var animation = scene.beginAnimation(projectileInstance, 0, 100, false);
+        
+        // Destroy enemy projectile at the end position
+        animation.onAnimationEnd = function () {            
+            console.log("Projectile Animation ended");
+            projectileInstance.dispose();
+        }        
+    }
    
 }
 
