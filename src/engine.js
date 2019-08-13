@@ -2,15 +2,12 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { GridMaterial } from "@babylonjs/materials";
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
 
-//mport CannonJSPlugin from "@babylonjs/core/Physics/Plugins";
-//import * as cannon from "CANNON";
-
+import * as cannon from "CANNON";
+import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
 
 import Weapon from "./weapon";
 import * as GUI from "@babylonjs/gui";
 import Enemy from "./enemy";
-
-
 
 export default class Engine{
     constructor(){
@@ -24,7 +21,7 @@ export default class Engine{
         this.enemyList = [];        
         
         // Camera setup
-        this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2.01, -8), this.scene);        
+        this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, -8), this.scene);        
         this.camera.attachControl(this.canvas, true);
         this.camera.speed = 0.2;       
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
@@ -35,9 +32,10 @@ export default class Engine{
         this.scene.collisionsEnabled = true;
         this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
         
-        // Enable physics
-        //this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
-        //this.scene.enablePhysics();
+        
+        // Enable physics        
+        this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
+        this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
 
         // HUD setup
         this.hud = this.hudManager();

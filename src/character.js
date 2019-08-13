@@ -64,6 +64,11 @@ export default class Character{
                     energy += 5;
                 }      
             }
+
+            
+            if(colMesh.name == "Bullet"){
+                console.log("Hit by Enemy");
+            }    
          
                         
             // Setting the health bar's width accordingly

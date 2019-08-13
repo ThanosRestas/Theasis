@@ -1,6 +1,7 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import Bullet from "./bullet";
+import "@babylonjs/core/Meshes/meshBuilder";
 
 export default class Enemy{
     constructor(scene, name, mesh){
@@ -11,17 +12,19 @@ export default class Enemy{
         this.name = name;
         this.mesh = mesh;
         //this.mesh.visibility = false;        
-        this.health = 5;
-        
+        this.health = 5;       
         // Enemy shooting setup
-        this.projectile = new Bullet(this.scene, this.mesh);
-        //this.projectile.setAnimations();
-        
-        // Creating the animation for the bullet
-        //this.setAnimations();
+        //this.projectile = new Bullet(this.scene, this.mesh);
 
+        this.itarg = BABYLON.Mesh.CreateBox("targ", 10, scene);        
+        this.itarg.visibility = 0;
+        this.itarg.parent = mesh;
+        this.itarg.position.z = -100;
+        this.itarg.position.y = -10
+
+        //fireBullet(this.scene, this.mesh, this.itarg);
         
-       
+        
     }
 
     move(){        
@@ -39,7 +42,7 @@ export default class Enemy{
             // Move enemy towards the player and stops slightly ahead
             if(distVec > 10){
                 distVec -= 0.1;
-                //mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
+                mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
             }
             // Enemy always faces the player
             mesh.lookAt(camera.position, Math.PI);           
@@ -51,31 +54,14 @@ export default class Enemy{
         let scene = this.scene;
         let camera = scene.activeCamera;
         let projectile = this.projectile;
-        
-        if(mesh){          
-            // Calculating distances between the enemy and the player
-            //let initVec = projectile.position.clone();// Enemy position
-            //let distVec = BABYLON.Vector3.Distance(camera.position, projectile.position);// Distance between player and enemy                
-            //let targetVec = camera.position.subtract(initVec);
-            //let targetVecNorm = BABYLON.Vector3.Normalize(targetVec); // Target to shoot at  
+        let itarg = this.itarg;       
             
-            // Follow the player
-            /*if(distVec > 10){
-                distVec -= 0.1;
-                //projectile.translate(new BABYLON.Vector3(0, 0, 5), 0.1, BABYLON.Space.WORLD);
-                projectile.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);
-                
-            }*/         
-
-            //this.scene.beginAnimation(this.projectile, 0, 100, false);
-
-            //this.projectile = new Bullet(this.scene, this.mesh);
-
-            if(scene.getMeshByName("bullet") == null){
-                projectile = new Bullet(scene, mesh);
-            }
-                              
-            
+        if(mesh){
+            // Enemy shoots as long its mesh is present in the scene
+            if (scene.getMeshByName("Bullet") == null)
+            {
+                fireBullet(this.scene, this.mesh, this.itarg);            
+            }         
         }      
     }
 
@@ -87,39 +73,10 @@ export default class Enemy{
         mesh.dispose();  
         // Set explosion debris-levels
         let particleSystemManualEmitCount = 5000;               
-        // Now lets call a  generateExplosion function...
+        // Now lets call a  generateExplosion function...       
         generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);
-    }
-
-    setAnimations(){        
-        let scene = this.scene;
-        let projectileInstance = this.projectile.createInstance();
-        var frameRate = 60;        
-     
-        // Setting up keys based on start-end values
-        var keys = [{frame: 0, value: 0},{frame: 50, value: 2},{frame: 100, value: 4}];
-        // Setting up the animation object
-        var display = new BABYLON.Animation(
-            "move",
-            "position.x",
-            frameRate,
-            BABYLON.Animation.ANIMATIONTYPE_FLOAT,            
-            BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);  
-        // Push the keys to athe animations
-        display.setKeys(keys);         
-        projectileInstance.animations.push(display);
-        console.log("Animations Created for : Enemy Projectile ");
         
-        //var animation = scene.beginDirectAnimation(this.projectile, [display], 0, 2 * frameRate, true);
-        var animation = scene.beginAnimation(projectileInstance, 0, 100, false);
-        
-        // Destroy enemy projectile at the end position
-        animation.onAnimationEnd = function () {            
-            console.log("Projectile Animation ended");
-            projectileInstance.dispose();
-        }        
-    }
-   
+    }  
 }
 
 function generateExplosion(sprayer, puffsize, where) {
@@ -127,4 +84,33 @@ function generateExplosion(sprayer, puffsize, where) {
     sprayer.emitter = where;
     // We set this value to 5000, earlier, activating idle particle system     
     sprayer.manualEmitCount = puffsize;  
+}
+
+
+function fireBullet(scene, mesh, itarg){
+    
+    if(mesh)
+    {
+        var bullet = BABYLON.MeshBuilder.CreateSphere("Bullet", { segments: 3, diameter: 0.3 }, scene);
+        bullet.position = mesh.getAbsolutePosition();
+        bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, 
+            BABYLON.PhysicsImpostor.SphereImpostor, 
+            { mass: 0.1, friction: 0.5, restition: 0.3 },
+            scene);
+
+        var dir = itarg.getAbsolutePosition().subtract(mesh.getAbsolutePosition());
+        bullet.physicsImpostor.applyImpulse(dir.scale(0.5), mesh.getAbsolutePosition());
+        bullet.life = 0;
+
+        bullet.step = ()=>{
+            bullet.life++;
+            if(bullet.life> 100 && bullet.physicsImpostor){
+                bullet.physicsImpostor.dispose();
+                bullet.dispose();                
+            }
+        };
+
+        scene.onBeforeRenderObservable.add(bullet.step);
+    }
+    
 }
