@@ -13,18 +13,13 @@ export default class Enemy{
         this.mesh = mesh;
         //this.mesh.visibility = false;        
         this.health = 5;       
-        // Enemy shooting setup
-        //this.projectile = new Bullet(this.scene, this.mesh);
+        // Enemy shooting setup        
 
         this.itarg = BABYLON.Mesh.CreateBox("targ", 10, scene);        
         this.itarg.visibility = 0;
         this.itarg.parent = mesh;
         this.itarg.position.z = -100;
-        this.itarg.position.y = -10
-
-        //fireBullet(this.scene, this.mesh, this.itarg);
-        
-        
+        this.itarg.position.y = -10;       
     }
 
     move(){        
@@ -42,7 +37,7 @@ export default class Enemy{
             // Move enemy towards the player and stops slightly ahead
             if(distVec > 10){
                 distVec -= 0.1;
-                mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
+                //mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
             }
             // Enemy always faces the player
             mesh.lookAt(camera.position, Math.PI);           
@@ -87,7 +82,7 @@ function generateExplosion(sprayer, puffsize, where) {
 }
 
 
-function fireBullet(scene, mesh, itarg){
+function fireBullet(scene, mesh, itarg){   
     
     if(mesh)
     {
@@ -98,7 +93,7 @@ function fireBullet(scene, mesh, itarg){
             { mass: 0.1, friction: 0.5, restition: 0.3 },
             scene);
 
-        var dir = itarg.getAbsolutePosition().subtract(mesh.getAbsolutePosition());
+        var dir = scene.activeCamera.position.subtract(mesh.getAbsolutePosition());
         bullet.physicsImpostor.applyImpulse(dir.scale(0.5), mesh.getAbsolutePosition());
         bullet.life = 0;
 
@@ -109,6 +104,17 @@ function fireBullet(scene, mesh, itarg){
                 bullet.dispose();                
             }
         };
+
+        /*bullet.physicsImpostor.onCollideEvent = (e, t)=>{
+            //console.log("Bullet collision with : " + t.object.name);
+            if(t.object.name == "CameraImpostor"){
+
+            }
+        }*/
+
+        /*bullet.onCollide = function (colMesh) {
+            console.log("Bullet collided");
+        }*/ 
 
         scene.onBeforeRenderObservable.add(bullet.step);
     }

@@ -12,11 +12,12 @@ export default class Character{
 
         this.health = 20;
         this.energy = 20;
-
-
+        
         // Change into weapon array to store all weapons
         this.currentWeapon = 0;
-              
+
+        // Getting the camera's physics impostor
+        this.cameraImpostor = this.camera.getChildren();
     }
     
     characterController (hud) { 
@@ -30,6 +31,7 @@ export default class Character{
         let ammoHud = hud[2];        
         let health = this.health;
         //let currentWeapon = this.currentWeapon ;
+        let cameraImpostor = this.cameraImpostor;
 
         // Detect collision between player and enemy and damange health
         camera.onCollide = function (colMesh) {
@@ -64,17 +66,16 @@ export default class Character{
                     energy += 5;
                 }      
             }
-
-            
-            if(colMesh.name == "Bullet"){
-                console.log("Hit by Enemy");
-            }    
-         
                         
             // Setting the health bar's width accordingly
             healthHud.width = health/100;
             energyHud.width = energy/100;
-        }     
+        }
+        
+        cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
+            console.log("Bullet collision with : " + t.object.name);
+            health -= 5;
+        }
         
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {

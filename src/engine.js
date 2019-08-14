@@ -30,12 +30,23 @@ export default class Engine{
 
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true;
-        this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
-        
+        this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);        
         
         // Enable physics        
         this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
         this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
+
+        // Camera physics impostor
+        this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 5 }, this.scene);
+        //this.cameraImpostor.parent = this.camera;
+        this.cameraImpostor.physicsImpostor = new BABYLON.PhysicsImpostor(this.cameraImpostor, 
+            BABYLON.PhysicsImpostor.SphereImpostor, 
+            { mass: 0, friction: 0.5, restition: 0.3 },
+            this.scene);
+
+        //this.cameraImpostor.visibility = 0;
+        this.cameraImpostor.parent = this.camera;
+        
 
         // HUD setup
         this.hud = this.hudManager();
@@ -61,14 +72,14 @@ export default class Engine{
         var assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
-            //console.log("task successful", task);            
+            //console.log("task successful", task);
 
             // Setting ground material
             var ground = scene.getMeshByName("ground");           
             ground.material = new GridMaterial("groundMaterial", scene);    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             ground.material.backFaceCulling = false;
-
+            ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
 
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene);
