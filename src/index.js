@@ -8,9 +8,6 @@ import "@babylonjs/loaders/OBJ";
 import Engine from "./engine";
 import Character from "./character";
 
-
-
-
 let game, player;
 
 function main(){    
@@ -23,8 +20,6 @@ function main(){
     game.pointerLock();
     player.characterController(game.hud);    
     game.render();  
-
-   
 }
 
 main();

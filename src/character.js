@@ -8,14 +8,13 @@ export default class Character{
         this.scene = game.scene;
         this.camera = game.camera;
 
+        // Player info
         this.gunLoadout = [];
-
         this.health = 20;
         this.energy = 20;
         
         // Change into weapon array to store all weapons
         this.currentWeapon = 0;
-
         // Getting the camera's physics impostor
         this.cameraImpostor = this.camera.getChildren();
     }
@@ -29,8 +28,7 @@ export default class Character{
         let healthHud = hud[0];
         let energyHud = hud[1];
         let ammoHud = hud[2];        
-        let health = this.health;
-        //let currentWeapon = this.currentWeapon ;
+        let health = this.health;        
         let cameraImpostor = this.cameraImpostor;
 
         // Detect collision between player and enemy and damange health
@@ -74,7 +72,12 @@ export default class Character{
         
         cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
             console.log("Bullet collision with : " + t.object.name);
-            health -= 5;
+            if(t.object.name == "Bullet"){
+                t.object.dispose();
+            }            
+            health -= 1;
+            healthHud.width = health/100;
+           
         }
         
         // Create our own manager:

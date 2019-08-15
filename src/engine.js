@@ -23,8 +23,9 @@ export default class Engine{
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, -8), this.scene);        
         this.camera.attachControl(this.canvas, true);
-        this.camera.speed = 0.2;       
-        this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); // Collision box for the camera
+        this.camera.speed = 0.2;
+        // Collision box for the camera -- Deprecated after cannon.js usage !?      
+        this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); 
         this.camera.checkCollisions = true;
         this.camera.applyGravity = true; 
 
@@ -37,16 +38,16 @@ export default class Engine{
         this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
 
         // Camera physics impostor
-        this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 5 }, this.scene);
-        //this.cameraImpostor.parent = this.camera;
+        this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 2 }, this.scene);
         this.cameraImpostor.physicsImpostor = new BABYLON.PhysicsImpostor(this.cameraImpostor, 
             BABYLON.PhysicsImpostor.SphereImpostor, 
             { mass: 0, friction: 0.5, restition: 0.3 },
             this.scene);
-
-        //this.cameraImpostor.visibility = 0;
+        // Making the collision sphere invisible
+        this.cameraImpostor.visibility = 5;
+        // Assigning the collision sphere to the camera
         this.cameraImpostor.parent = this.camera;
-        
+        this.cameraImpostor.isPickable = false;        
 
         // HUD setup
         this.hud = this.hudManager();
@@ -67,7 +68,6 @@ export default class Engine{
         // Add lights to the scene
         var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
         light4.intensity = 2;
-
         // Asset loading
         var assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
@@ -93,7 +93,6 @@ export default class Engine{
             var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR;}); 
             //console.log(tasks);
         });
-
         // We add single tasks to the assetsManager
         // Level design load
         assetsManager.addMeshTask("task", "", "../assets/models/", "test106.babylon");
@@ -114,8 +113,7 @@ export default class Engine{
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
             let currentWeapon = player.currentWeapon;
-            //let enemyList = this.enemyList;                
-
+            //let enemyList = this.enemyList;    
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
     

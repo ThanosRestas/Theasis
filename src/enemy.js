@@ -13,8 +13,8 @@ export default class Enemy{
         this.mesh = mesh;
         //this.mesh.visibility = false;        
         this.health = 5;       
-        // Enemy shooting setup        
-
+        // Enemy shooting setup       
+        // Itarg == invisible mesh ahead of enemy mesh that acts like its aim -- Not used for now
         this.itarg = BABYLON.Mesh.CreateBox("targ", 10, scene);        
         this.itarg.visibility = 0;
         this.itarg.parent = mesh;
@@ -49,15 +49,17 @@ export default class Enemy{
         let scene = this.scene;
         let camera = scene.activeCamera;
         let projectile = this.projectile;
+        let name = this.name;
         let itarg = this.itarg;       
             
-        if(mesh){
+        if(scene.getMeshByName(name) != null){
             // Enemy shoots as long its mesh is present in the scene
             if (scene.getMeshByName("Bullet") == null)
             {
+                console.log("Enemy exists");
                 fireBullet(this.scene, this.mesh, this.itarg);            
             }         
-        }      
+        }         
     }
 
     destroy(sprayer){
@@ -69,8 +71,7 @@ export default class Enemy{
         // Set explosion debris-levels
         let particleSystemManualEmitCount = 5000;               
         // Now lets call a  generateExplosion function...       
-        generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);
-        
+        generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);        
     }  
 }
 
@@ -81,42 +82,27 @@ function generateExplosion(sprayer, puffsize, where) {
     sprayer.manualEmitCount = puffsize;  
 }
 
+function fireBullet(scene, mesh, itarg){
+       
+    var bullet = BABYLON.MeshBuilder.CreateSphere("Bullet", { segments: 3, diameter: 0.3 }, scene);
+        
+    bullet.position = mesh.getAbsolutePosition();
+    bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, 
+        BABYLON.PhysicsImpostor.SphereImpostor, 
+        { mass: 0.1, friction: 0.5, restition: 0.3 },
+        scene);
 
-function fireBullet(scene, mesh, itarg){   
-    
-    if(mesh)
-    {
-        var bullet = BABYLON.MeshBuilder.CreateSphere("Bullet", { segments: 3, diameter: 0.3 }, scene);
-        bullet.position = mesh.getAbsolutePosition();
-        bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, 
-            BABYLON.PhysicsImpostor.SphereImpostor, 
-            { mass: 0.1, friction: 0.5, restition: 0.3 },
-            scene);
+    var dir = scene.activeCamera.position.subtract(mesh.getAbsolutePosition());
+    bullet.physicsImpostor.applyImpulse(dir.scale(0.5), mesh.getAbsolutePosition());
+    bullet.life = 0;
 
-        var dir = scene.activeCamera.position.subtract(mesh.getAbsolutePosition());
-        bullet.physicsImpostor.applyImpulse(dir.scale(0.5), mesh.getAbsolutePosition());
-        bullet.life = 0;
+    bullet.step = ()=>{
+        bullet.life++;
+        if(bullet.life> 100 && bullet.physicsImpostor){
+            bullet.physicsImpostor.dispose();
+            bullet.dispose();                
+        }
+    };
 
-        bullet.step = ()=>{
-            bullet.life++;
-            if(bullet.life> 100 && bullet.physicsImpostor){
-                bullet.physicsImpostor.dispose();
-                bullet.dispose();                
-            }
-        };
-
-        /*bullet.physicsImpostor.onCollideEvent = (e, t)=>{
-            //console.log("Bullet collision with : " + t.object.name);
-            if(t.object.name == "CameraImpostor"){
-
-            }
-        }*/
-
-        /*bullet.onCollide = function (colMesh) {
-            console.log("Bullet collided");
-        }*/ 
-
-        scene.onBeforeRenderObservable.add(bullet.step);
-    }
-    
+    scene.onBeforeRenderObservable.add(bullet.step);   
 }
