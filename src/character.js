@@ -71,7 +71,7 @@ export default class Character{
         }
         
         cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
-            console.log("Bullet collision with : " + t.object.name);
+            //console.log("Bullet collision with : " + t.object.name);
             // Check for "Bullet" substring inside of collision t object name
             if(t.object.name.substring(0, 6) == "Bullet"){
                 

@@ -46,19 +46,21 @@ export default class Enemy{
 
     shoot(){             
         let scene = this.scene;       
-        let name = this.name;
-        let timeNow = Date.now();
+        let name = this.name;        
         let mesh = this.mesh;
-       
-        this.timeThen = 0;
-        console.log(this.timeThen);
+        let timeNow = Date.now();        
+        
         if(scene.getMeshByName(name) != null){
-            if (scene.getMeshByName("Bullet"+name) == null)
-            {
-                //console.log("Enemy shoots");
-                fireBullet(scene, mesh, name );
-                
-               
+            // Checking if enemy's bullet is still in the scene
+            if(scene.getMeshByName("Bullet"+name) == null)
+            {  
+                // Enemy shoots every nth second
+                let timePassed = (timeNow - this.timeThen) / 1000;
+                let firingRate = 2;                                
+                if( timePassed >= firingRate){
+                    fireBullet(scene, mesh, name );
+                    this.timeThen = timeNow;
+                }              
             }                
         }         
     }
