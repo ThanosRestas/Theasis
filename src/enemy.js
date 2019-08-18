@@ -13,19 +13,19 @@ export default class Enemy{
         this.mesh = mesh;
         //this.mesh.visibility = false;        
         this.health = 5;       
-        // Enemy shooting setup       
-        // Itarg == invisible mesh ahead of enemy mesh that acts like its aim -- Not used for now
-        this.itarg = BABYLON.Mesh.CreateBox("targ", 10, scene);        
-        this.itarg.visibility = 0;
-        this.itarg.parent = mesh;
-        this.itarg.position.z = -100;
-        this.itarg.position.y = -10;       
+        // Enemy shooting setup        
+        this.timeThen = Date.now();
+        
+        console.log(this.timeThen);
+       
     }
 
     move(){        
         let mesh = this.mesh;       
         let scene = this.scene;
         let camera = scene.activeCamera;
+
+        //let ray = mesh.getForwardRay(10000);
 
         if(mesh){           
             // Calculating distances between the enemy and the player
@@ -44,21 +44,22 @@ export default class Enemy{
         }
     }
 
-    shoot(){
-        let mesh = this.mesh;       
-        let scene = this.scene;
-        let camera = scene.activeCamera;
-        let projectile = this.projectile;
+    shoot(){             
+        let scene = this.scene;       
         let name = this.name;
-        let itarg = this.itarg;       
-            
+        let timeNow = Date.now();
+        let mesh = this.mesh;
+       
+        this.timeThen = 0;
+        console.log(this.timeThen);
         if(scene.getMeshByName(name) != null){
-            // Enemy shoots as long its mesh is present in the scene
-            if (scene.getMeshByName("Bullet") == null)
+            if (scene.getMeshByName("Bullet"+name) == null)
             {
-                console.log("Enemy exists");
-                fireBullet(this.scene, this.mesh, this.itarg);            
-            }         
+                //console.log("Enemy shoots");
+                fireBullet(scene, mesh, name );
+                
+               
+            }                
         }         
     }
 
@@ -82,9 +83,13 @@ function generateExplosion(sprayer, puffsize, where) {
     sprayer.manualEmitCount = puffsize;  
 }
 
-function fireBullet(scene, mesh, itarg){
-       
-    var bullet = BABYLON.MeshBuilder.CreateSphere("Bullet", { segments: 3, diameter: 0.3 }, scene);
+function fireBullet(scene, mesh, name){
+
+    var bulletName = "Bullet" + name;
+    //console.log(bulletName);
+    var bullet = BABYLON.MeshBuilder.CreateSphere(bulletName, { segments: 3, diameter: 0.3 }, scene);
+
+    // Name bullet , Bullet + rand number then get name via bullet.name;
         
     bullet.position = mesh.getAbsolutePosition();
     bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, 

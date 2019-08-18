@@ -279,9 +279,10 @@ function addPistol(player, scene, camera){
 function addEnemy(enemyList, scene){
 
     enemyList.push(scene.getMeshByName("skull"));
-
+    enemyList.push(scene.getMeshByName("skull2"));
+    
     enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
-
+    enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);      
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
