@@ -1,6 +1,5 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
-import Bullet from "./bullet";
 import "@babylonjs/core/Meshes/meshBuilder";
 
 export default class Enemy{
@@ -14,10 +13,7 @@ export default class Enemy{
         //this.mesh.visibility = false;        
         this.health = 5;       
         // Enemy shooting setup        
-        this.timeThen = Date.now();
-        
-        console.log(this.timeThen);
-       
+        this.timeThen = Date.now();      
     }
 
     move(){        
@@ -35,9 +31,9 @@ export default class Enemy{
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
 
             // Move enemy towards the player and stops slightly ahead
-            if(distVec > 10){
+            if(distVec < 10){
                 distVec -= 0.1;
-                //mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
+                mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
             }
             // Enemy always faces the player
             mesh.lookAt(camera.position, Math.PI);           
@@ -105,7 +101,7 @@ function fireBullet(scene, mesh, name){
 
     bullet.step = ()=>{
         bullet.life++;
-        if(bullet.life> 100 && bullet.physicsImpostor){
+        if(bullet.life> 20 && bullet.physicsImpostor){
             bullet.physicsImpostor.dispose();
             bullet.dispose();                
         }

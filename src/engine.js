@@ -1,13 +1,16 @@
+// Babylon
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { GridMaterial } from "@babylonjs/materials";
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
-
+import * as GUI from "@babylonjs/gui";
+// Physics
 import * as cannon from "CANNON";
 import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
-
+// Utilities 
 import Weapon from "./weapon";
-import * as GUI from "@babylonjs/gui";
 import Enemy from "./enemy";
+import Collectible from "./collectible";
+import { cpus } from "os";
 
 export default class Engine{
     constructor(){
@@ -18,7 +21,8 @@ export default class Engine{
 
         // Entities
         this.player;
-        this.enemyList = [];        
+        this.enemyList = [];
+        this.collectibleList = [];        
         
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, -8), this.scene);        
@@ -64,6 +68,7 @@ export default class Engine{
         var scene = this.scene;
         var player = this.player;
         var enemyList = this.enemyList;
+        var collectibleList = this.collectibleList;
 
         // Add lights to the scene
         var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
@@ -84,7 +89,9 @@ export default class Engine{
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene);
             // Add the weapon meshes to the scene
-            addPistol(player, scene, camera);           
+            addPistol(player, scene, camera);
+            // Add the collectible meshes to the scene
+            addCollectible(collectibleList, scene);           
         });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
@@ -144,7 +151,6 @@ export default class Engine{
                 let model = hit.pickedMesh;             
                 // Exempt ground from the be shot at
                 if(hit !== null && model !== null && model.name != "ground"){
-
                     for(let i= 0; i < enemyList.length ; i++){
                         if(enemyList[i].name == model.name){
                             console.log("Target Hit :" + model.name + " Health :" + enemyList[i].health );
@@ -288,5 +294,18 @@ function addEnemy(enemyList, scene){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
         scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
     }    
+}
+
+function addCollectible(collectibleList, scene){
+    
+    collectibleList.push(scene.getMeshByName("energyPack"));
+    collectibleList.push(scene.getMeshByName("healthPack"));
+    
+    collectibleList[0] = new Collectible(scene, "energyPack",  collectibleList[0]);
+    collectibleList[1] = new Collectible(scene, "healthPack", collectibleList[1]);      
+    //Adding up the move() functions of each enemy to the render ovservable
+    for(let i=0; i<collectibleList.length; i++){
+        scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});             
+    }  
 }
 
