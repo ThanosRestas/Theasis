@@ -14,8 +14,9 @@ export default class Collectible{
     
     rotate(){
         if(this.mesh != null){
-            this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);  
-        }           
-    }
+            this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);           
+        } 
+    } 
+      
 }
 

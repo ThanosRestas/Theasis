@@ -4,15 +4,15 @@ import { MultiPointerScaleBehavior } from "@babylonjs/core/Legacy/legacy";
 
 export default class Character{
     constructor(game){
+        // World info
         this.game = game;
         this.scene = game.scene;
         this.camera = game.camera;
-
+        this.camera.position.z = 5;
         // Player info
         this.gunLoadout = [];
         this.health = 20;
-        this.energy = 20;
-        
+        this.energy = 20;        
         // Change into weapon array to store all weapons
         this.currentWeapon = 0;
         // Getting the camera's physics impostor
@@ -165,16 +165,21 @@ export default class Character{
                     var keyCode = this._keys[index]
                     var speed = this.camera._computeLocalCameraSpeed()                
                     if (this.keysLeft.indexOf(keyCode) !== -1) {                    
-                        this.camera._localDirection.copyFromFloats(-speed, 0, 0)
+                        this.camera._localDirection.copyFromFloats(-speed, 0, 0);
+                        //console.log(this.camera.position.x);
                     }
                     else if (this.keysRight.indexOf(keyCode) !== -1) {
-                        this.camera._localDirection.copyFromFloats(+speed, 0, 0)
+                        this.camera._localDirection.copyFromFloats(+speed, 0, 0);
+                        //console.log(this.camera.position.x);
                     }
                     else if (this.keysBackward.indexOf(keyCode) !== -1){
-                        this.camera._localDirection.copyFromFloats(0, 0, -speed)
+                        this.camera._localDirection.copyFromFloats(0, 0, -speed);
+                        //console.log(this.camera.position.z);
                     }
                     else if (this.keysForward.indexOf(keyCode) !== -1){
-                        this.camera._localDirection.copyFromFloats(0, 0, +speed)
+                        this.camera._localDirection.copyFromFloats(0, 0, +speed);
+                        //console.log(this.camera.position.z);
+                        
                     }
                
                     if (this.camera.getScene().useRightHandedSystem) {

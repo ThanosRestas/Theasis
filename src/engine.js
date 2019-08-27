@@ -1,6 +1,8 @@
 // Babylon
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { GridMaterial } from "@babylonjs/materials";
+import "@babylonjs/loaders/glTF";
+
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
 import * as GUI from "@babylonjs/gui";
 // Physics
@@ -18,12 +20,10 @@ export default class Engine{
         this.canvas = document.getElementById("renderCanvas");
         this.engine = new BABYLON.Engine(this.canvas);       
         this.scene = new BABYLON.Scene(this.engine);
-
         // Entities
         this.player;
         this.enemyList = [];
-        this.collectibleList = [];        
-        
+        this.collectibleList = [];    
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, -8), this.scene);        
         this.camera.attachControl(this.canvas, true);
@@ -32,15 +32,12 @@ export default class Engine{
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); 
         this.camera.checkCollisions = true;
         this.camera.applyGravity = true; 
-
         // Enable collisions and gravity in scene
         this.scene.collisionsEnabled = true;
-        this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);        
-        
+        this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);    
         // Enable physics        
         this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
         this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
-
         // Camera physics impostor
         this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 2 }, this.scene);
         this.cameraImpostor.physicsImpostor = new BABYLON.PhysicsImpostor(this.cameraImpostor, 
@@ -52,15 +49,15 @@ export default class Engine{
         // Assigning the collision sphere to the camera
         this.cameraImpostor.parent = this.camera;
         this.cameraImpostor.isPickable = false;        
-
         // HUD setup
         this.hud = this.hudManager();
-
         // Particle system setup
         this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
         this.particleSystem.particleTexture = new BABYLON.Texture("../assets/textures/flare.png", this.scene);
         this.particleSystem.emitRate = 0;        
-        this.particleSystem.start();       
+        this.particleSystem.start();   
+        
+        this.scene.animationsEnabled = true;
     }
 
     assetManager(){
@@ -69,7 +66,6 @@ export default class Engine{
         var player = this.player;
         var enemyList = this.enemyList;
         var collectibleList = this.collectibleList;
-
         // Add lights to the scene
         var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
         light4.intensity = 2;
@@ -80,7 +76,8 @@ export default class Engine{
             //console.log("task successful", task);
 
             // Setting ground material
-            var ground = scene.getMeshByName("ground");           
+            var ground = scene.getMeshByName("ground");
+            ground.checkCollisions = true;           
             ground.material = new GridMaterial("groundMaterial", scene);    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             ground.material.backFaceCulling = false;
@@ -91,18 +88,25 @@ export default class Engine{
             // Add the weapon meshes to the scene
             addPistol(player, scene, camera);
             // Add the collectible meshes to the scene
-            addCollectible(collectibleList, scene);           
+            addCollectible(collectibleList, scene);
+           
         });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
 
             var errors = tasks.filter(function(task) {return task.taskState === BABYLON.AssetTaskState.ERROR;});
             var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR;}); 
-            //console.log(tasks);
+
+            //console.log(scene);
+            //var healthPack = scene.getTransformNodeByName("skull");
+            //console.log(healthPack);
+           
         });
         // We add single tasks to the assetsManager
         // Level design load
-        assetsManager.addMeshTask("task", "", "../assets/models/", "test106.babylon");
+        //assetsManager.addMeshTask("task", "", "../assets/models/", "test109.babylon");
+        assetsManager.addMeshTask("task2", "", "../assets/models/", "test145.glb");
+        //assetsManager.addMeshTask("task2", "", "../assets/models/", "test.babylon");
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -191,11 +195,9 @@ export default class Engine{
 
     hudManager(){
 
-        let player = this.player;
-
+        let player = this.player; 
         // GUI setup
         var advancedTexture = new GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this.scene);
-
         // Array filled with our three info bars
         var hudComponents = [];
 
@@ -249,9 +251,13 @@ export default class Engine{
 function addPistol(player, scene, camera){    
 
     // Getting the gun models from the scene and load them into the loadout    
-    player.gunLoadout.push(scene.getMeshByName("pistol"));
-    player.gunLoadout.push(scene.getMeshByName("shotgun"));
-    player.gunLoadout.push(scene.getMeshByName("ak47"));
+    //player.gunLoadout.push(scene.getMeshByName("pistol"));
+    //player.gunLoadout.push(scene.getMeshByName("shotgun"));
+    //player.gunLoadout.push(scene.getMeshByName("ak47"));
+
+    player.gunLoadout.push(scene.getTransformNodeByName("pistol"));
+    player.gunLoadout.push(scene.getTransformNodeByName("shotgun"));
+    player.gunLoadout.push(scene.getTransformNodeByName("ak47"));
     
     // Set pistol's attributes for proper positioning
     player.gunLoadout[0].parent = camera;    
@@ -260,13 +266,13 @@ function addPistol(player, scene, camera){
 
     // Set shotgun's attributes for proper positioning  
     player.gunLoadout[1].parent = camera;
-    player.gunLoadout[1].rotation.y = -Math.PI/2;    
+    player.gunLoadout[1].rotation.y = Math.PI/2;    
     player.gunLoadout[1].position = new BABYLON.Vector3(1, -1, 3);    
 
     // Set ak47's attributes for proper positioning
     player.gunLoadout[2].parent = camera;
-    player.gunLoadout[2].rotation.y = -Math.PI/2;    
-    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -1, 1.5);   
+    //player.gunLoadout[2].rotation.y = Math.PI;    
+    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -0.75, 2.5);   
     
     for(var i=0; i<player.gunLoadout.length;i++){
         // Make invisible the gun dummy model and its children
@@ -283,12 +289,15 @@ function addPistol(player, scene, camera){
 }
 
 function addEnemy(enemyList, scene){
-
-    enemyList.push(scene.getMeshByName("skull"));
-    enemyList.push(scene.getMeshByName("skull2"));
+    
+    enemyList.push(scene.getTransformNodeByName("skull"));
+    enemyList.push(scene.getTransformNodeByName("skull2"));
+    enemyList.push(scene.getTransformNodeByName("skull3"));
     
     enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
-    enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);      
+    enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);
+    enemyList[2] = new Enemy(scene, "skull3", enemyList[2]);   
+
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});

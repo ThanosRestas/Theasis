@@ -8,7 +8,9 @@ export default class Weapon{
         // Animation properties
         this.start = start;      
         // Create the proper animation per gun upon object creation
-        this.setAnimations();        
+        this.setAnimations();  
+        
+        //console.log(this.mesh);
     }
     setAnimations(){        
         // Setting the end position of the animation(usually the same as the start)
@@ -18,10 +20,10 @@ export default class Weapon{
             end.z -= Math.PI/10;
         }
         else if(this.name == "shotgun"){
-            end.z += Math.PI/20;
+            end.z -= Math.PI/20;
         }
         else if(this.name == "ak47"){
-            end.z += Math.PI/100;        
+            end.x -= Math.PI/100;        
         }     
         // Setting up keys based on start-end values
         var keys = [{frame: 0,value: this.start},{frame: 10,value: end},{frame: 100,value: this.start}];

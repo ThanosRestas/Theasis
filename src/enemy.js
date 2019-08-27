@@ -13,15 +13,17 @@ export default class Enemy{
         //this.mesh.visibility = false;        
         this.health = 5;       
         // Enemy shooting setup        
-        this.timeThen = Date.now();      
+        this.timeThen = Date.now();
+               
     }
 
     move(){        
         let mesh = this.mesh;       
         let scene = this.scene;
         let camera = scene.activeCamera;
-
-        //let ray = mesh.getForwardRay(10000);
+        
+        let lAt = camera.position;
+        let myMesh = mesh;
 
         if(mesh){           
             // Calculating distances between the enemy and the player
@@ -33,11 +35,15 @@ export default class Enemy{
             // Move enemy towards the player and stops slightly ahead
             if(distVec < 10){
                 distVec -= 0.1;
-                mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
+                //mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
             }
+            
             // Enemy always faces the player
-            mesh.lookAt(camera.position, Math.PI);           
+            mesh.setParent(null);
+            mesh.lookAt(camera.position, Math.PI, Math.PI / 2);       
+            
         }
+       
     }
 
     shoot(){             
@@ -46,7 +52,7 @@ export default class Enemy{
         let mesh = this.mesh;
         let timeNow = Date.now();        
         
-        if(scene.getMeshByName(name) != null){
+        if(scene.getTransformNodeByName(name) != null){
             // Checking if enemy's bullet is still in the scene
             if(scene.getMeshByName("Bullet"+name) == null)
             {  
@@ -109,3 +115,17 @@ function fireBullet(scene, mesh, name){
 
     scene.onBeforeRenderObservable.add(bullet.step);   
 }
+
+/*function lookatposition(lAt, myMesh){ // lAt = vector3(xyz) of target position to look at
+
+  
+
+    if (lAt){
+        var pitchAdjustment = 1.6; //use to orient pitch 
+        lAt = lAt.subtract(myMesh.position);
+        var rotationFactor = -Math.atan2(lAt.z, lAt.x) - Math.PI/2;
+        //imported GLB only works with quaternion, also needs pitch adjustment to stand upright
+        var yprQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(rotationFactor, pitchAdjustment, 0);
+        myMesh.rotationQuaternion = yprQuaternion;
+    }
+}*/
