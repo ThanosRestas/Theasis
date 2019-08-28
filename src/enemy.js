@@ -10,6 +10,7 @@ export default class Enemy{
         // Enemy properties
         this.name = name;
         this.mesh = mesh;
+        this.destroyed = false;
         //this.mesh.visibility = false;        
         this.health = 5;       
         // Enemy shooting setup        
@@ -20,10 +21,7 @@ export default class Enemy{
     move(){        
         let mesh = this.mesh;       
         let scene = this.scene;
-        let camera = scene.activeCamera;
-        
-        let lAt = camera.position;
-        let myMesh = mesh;
+        let camera = scene.activeCamera;     
 
         if(mesh){           
             // Calculating distances between the enemy and the player
@@ -69,14 +67,17 @@ export default class Enemy{
 
     destroy(sprayer){
         let mesh = this.mesh;
+        let destroyed = this.destroyed;
+        
         // Get the position of the mesh to be used for explosion
         let explodeLocation = mesh.getAbsolutePosition();
-        // Destroy the mesh      
-        mesh.dispose();  
+        // Destroy the mesh
+        destroyed = true;       
+        mesh.dispose();        
         // Set explosion debris-levels
         let particleSystemManualEmitCount = 5000;               
         // Now lets call a  generateExplosion function...       
-        generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);        
+        //generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);        
     }  
 }
 
@@ -92,9 +93,9 @@ function fireBullet(scene, mesh, name){
     var bulletName = "Bullet" + name;
     //console.log(bulletName);
     var bullet = BABYLON.MeshBuilder.CreateSphere(bulletName, { segments: 3, diameter: 0.3 }, scene);
+    bullet.isPickable = false;
 
-    // Name bullet , Bullet + rand number then get name via bullet.name;
-        
+    // Name bullet , Bullet + rand number then get name via bullet.name;        
     bullet.position = mesh.getAbsolutePosition();
     bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, 
         BABYLON.PhysicsImpostor.SphereImpostor, 
@@ -115,17 +116,3 @@ function fireBullet(scene, mesh, name){
 
     scene.onBeforeRenderObservable.add(bullet.step);   
 }
-
-/*function lookatposition(lAt, myMesh){ // lAt = vector3(xyz) of target position to look at
-
-  
-
-    if (lAt){
-        var pitchAdjustment = 1.6; //use to orient pitch 
-        lAt = lAt.subtract(myMesh.position);
-        var rotationFactor = -Math.atan2(lAt.z, lAt.x) - Math.PI/2;
-        //imported GLB only works with quaternion, also needs pitch adjustment to stand upright
-        var yprQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(rotationFactor, pitchAdjustment, 0);
-        myMesh.rotationQuaternion = yprQuaternion;
-    }
-}*/

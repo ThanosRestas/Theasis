@@ -74,7 +74,6 @@ export default class Engine{
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
             //console.log("task successful", task);
-
             // Setting ground material
             var ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;           
@@ -93,20 +92,12 @@ export default class Engine{
         });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
-
             var errors = tasks.filter(function(task) {return task.taskState === BABYLON.AssetTaskState.ERROR;});
             var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR;}); 
-
-            //console.log(scene);
-            //var healthPack = scene.getTransformNodeByName("skull");
-            //console.log(healthPack);
-           
         });
         // We add single tasks to the assetsManager
-        // Level design load
-        //assetsManager.addMeshTask("task", "", "../assets/models/", "test109.babylon");
-        assetsManager.addMeshTask("task2", "", "../assets/models/", "test145.glb");
-        //assetsManager.addMeshTask("task2", "", "../assets/models/", "test.babylon");
+        // Level design load        
+        assetsManager.addMeshTask("task2", "", "../assets/models/", "test151.glb");        
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -152,16 +143,22 @@ export default class Engine{
                 // Destroy camera's ray target in 1000 distance
                 let ray = camera.getForwardRay(10000);
                 let hit = scene.pickWithRay(ray);
-                let model = hit.pickedMesh;             
+                let model = hit.pickedMesh;              
+                           
                 // Exempt ground from the be shot at
                 if(hit !== null && model !== null && model.name != "ground"){
-                    for(let i= 0; i < enemyList.length ; i++){
-                        if(enemyList[i].name == model.name){
-                            console.log("Target Hit :" + model.name + " Health :" + enemyList[i].health );
-                            enemyList[i].health -= 1;
-                            if(enemyList[i].health == 0){                               
-                                enemyList[i].destroy(particleSystem);
+                    for(let i = 0; i < enemyList.length ; i++){
+                        if(enemyList[i].name == model.parent.name){                           
+                            if(enemyList[i].health > 0){
+                                
+                                enemyList[i].health -= 1;
+                                console.log("Target Hit :" + model.parent.name + " Health :" + enemyList[i].health );    
                             }
+
+                            if(enemyList[i].health == 0){                                                            
+                                enemyList[i].destroy(particleSystem);
+                                break;                               
+                            }    
                         }
                     }                      
                 }                               
