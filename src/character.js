@@ -33,6 +33,8 @@ export default class Character{
 
         // Detect collision between player and enemy and damange health
         camera.onCollide = function (colMesh) {
+
+            //console.log(colMesh.name);
             
             if(colMesh.name != "ground"){
                 console.log("Collision detected");
@@ -47,19 +49,18 @@ export default class Character{
                 }                           
             }            
             
-            if(scene.getMeshByName("healthPack")!== null && colMesh == scene.getMeshByName("healthPackCollision")){
+            if(scene.getMeshByName("healthPack")!== null && colMesh.name == "healthPack"){
                 console.log("Health pack acquired");
                 // Remove the health pack from the scene and restore 10% health to the player
-                scene.getMeshByName(colMesh.parent.name).dispose();
+                scene.getMeshByName(colMesh.name).dispose();
                 if(health < 20){
                     health += 0.5;
                 }      
-            }            
-            
-            if(scene.getMeshByName("energyPack")!== null && colMesh == scene.getMeshByName("energyPackCollision")){
+            }           
+            else if(scene.getTransformNodeByName("energyPack")!== null && colMesh.parent.name == "energyPack"){
                 console.log("Energy pack acquired");
                 // Remove the energy pack from the scene and restore 20% energy to the player
-                scene.getMeshByName(colMesh.parent.name).dispose();
+                scene.getTransformNodeByName(colMesh.parent.name).dispose();
                 if(energy < 20){
                     energy += 5;
                 }      

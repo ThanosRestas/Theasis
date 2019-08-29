@@ -9,8 +9,20 @@ export default class Collectible{
         this.scene = scene;
         // Weapon properties
         this.name = name;
-        this.mesh = mesh;     
-    }  
+        this.mesh = mesh;
+        
+        this.mesh.checkCollisions = true;        
+        // When the type of mesh is of TransformNode 
+        // get submeshes and enable collision on each
+        this.subMeshes = this.mesh.getChildren();
+        this.setup();      
+    } 
+    
+    setup(){
+        for(let i = 0; i<this.subMeshes.length ; i++){
+            this.subMeshes[i].checkCollisions = true;
+        }
+    }
     
     rotate(){
         if(this.mesh != null){

@@ -97,7 +97,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/models/", "test151.glb");        
+        assetsManager.addMeshTask("task2", "", "../assets/models/", "test155.glb");        
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -247,11 +247,7 @@ export default class Engine{
 
 function addPistol(player, scene, camera){    
 
-    // Getting the gun models from the scene and load them into the loadout    
-    //player.gunLoadout.push(scene.getMeshByName("pistol"));
-    //player.gunLoadout.push(scene.getMeshByName("shotgun"));
-    //player.gunLoadout.push(scene.getMeshByName("ak47"));
-
+    // Getting the gun models from the scene and load them into the loadout
     player.gunLoadout.push(scene.getTransformNodeByName("pistol"));
     player.gunLoadout.push(scene.getTransformNodeByName("shotgun"));
     player.gunLoadout.push(scene.getTransformNodeByName("ak47"));
@@ -302,16 +298,18 @@ function addEnemy(enemyList, scene){
     }    
 }
 
-function addCollectible(collectibleList, scene){
+function addCollectible(collectibleList, scene){ 
     
-    collectibleList.push(scene.getMeshByName("energyPack"));
+   
     collectibleList.push(scene.getMeshByName("healthPack"));
+    collectibleList.push(scene.getTransformNodeByName("energyPack"));
     
-    collectibleList[0] = new Collectible(scene, "energyPack",  collectibleList[0]);
-    collectibleList[1] = new Collectible(scene, "healthPack", collectibleList[1]);      
-    //Adding up the move() functions of each enemy to the render ovservable
+    collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
+    collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
+       
+    //Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
-        scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});             
+        scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            
     }  
 }
 
