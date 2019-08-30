@@ -12,12 +12,22 @@ export default class Enemy{
         this.mesh = mesh;
         this.destroyed = false;
         //this.mesh.visibility = false;        
-        this.health = 5;       
+        this.health = 10;       
         // Enemy shooting setup        
         this.timeThen = Date.now();
-               
-    }
+        // When the type of mesh is of TransformNode 
+        // get submeshes and enable collision on each
+        this.subMeshes = this.mesh.getChildren();
+        this.setup();      
+    } 
+    
+    setup(){
 
+        for(let i = 0; i<this.subMeshes.length ; i++){
+            this.subMeshes[i].checkCollisions = true;
+        }
+    }               
+    
     move(){        
         let mesh = this.mesh;       
         let scene = this.scene;
@@ -31,9 +41,9 @@ export default class Enemy{
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
 
             // Move enemy towards the player and stops slightly ahead
-            if(distVec < 10){
-                distVec -= 0.1;
-                //mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);                     
+            if(distVec < 15){
+                distVec -= 0.05;
+                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);                     
             }
             
             // Enemy always faces the player

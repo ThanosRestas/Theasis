@@ -41,13 +41,13 @@ export default class Character{
             }            
 
             // First check if there are any of the hitable meshes in the scene still and then check collision
-            if (scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
+            /*if (scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
                 console.log("Enemy hit");
                 // Health deprecation with every collision with an enemy
                 if(health >= 1){
                     health -= 0.20;
                 }                           
-            }            
+            }*/            
             
             if(scene.getMeshByName("healthPack")!== null && colMesh.name == "healthPack"){
                 console.log("Health pack acquired");

@@ -25,7 +25,7 @@ export default class Engine{
         this.enemyList = [];
         this.collectibleList = [];    
         // Camera setup
-        this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, -8), this.scene);        
+        this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, 0), this.scene);        
         this.camera.attachControl(this.canvas, true);
         this.camera.speed = 0.2;
         // Collision box for the camera -- Deprecated after cannon.js usage !?      
@@ -97,7 +97,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/models/", "test155.glb");        
+        assetsManager.addMeshTask("task2", "", "../assets/models/", "test156.glb");        
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -140,10 +140,12 @@ export default class Engine{
                 }                           
                 // Update HUD
                 hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);               
-                // Destroy camera's ray target in 1000 distance
-                let ray = camera.getForwardRay(10000);
+                // Shoot at camera's ray target according to each weapon's range            
+                let ray = camera.getForwardRay(player.gunLoadout[currentWeapon].range);
                 let hit = scene.pickWithRay(ray);
-                let model = hit.pickedMesh;              
+                let model = hit.pickedMesh;   
+                
+                          
                            
                 // Exempt ground from the be shot at
                 if(hit !== null && model !== null && model.name != "ground"){
@@ -151,11 +153,11 @@ export default class Engine{
                         if(enemyList[i].name == model.parent.name){                           
                             if(enemyList[i].health > 0){
                                 
-                                enemyList[i].health -= 1;
+                                enemyList[i].health -= player.gunLoadout[currentWeapon].damage;
                                 console.log("Target Hit :" + model.parent.name + " Health :" + enemyList[i].health );    
                             }
 
-                            if(enemyList[i].health == 0){                                                            
+                            if(enemyList[i].health <= 0){                                                            
                                 enemyList[i].destroy(particleSystem);
                                 break;                               
                             }    
@@ -293,8 +295,8 @@ function addEnemy(enemyList, scene){
 
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
-        scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
-        scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
+        //scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
+        //scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
     }    
 }
 
@@ -307,7 +309,7 @@ function addCollectible(collectibleList, scene){
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
     collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
        
-    //Adding up the move() functions of each enemy to the render observable
+    // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
         scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            
     }  

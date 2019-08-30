@@ -4,7 +4,9 @@ export default class Weapon{
         // Weapon properties
         this.name = name;
         this.mesh = mesh;
-        this.ammo = 30;        
+        this.ammo = 30;
+        this.damage = 0;
+        this.range = 0;        
         // Animation properties
         this.start = start;      
         // Create the proper animation per gun upon object creation
@@ -17,12 +19,18 @@ export default class Weapon{
         var end = this.start.clone();
         // Setting appropriate end position according to gun model
         if(this.name == "pistol"){
+            this.damage = 1;
+            this.range = 25;
             end.z -= Math.PI/10;
         }
         else if(this.name == "shotgun"){
+            this.damage = 2.5;
+            this.range = 10;
             end.z -= Math.PI/20;
         }
         else if(this.name == "ak47"){
+            this.damage = 5;
+            this.range = 50;
             end.x -= Math.PI/100;        
         }     
         // Setting up keys based on start-end values
