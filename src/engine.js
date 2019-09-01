@@ -26,8 +26,7 @@ export default class Engine{
         this.collectibleList = [];    
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, 0), this.scene);        
-        this.camera.attachControl(this.canvas, true);
-        
+        this.camera.attachControl(this.canvas, true);        
         this.camera.speed = 0.2;
         // Collision box for the camera -- Deprecated after cannon.js usage !?      
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); 
@@ -82,20 +81,12 @@ export default class Engine{
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             ground.material.backFaceCulling = false;
             ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene);
             // Add the weapon meshes to the scene
             addPistol(player, scene, camera);
             // Add the collectible meshes to the scene
-            addCollectible(collectibleList, scene);
-
-            //console.log(scene.getMeshByName("__root__"));
-
-           
-
-
-           
+            addCollectible(collectibleList, scene);           
         });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
@@ -105,8 +96,7 @@ export default class Engine{
         // We add single tasks to the assetsManager
         // Level design load        
         assetsManager.addMeshTask("task2", "", "../assets/models/", "test159.glb");
-        assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");
-        assetsManager.addMeshTask("task4", "", "../assets/models/", "Rifle.glb");            
+        assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");            
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -120,11 +110,14 @@ export default class Engine{
         let isLocked = false;
         let enemyList = this.enemyList;
         let particleSystem = this.particleSystem;        
- 
+        
+        let animationsRunning = false;
+        let shooting = false;
+        let animation = null;
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
             let currentWeapon = player.currentWeapon;
-            //let enemyList = this.enemyList;    
+
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
     
@@ -140,13 +133,21 @@ export default class Engine{
             //evt === 0 (left mouse click)
             //evt === 1 (mouse wheel click (not scrolling))
             //evt === 2 (right mouse click)
+            
             if(evt.button == 0){ 
                 //Play current Weapon's animation
-                //beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);
-                scene.animationGroups[1].start(false); // Pistol
-                scene.animationGroups[3].start(false); // Shotgun
-                           
-                // Remove ammunition
+                if(animationsRunning == false){                    
+                    animation = scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);
+                    animationsRunning = true;
+                                      
+                }
+
+                animation.onAnimationEnd = function(){
+                    console.log("Animation end");
+                    animationsRunning = false;                    
+                }              
+                //scene.animationGroups[1].start(false, 2); // Pistol                           
+                // Remove ammunition                
                 if(player.gunLoadout[currentWeapon].ammo > 0){
                     player.gunLoadout[currentWeapon].ammo -= 1;     
                 }                           
@@ -158,7 +159,7 @@ export default class Engine{
                 let model = hit.pickedMesh;                          
                            
                 // Exempt ground from the be shot at
-                if(hit !== null && model !== null && model.name != "ground"){
+                if(hit !== null && model !== null && model.name != "ground" && player.gunLoadout[currentWeapon].ammo > 0){
                     for(let i = 0; i < enemyList.length ; i++){
                         if(enemyList[i].name == model.parent.name){                           
                             if(enemyList[i].health > 0){
@@ -190,16 +191,13 @@ export default class Engine{
                 isLocked = true;
                 this.active = true;
             }
-        };
-    
+        };    
         // Attach events to the document
         document.addEventListener("pointerlockchange", pointerlockchange, false);
         document.addEventListener("mspointerlockchange", pointerlockchange, false);
         document.addEventListener("mozpointerlockchange", pointerlockchange, false);
         document.addEventListener("webkitpointerlockchange", pointerlockchange, false);
-
-        this.player = player;
-        //hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);
+        //this.player = player;        
     }
 
     hudManager(){
@@ -257,17 +255,12 @@ export default class Engine{
     }
 }
 
-function addPistol(player, scene, camera){
-    
-    var mesh1 = scene.getTransformNodeByName("PistolArmature");
-    var mesh2 = scene.getTransformNodeByName("RifleArmature");
-    
+function addPistol(player, scene, camera){       
 
-    // Getting the gun models from the scene and load them into the loadout
-    //player.gunLoadout.push(scene.getMeshByName("__root__"));
-    player.gunLoadout.push(mesh1.parent);     
-    //player.gunLoadout.push(scene.getTransformNodeByName("pistol"));    
-    player.gunLoadout.push(mesh2.parent);
+    // Getting the gun models from the scene and load them into the loadout    
+    player.gunLoadout.push(scene.getTransformNodeByName("PistolArmature").parent);     
+    //player.gunLoadout.push(mesh2.parent);
+    player.gunLoadout.push(scene.getTransformNodeByName("shotgun"));
     player.gunLoadout.push(scene.getTransformNodeByName("ak47"));   
     
     // Set pistol's attributes for proper positioning
@@ -277,51 +270,25 @@ function addPistol(player, scene, camera){
     player.gunLoadout[0].scaling.z  *= 0.10;
     player.gunLoadout[0].position = new BABYLON.Vector3(0.8, -0.1, 3);
     player.gunLoadout[0].rotationQuaternion = null;     
-    player.gunLoadout[0].rotation.y =   - 3.8 * Math.PI / 7;
-    
-
-    
-
-    // Set shotgun's attributes for proper positioning 
-    player.gunLoadout[1].parent = camera; 
-    player.gunLoadout[1].scaling.x  *= 0.3;
-    player.gunLoadout[1].scaling.y  *= 0.3;  
-    player.gunLoadout[1].scaling.z  *= 0.3;
-    player.gunLoadout[1].position = new BABYLON.Vector3(1, -0.1, 1);
-    player.gunLoadout[1].rotationQuaternion = null;     
-    //player.gunLoadout[1].rotation.y =   - 3.8 * Math.PI / 7;
-
+    player.gunLoadout[0].rotation.y =   - 3.8 * Math.PI / 7;    
+    // Set shotgun's attributes for proper positioning  
+    player.gunLoadout[1].parent = camera;
+    player.gunLoadout[1].rotation.y = Math.PI/2;    
+    player.gunLoadout[1].position = new BABYLON.Vector3(1, -1, 3);
     // Set ak47's attributes for proper positioning
     player.gunLoadout[2].parent = camera;    
-    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -0.75, 2.5); 
+    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -0.75, 2.5);   
     
-    //console.log(player.gunLoadout[1]);
-    
-    console.log(scene.animationGroups);
-
-    //scene.animationGroups[0].stop();
-    //scene.animationGroups[3].stop();
-
+    // Stoping all animations from autoplaying on scene loading
     scene.animationGroups.forEach(group => {
         group.stop();
         group.reset();
-    });
-    
-    
-    /*for(var i=0; i<player.gunLoadout.length;i++){
-        // Make invisible the gun dummy model and its children
-        player.gunLoadout[i].visibility = false; 
-        player.gunLoadout[i].getChildren().forEach(function(_child) {
-            _child.visibility = false;
-        }, this);
-    }*/  
+    });  
         
     // Setting up the weapon's object on the player            
-    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], player.gunLoadout[0].rotation);
-    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1],  player.gunLoadout[1].rotation);
-    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2],  player.gunLoadout[2].rotation);  
-    
-    //console.log(player.gunLoadout)
+    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25);
+    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10);
+    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 10, 5, 50);    
 }
 
 function addEnemy(enemyList, scene){
@@ -341,15 +308,13 @@ function addEnemy(enemyList, scene){
     }    
 }
 
-function addCollectible(collectibleList, scene){ 
-    
-   
+function addCollectible(collectibleList, scene){
+
     collectibleList.push(scene.getMeshByName("healthPack"));
-    collectibleList.push(scene.getTransformNodeByName("energyPack"));
-    
+    collectibleList.push(scene.getTransformNodeByName("energyPack")); 
+
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
-    collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
-       
+    collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);       
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
         scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            

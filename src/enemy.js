@@ -4,8 +4,7 @@ import "@babylonjs/core/Meshes/meshBuilder";
 
 export default class Enemy{
     constructor(scene, name, mesh){
-        // Game properties
-        //this.game = game;
+        // Game properties        
         this.scene = scene;
         // Enemy properties
         this.name = name;

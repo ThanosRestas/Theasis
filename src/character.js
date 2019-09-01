@@ -32,14 +32,11 @@ export default class Character{
         let cameraImpostor = this.cameraImpostor;
 
         // Detect collision between player and enemy and damange health
-        camera.onCollide = function (colMesh) {
-
-            //console.log(colMesh.name);
+        camera.onCollide = function (colMesh) {     
             
             if(colMesh.name != "ground"){
                 console.log("Collision detected");
-            }            
-
+            }
             // First check if there are any of the hitable meshes in the scene still and then check collision
             /*if (scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
                 console.log("Enemy hit");
@@ -47,8 +44,7 @@ export default class Character{
                 if(health >= 1){
                     health -= 0.20;
                 }                           
-            }*/            
-            
+            }*/           
             if(scene.getMeshByName("healthPack")!== null && colMesh.name == "healthPack"){
                 console.log("Health pack acquired");
                 // Remove the health pack from the scene and restore 10% health to the player
@@ -64,8 +60,7 @@ export default class Character{
                 if(energy < 20){
                     energy += 5;
                 }      
-            }
-                        
+            }                        
             // Setting the health bar's width accordingly
             healthHud.width = health/100;
             energyHud.width = energy/100;
