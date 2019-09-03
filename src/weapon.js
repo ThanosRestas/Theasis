@@ -12,7 +12,8 @@ export default class Weapon{
         this.mesh.setEnabled(false);
         // Animation properties
         this.start = this.mesh.rotation;
-        this.animation = null;      
+        this.animation = null;
+        this.animationSpeed = 1.5;      
         // Create the proper animation per gun upon object creation
         this.setAnimations();       
     }
@@ -24,11 +25,13 @@ export default class Weapon{
             //this.damage = 2.5;
             //this.range = 10;
             end.z -= Math.PI/20;
+            this.animationSpeed = 1;
         }
         else if(this.name == "ak47"){
             //this.damage = 5;
             //this.range = 50;
-            end.x -= Math.PI/100;        
+            end.x -= Math.PI/100; 
+            this.animationSpeed = 5;      
         }
         
         if(this.name!== "pistol"){

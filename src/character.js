@@ -13,7 +13,7 @@ export default class Character{
         this.gunLoadout = [];
         this.health = 20;
         this.energy = 20;        
-        // Change into weapon array to store all weapons
+        // Index marking weapon in use
         this.currentWeapon = 0;
         // Getting the camera's physics impostor
         this.cameraImpostor = this.camera.getChildren();

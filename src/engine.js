@@ -58,6 +58,9 @@ export default class Engine{
         this.particleSystem.start();   
         
         this.scene.animationsEnabled = true;
+
+        //animations
+        this.animationRunning = false;
     }
 
     assetManager(){
@@ -109,14 +112,14 @@ export default class Engine{
         let hud = this.hud;
         let isLocked = false;
         let enemyList = this.enemyList;
-        let particleSystem = this.particleSystem;        
-        
-        let animationsRunning = false;
-        let shooting = false;
+        let particleSystem = this.particleSystem;
+        let animationRunning = this.animationRunning;        
         let animation = null;
+        // Mouse input manager   
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
             let currentWeapon = player.currentWeapon;
+            currentWeapon = player.gunLoadout[currentWeapon];
 
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
@@ -129,53 +132,52 @@ export default class Engine{
                     }
                 }
             }
-            //continue with shooting requests or whatever :P
-            //evt === 0 (left mouse click)
-            //evt === 1 (mouse wheel click (not scrolling))
-            //evt === 2 (right mouse click)
-            
-            if(evt.button == 0){ 
-                //Play current Weapon's animation
-                if(animationsRunning == false){                    
-                    animation = scene.beginAnimation(player.gunLoadout[currentWeapon].mesh, 0, 100, false);
-                    animationsRunning = true;
-                                      
-                }
-
-                animation.onAnimationEnd = function(){
-                    console.log("Animation end");
-                    animationsRunning = false;                    
-                }              
-                //scene.animationGroups[1].start(false, 2); // Pistol                           
-                // Remove ammunition                
-                if(player.gunLoadout[currentWeapon].ammo > 0){
-                    player.gunLoadout[currentWeapon].ammo -= 1;     
-                }                           
-                // Update HUD
-                hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);               
-                // Shoot at camera's ray target according to each weapon's range            
-                let ray = camera.getForwardRay(player.gunLoadout[currentWeapon].range);
-                let hit = scene.pickWithRay(ray);
-                let model = hit.pickedMesh;                          
-                           
-                // Exempt ground from the be shot at
-                if(hit !== null && model !== null && model.name != "ground" && player.gunLoadout[currentWeapon].ammo > 0){
-                    for(let i = 0; i < enemyList.length ; i++){
-                        if(enemyList[i].name == model.parent.name){                           
-                            if(enemyList[i].health > 0){
-                                
-                                enemyList[i].health -= player.gunLoadout[currentWeapon].damage;
-                                console.log("Target Hit :" + model.parent.name + " Health :" + enemyList[i].health );    
+            // continue with shooting requests or whatever :P
+            // evt === 0 (left mouse click)
+            // evt === 1 (mouse wheel click (not scrolling))
+            // evt === 2 (right mouse click)          
+            if(evt.button == 0){                
+                // Play current Weapon's animation
+                console.log(animationRunning);               
+                if(animationRunning == false){
+                    // Shoot only when an animation has ended
+                    console.log("Animation running");
+                    animation = scene.beginAnimation( currentWeapon.mesh, 0, 100, false, currentWeapon.animationSpeed);
+                    scene.animationGroups[1].start(false, 2); // Pistol      
+                    animationRunning = true;
+                    animation.onAnimationEndObservable.add(function(){
+                        console.log("Animation ended");
+                        animationRunning = false;
+                    });   
+                    // Remove ammo from current weapon's magazine               
+                    if(currentWeapon.ammo > 0){
+                        currentWeapon.ammo -= 1;                      
+                    }
+                    // Shoot at camera's ray target according to each weapon's range    
+                    let ray = camera.getForwardRay(currentWeapon.range);
+                    let hit = scene.pickWithRay(ray);
+                    let model = hit.pickedMesh;
+                    // Exempt ground from the be shot at
+                    if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0 ){
+                        for(let i = 0; i < enemyList.length ; i++){
+                            if(enemyList[i].name == model.parent.name){ 
+                                // Damage enemy                          
+                                if(enemyList[i].health > 0){                                
+                                    enemyList[i].health -= currentWeapon.damage;
+                                    console.log("Target Hit :" + model.parent.name + " Health :" + enemyList[i].health );    
+                                }
+                                // Destroy enemy    
+                                if(enemyList[i].health <= 0){                                                            
+                                    enemyList[i].destroy(particleSystem);
+                                    break;                               
+                                }    
                             }
-
-                            if(enemyList[i].health <= 0){                                                            
-                                enemyList[i].destroy(particleSystem);
-                                break;                               
-                            }    
-                        }
-                    }                      
+                        }                      
+                    }                               
                 }                               
-            }            
+            }                                           
+            // Update HUD
+            hud[2].text = String(player.gunLoadout[player.currentWeapon].ammo);              
         }; 
         // Event listener when the pointerlock is updated (or removed by pressing ESC for example).
         var pointerlockchange = function () {
@@ -197,12 +199,9 @@ export default class Engine{
         document.addEventListener("mspointerlockchange", pointerlockchange, false);
         document.addEventListener("mozpointerlockchange", pointerlockchange, false);
         document.addEventListener("webkitpointerlockchange", pointerlockchange, false);
-        //this.player = player;        
     }
 
-    hudManager(){
-
-        let player = this.player; 
+    hudManager(){        
         // GUI setup
         var advancedTexture = new GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this.scene);
         // Array filled with our three info bars
@@ -234,8 +233,6 @@ export default class Engine{
 
         // Ammo bar
         var ammoBar = new GUI.TextBlock();
-        //ammoBar.text = String(player.gunLoadout[player.currentWeapon].ammo);
-        //ammoBar.text 
         ammoBar.color = "white";
         ammoBar.fontSize = 24;
         ammoBar.top = 350;
