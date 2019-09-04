@@ -58,7 +58,10 @@ export default class Character{
                 // Remove the energy pack from the scene and restore 20% energy to the player
                 scene.getTransformNodeByName(colMesh.parent.name).dispose();
                 if(energy < 20){
-                    energy += 5;
+                    energy += 30;
+                    if(energy >= 20){
+                        energy = 20;
+                    }
                 }      
             }                        
             // Setting the health bar's width accordingly
@@ -190,13 +193,13 @@ export default class Character{
         }   
     
         FreeCameraKeyboardRotateInput.prototype.getTypeName = function () {
-            return "FreeCameraKeyboardRotateInput"
+            return "FreeCameraKeyboardRotateInput";
         }
         FreeCameraKeyboardRotateInput.prototype._onLostFocus = function (e) {
-            this._keys = []
+            this._keys = [];
         }
         FreeCameraKeyboardRotateInput.prototype.getSimpleName = function () {
-            return "keyboardRotate"
+            return "keyboardRotate";
         }
     
         // Connect to camera:
@@ -236,26 +239,11 @@ export default class Character{
 }
 
 function weaponSwitch(gunLoadout, currentWeapon){
-    //Making every weapon invisible - not in use 
-    /*for(let i=0; i< gunLoadout.length; i++){
-        gunLoadout[i].mesh.visibility = false; 
-        gunLoadout[i].mesh.getChildren().forEach(function(_child) {
-            _child.visibility = false;
-        }, this);
-    }
-    // Make desired weapon visible - in use
-    gunLoadout[currentWeapon].mesh.visibility = true; 
-    gunLoadout[currentWeapon].mesh.getChildren().forEach(function(_child) {
-        _child.visibility = true;
-    }, this);*/
-
+    // Make all meshes invisible   
     for(let i=0; i< gunLoadout.length; i++){
         gunLoadout[i].mesh.setEnabled(false);      
     }
     // Make desired weapon visible - in use
     gunLoadout[currentWeapon].mesh.setEnabled(true);
-  
-
-    //gunLoadout[currentWeapon].mesh.setEnabled(true);
 }
 

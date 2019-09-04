@@ -11,6 +11,7 @@ import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
 // Utilities 
 import Weapon from "./weapon";
 import Enemy from "./enemy";
+import Skeleton from "./skeleton";
 import Collectible from "./collectible";
 import { cpus } from "os";
 
@@ -76,7 +77,7 @@ export default class Engine{
         var assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
-            //console.log("task successful", task);
+            console.log("task successful", task);
             // Setting ground material
             var ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;           
@@ -98,7 +99,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/models/", "test159.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/models/", "test160.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");            
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
@@ -138,15 +139,15 @@ export default class Engine{
             // evt === 2 (right mouse click)          
             if(evt.button == 0){                
                 // Play current Weapon's animation
-                console.log(animationRunning);               
+                //console.log(animationRunning);               
                 if(animationRunning == false){
                     // Shoot only when an animation has ended
-                    console.log("Animation running");
+                    //console.log("Animation running");
                     animation = scene.beginAnimation( currentWeapon.mesh, 0, 100, false, currentWeapon.animationSpeed);
                     scene.animationGroups[1].start(false, 2); // Pistol      
                     animationRunning = true;
                     animation.onAnimationEndObservable.add(function(){
-                        console.log("Animation ended");
+                        //console.log("Animation ended");
                         animationRunning = false;
                     });   
                     // Remove ammo from current weapon's magazine               
@@ -290,13 +291,18 @@ function addPistol(player, scene, camera){
 
 function addEnemy(enemyList, scene){
     
+    // Skulls
     enemyList.push(scene.getTransformNodeByName("skull"));
     enemyList.push(scene.getTransformNodeByName("skull2"));
     enemyList.push(scene.getTransformNodeByName("skull3"));
+    // Skeletons
+    enemyList.push(scene.getTransformNodeByName("Skeleton"));
     
     enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
     enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);
-    enemyList[2] = new Enemy(scene, "skull3", enemyList[2]);   
+    enemyList[2] = new Enemy(scene, "skull3", enemyList[2]);
+    
+    enemyList[3] = new Skeleton(scene, "skeleton", enemyList[3]);   
 
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
