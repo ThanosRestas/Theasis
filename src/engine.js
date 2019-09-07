@@ -77,7 +77,7 @@ export default class Engine{
         var assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
-            console.log("task successful", task);
+            //console.log("task successful", task);
             // Setting ground material
             var ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;           
@@ -100,7 +100,8 @@ export default class Engine{
         // We add single tasks to the assetsManager
         // Level design load        
         assetsManager.addMeshTask("task2", "", "../assets/models/", "test160.glb");
-        assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");            
+        assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");
+        assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton.glb");                
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -296,7 +297,10 @@ function addEnemy(enemyList, scene){
     enemyList.push(scene.getTransformNodeByName("skull2"));
     enemyList.push(scene.getTransformNodeByName("skull3"));
     // Skeletons
-    enemyList.push(scene.getTransformNodeByName("Skeleton"));
+    scene.getTransformNodeByName("SkeletonArmature").parent.position.x = 18;
+    scene.getTransformNodeByName("SkeletonArmature").parent.position.y = 0;
+    scene.getTransformNodeByName("SkeletonArmature").parent.position.z = 1.5;
+    enemyList.push(scene.getTransformNodeByName("SkeletonArmature").parent);
     
     enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
     enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);
@@ -306,7 +310,7 @@ function addEnemy(enemyList, scene){
 
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
-        //scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
+        scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
         //scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
     }    
 }
