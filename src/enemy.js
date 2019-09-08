@@ -17,9 +17,7 @@ export default class Enemy{
         // When the type of mesh is of TransformNode 
         // get submeshes and enable collision on each
         this.subMeshes = this.mesh.getChildren();
-        this.setup(); 
-        
-        console.log("yo");
+        //this.setup();       
     } 
     
     setup(){
@@ -42,10 +40,10 @@ export default class Enemy{
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
 
             // Move enemy towards the player and stops slightly ahead
-            if(distVec < 15){
+            /*if(distVec < 15){
                 distVec -= 0.05;
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);                     
-            }
+            }*/
             
             // Enemy always faces the player
             mesh.setParent(null);

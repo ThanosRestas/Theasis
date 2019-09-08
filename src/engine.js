@@ -56,12 +56,14 @@ export default class Engine{
         this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
         this.particleSystem.particleTexture = new BABYLON.Texture("../assets/textures/flare.png", this.scene);
         this.particleSystem.emitRate = 0;        
-        this.particleSystem.start();   
-        
+        this.particleSystem.start();        
+        // Animations
         this.scene.animationsEnabled = true;
-
-        //animations
         this.animationRunning = false;
+
+        // Enable debugging tools;
+        this.scene.debugLayer.show();
+
     }
 
     assetManager(){
@@ -101,7 +103,8 @@ export default class Engine{
         // Level design load        
         assetsManager.addMeshTask("task2", "", "../assets/models/", "test160.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");
-        assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton.glb");                
+        assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton.glb");
+        assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");                   
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -159,6 +162,10 @@ export default class Engine{
                     let ray = camera.getForwardRay(currentWeapon.range);
                     let hit = scene.pickWithRay(ray);
                     let model = hit.pickedMesh;
+
+                    /*if(model!=null){
+                        console.log(model.parent.name);
+                    }*/                    
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0 ){
                         for(let i = 0; i < enemyList.length ; i++){
@@ -296,18 +303,13 @@ function addEnemy(enemyList, scene){
     enemyList.push(scene.getTransformNodeByName("skull"));
     enemyList.push(scene.getTransformNodeByName("skull2"));
     enemyList.push(scene.getTransformNodeByName("skull3"));
-    // Skeletons
-    scene.getTransformNodeByName("SkeletonArmature").parent.position.x = 18;
-    scene.getTransformNodeByName("SkeletonArmature").parent.position.y = 0;
-    scene.getTransformNodeByName("SkeletonArmature").parent.position.z = 1.5;
-    enemyList.push(scene.getTransformNodeByName("SkeletonArmature").parent);
     
     enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
     enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);
     enemyList[2] = new Enemy(scene, "skull3", enemyList[2]);
     
-    enemyList[3] = new Skeleton(scene, "skeleton", enemyList[3]);   
-
+    enemyList[3] = new Skeleton(scene, "Skeleton1", scene.getTransformNodeByName("Skeleton1").parent, scene.getTransformNodeByName("SkeletonPosition1").position);
+    enemyList[4] = new Skeleton(scene, "Skeleton2", scene.getTransformNodeByName("Skeleton2").parent, scene.getTransformNodeByName("SkeletonPosition2").position);
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});

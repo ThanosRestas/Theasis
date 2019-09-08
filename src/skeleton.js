@@ -3,40 +3,60 @@ import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
 
 export default class Skeleton{
-    constructor(scene, name, mesh){
+    constructor(scene, name, mesh, position){
         // Game properties        
         this.scene = scene;
         // Enemy properties
         this.name = name;
         this.mesh = mesh;
-        this.destroyed = false;
-        //this.mesh.visibility = false;        
-        this.health = 10;       
-        // Enemy shooting setup        
-        this.timeThen = Date.now();
-        // When the type of mesh is of TransformNode 
-        // get submeshes and enable collision on each
-        this.subMeshes = this.mesh.getChildren();
-        
-        
+        this.mesh.position = position;
+        this.mesh.position.y = 0;        
+        this.destroyed = false;                  
+        this.health = 30;       
+        // Animation properties
+        this.animations = [];
+        this.animationIdle;
+        this.animationRunning;
+        // Setting up the animation properties        
         this.setup();
-        
-        
+        // Setting up the collision mesh and making it invisible
+        this.subMeshes = this.mesh.getChildren();
+        this.subMeshes = this.subMeshes[0].getChildren();
+        this.collisionMesh = this.subMeshes[1];
+        this.collisionMesh.isVisible = false; 
     } 
     
     setup(){
 
-        // Enable collisions and invisibility on collision box
-        this.subMeshes[1].checkCollisions = true;
-        this.subMeshes[1].isVisible = false;
+        let scene = this.scene;
+        let mesh = this.mesh;
+        let animations = this.animations;       
+        let name = this.name;
 
-        
-    }               
+        for(let i = 0; i < scene.animationGroups.length; i++){             
+            var targetMesh = scene.animationGroups[i]._targetedAnimations[0].target.parent.name;
+            if(targetMesh == name){
+                animations.push(scene.animationGroups[i]);
+            }
+        }
+
+        for(let i = 0; i < animations.length ; i++){
+            //console.log(animations[i].name);
+            if(animations[i].name == "Skeleton_Idle"){                
+                this.animationIdle = animations[i];
+            }
+            else if( animations[i].name == "Skeleton_Running"){
+                this.animationRunning = animations[i];
+            }
+        }      
+    }
     
     move(){        
-        /*let mesh = this.mesh;       
+        let mesh = this.mesh;       
         let scene = this.scene;
-        let camera = scene.activeCamera;     
+        let camera = scene.activeCamera;        
+        let animationIdle = this.animationIdle;
+        let animationRunning = this.animationRunning;    
 
         if(mesh){           
             // Calculating distances between the enemy and the player
@@ -44,18 +64,22 @@ export default class Skeleton{
             let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
             let targetVec = camera.position.subtract(initVec);
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
-
             // Move enemy towards the player and stops slightly ahead
             if(distVec < 15){
                 distVec -= 0.05;
-                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);                     
+                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
+                mesh.position.y = 0;
+                // Running animation play
+                animationRunning.start();                                      
             }
+            if(distVec >= 15){
+                // Idle animation play
+                animationIdle.start();
+            }           
+            // Enemy always faces the player                   
+            mesh.lookAt(camera.position, Math.PI);             
             
-            // Enemy always faces the player
-            mesh.setParent(null);
-            mesh.lookAt(camera.position, Math.PI, Math.PI / 2);       
-            
-        }*/
+        }
        
     }
 
@@ -80,18 +104,8 @@ export default class Skeleton{
         }*/         
     }
 
-    /*destroy(sprayer){
-        let mesh = this.mesh;
-        let destroyed = this.destroyed;
-        
-        // Get the position of the mesh to be used for explosion
-        let explodeLocation = mesh.getAbsolutePosition();
-        // Destroy the mesh
-        destroyed = true;       
-        mesh.dispose();        
-        // Set explosion debris-levels
-        let particleSystemManualEmitCount = 5000;               
-        // Now lets call a  generateExplosion function...       
-        //generateExplosion(sprayer, particleSystemManualEmitCount, explodeLocation);        
-    }*/  
+    destroy(sprayer){
+        let mesh = this.mesh;      
+        mesh.dispose();             
+    } 
 }
