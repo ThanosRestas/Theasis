@@ -12,7 +12,7 @@ export default class Skeleton{
         this.mesh.position = position;
         this.mesh.position.y = 0;        
         this.destroyed = false;                  
-        this.health = 30;       
+        this.health = 10;       
         // Animation properties
         this.animations = [];
         this.animationIdle;
@@ -22,8 +22,11 @@ export default class Skeleton{
         // Setting up the collision mesh and making it invisible
         this.subMeshes = this.mesh.getChildren();
         this.subMeshes = this.subMeshes[0].getChildren();
-        this.collisionMesh = this.subMeshes[1];
+        this.collisionMesh = this.subMeshes[1];        
         this.collisionMesh.isVisible = false; 
+        this.collisionMesh.checkCollisions = true;
+
+        
     } 
     
     setup(){
@@ -65,13 +68,13 @@ export default class Skeleton{
             let targetVec = camera.position.subtract(initVec);
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
             // Move enemy towards the player and stops slightly ahead
-            if(distVec < 15){
+            /*if(distVec < 15){
                 distVec -= 0.05;
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
                 mesh.position.y = 0;
                 // Running animation play
                 animationRunning.start();                                      
-            }
+            }*/
             if(distVec >= 15){
                 // Idle animation play
                 animationIdle.start();

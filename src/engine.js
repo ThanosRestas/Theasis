@@ -30,7 +30,7 @@ export default class Engine{
         this.camera.attachControl(this.canvas, true);        
         this.camera.speed = 0.2;
         // Collision box for the camera -- Deprecated after cannon.js usage !?      
-        this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); 
+        this.camera.ellipsoid = new BABYLON.Vector3(4, 1, 4); 
         this.camera.checkCollisions = true;
         this.camera.applyGravity = true; 
         // Enable collisions and gravity in scene
@@ -62,7 +62,7 @@ export default class Engine{
         this.animationRunning = false;
 
         // Enable debugging tools;
-        this.scene.debugLayer.show();
+        //this.scene.debugLayer.show();
 
     }
 
@@ -103,7 +103,7 @@ export default class Engine{
         // Level design load        
         assetsManager.addMeshTask("task2", "", "../assets/models/", "test160.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");
-        assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton.glb");
+        assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");                   
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
