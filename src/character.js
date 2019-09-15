@@ -22,11 +22,13 @@ export default class Character{
     }
 
     damage(ammount){
-        let health = this.health;
-        let healthHud = this.hud[0];
+        //let health = this.health;
 
-        health = health - ammount;
-        healthHud.width = health/100;
+        if(this.health >=1){
+            this.health -= ammount;
+            this.hud[0].width = this.health/100;
+        }
+        
     }
     
     characterController (hud) { 
@@ -53,13 +55,13 @@ export default class Character{
                 console.log("Collision detected");
             }
             // First check if there are any of the hitable meshes in the scene still and then check collision
-            if(scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
+            /*if(scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
                 console.log("Enemy hit");
                 // Health deprecation with every collision with an enemy
                 if(health >= 1){
                     health -= 0.20;
                 }                           
-            }  
+            }*/  
 
             if(scene.getMeshByName("healthPack")!== null && colMesh.name == "healthPack"){
                 console.log("Health pack acquired");
@@ -200,7 +202,7 @@ export default class Character{
                     }
                
                     if (this.camera.getScene().useRightHandedSystem) {
-                        this.camera._localDirection.z *= -1
+                        this.camera._localDirection.z *= -1;
                     }
     
                     this.camera.getViewMatrix().invertToRef(this.camera._cameraTransformMatrix)

@@ -2,8 +2,10 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
 
+
+
 export default class Skeleton{
-    constructor(scene, name, mesh, position){
+    constructor(scene, name, mesh, position, player){
         // Game properties        
         this.scene = scene;
         // Enemy properties
@@ -17,6 +19,7 @@ export default class Skeleton{
         this.animations = [];
         this.animationIdle;
         this.animationRunning;
+        this.animationAttack;
         // Setting up the animation properties        
         this.setup();
         // Setting up the collision mesh and making it invisible
@@ -25,6 +28,10 @@ export default class Skeleton{
         this.collisionMesh = this.subMeshes[1];        
         this.collisionMesh.isVisible = false; 
         this.collisionMesh.checkCollisions = true;
+        // The player of the game
+        this.player = player;
+
+       
 
         
     } 
@@ -35,6 +42,7 @@ export default class Skeleton{
         let mesh = this.mesh;
         let animations = this.animations;       
         let name = this.name;
+        let player = this.player;
 
         for(let i = 0; i < scene.animationGroups.length; i++){             
             var targetMesh = scene.animationGroups[i]._targetedAnimations[0].target.parent.name;
@@ -51,15 +59,21 @@ export default class Skeleton{
             else if( animations[i].name == "Skeleton_Running"){
                 this.animationRunning = animations[i];
             }
-        }      
+            else if ( animations[i].name == "Skeleton_Attack"){
+                this.animationAttack = animations[i];         
+            }
+        }       
+       
     }
     
     move(){        
         let mesh = this.mesh;       
         let scene = this.scene;
-        let camera = scene.activeCamera;        
+        let camera = scene.activeCamera; 
+        let player = this.player;       
         let animationIdle = this.animationIdle;
-        let animationRunning = this.animationRunning;    
+        let animationRunning = this.animationRunning; 
+        let animationAttack = this.animationAttack;   
 
         if(mesh){           
             // Calculating distances between the enemy and the player
@@ -68,20 +82,26 @@ export default class Skeleton{
             let targetVec = camera.position.subtract(initVec);
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
             // Move enemy towards the player and stops slightly ahead
-            /*if(distVec < 15){
+            if(distVec < 15 && distVec >=5){
                 distVec -= 0.05;
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
                 mesh.position.y = 0;
                 // Running animation play
                 animationRunning.start();                                      
-            }*/
+            }
+
             if(distVec >= 15){
                 // Idle animation play
                 animationIdle.start();
             }           
             // Enemy always faces the player                   
-            mesh.lookAt(camera.position, Math.PI);             
-            
+            mesh.lookAt(camera.position, Math.PI);
+
+            if(distVec < 5){
+                animationAttack.start();
+                player.damage(0.05);
+              
+            }           
         }
        
     }

@@ -6,8 +6,8 @@ import "@babylonjs/loaders/glTF";
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
 import * as GUI from "@babylonjs/gui";
 // Physics
-//import * as cannon from "CANNON";
-//import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
+import * as cannon from "CANNON";
+import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
 // Utilities 
 import Weapon from "./weapon";
 import Enemy from "./enemy";
@@ -37,7 +37,7 @@ export default class Engine{
         this.scene.collisionsEnabled = true;
         this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);    
         // Enable physics        
-        /*this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
+        this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
         this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
         // Camera physics impostor
         this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 2 }, this.scene);
@@ -49,7 +49,7 @@ export default class Engine{
         this.cameraImpostor.visibility = 5;
         // Assigning the collision sphere to the camera
         this.cameraImpostor.parent = this.camera;
-        this.cameraImpostor.isPickable = false;*/        
+        this.cameraImpostor.isPickable = false;       
         // HUD setup
         this.hud = this.hudManager();
         // Particle system setup
@@ -86,9 +86,9 @@ export default class Engine{
             ground.material = new GridMaterial("groundMaterial", scene);    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             ground.material.backFaceCulling = false;
-            //ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+            ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
             // Add enemy meshes to the scene
-            addEnemy(enemyList, scene);
+            addEnemy(enemyList, scene, player);
             // Add the weapon meshes to the scene
             addPistol(player, scene, camera);
             // Add the collectible meshes to the scene
@@ -297,8 +297,9 @@ function addPistol(player, scene, camera){
     player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 10, 5, 50);    
 }
 
-function addEnemy(enemyList, scene){
+function addEnemy(enemyList, scene, player){
     
+
     // Skulls
     enemyList.push(scene.getTransformNodeByName("skull"));
     enemyList.push(scene.getTransformNodeByName("skull2"));
@@ -308,8 +309,8 @@ function addEnemy(enemyList, scene){
     enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);
     enemyList[2] = new Enemy(scene, "skull3", enemyList[2]);
     
-    enemyList[3] = new Skeleton(scene, "Skeleton1", scene.getTransformNodeByName("Skeleton1").parent, scene.getTransformNodeByName("SkeletonPosition1").position);
-    enemyList[4] = new Skeleton(scene, "Skeleton2", scene.getTransformNodeByName("Skeleton2").parent, scene.getTransformNodeByName("SkeletonPosition2").position);
+    enemyList[3] = new Skeleton(scene, "Skeleton1", scene.getTransformNodeByName("Skeleton1").parent, scene.getTransformNodeByName("SkeletonPosition1").position, player);
+    enemyList[4] = new Skeleton(scene, "Skeleton2", scene.getTransformNodeByName("Skeleton2").parent, scene.getTransformNodeByName("SkeletonPosition2").position, player);
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
