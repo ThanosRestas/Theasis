@@ -63,13 +63,16 @@ export default class Character{
                         energy = 20;
                     }
                 }      
-            }                        
+            }
+            
+            console.log(colMesh.name);
+
             // Setting the health bar's width accordingly
             healthHud.width = health/100;
             energyHud.width = energy/100;
         }
         
-        cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
+        /*cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
             //console.log("Bullet collision with : " + t.object.name);
             // Check for "Bullet" substring inside of collision t object name
             if(t.object.name.substring(0, 6) == "Bullet"){
@@ -79,7 +82,7 @@ export default class Character{
             health -= 1;
             healthHud.width = health/100;
            
-        }
+        }*/
         
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {
