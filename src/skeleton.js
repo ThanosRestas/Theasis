@@ -32,7 +32,7 @@ export default class Skeleton{
         this.player = player;
 
        
-
+        
         
     } 
     
@@ -67,7 +67,8 @@ export default class Skeleton{
     }
     
     move(){        
-        let mesh = this.mesh;       
+        let mesh = this.mesh; 
+        let name = this.name;      
         let scene = this.scene;
         let camera = scene.activeCamera; 
         let player = this.player;       
@@ -75,7 +76,7 @@ export default class Skeleton{
         let animationRunning = this.animationRunning; 
         let animationAttack = this.animationAttack;   
 
-        if(mesh){           
+        if(scene.getTransformNodeByName(name)){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
             let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
@@ -99,8 +100,7 @@ export default class Skeleton{
 
             if(distVec < 5){
                 animationAttack.start();
-                player.damage(0.05);
-              
+                player.damage(0.05);              
             }           
         }
        
@@ -128,7 +128,9 @@ export default class Skeleton{
     }
 
     destroy(sprayer){
-        let mesh = this.mesh;      
-        mesh.dispose();             
+        let mesh = this.mesh; 
+        let scene = this.scene;  
+        
+        mesh.dispose();       
     } 
 }
