@@ -20,6 +20,7 @@ export default class Skeleton{
         this.animationIdle;
         this.animationRunning;
         this.animationAttack;
+        this.animationDeath;
         // Setting up the animation properties        
         this.setup();
         // Setting up the collision mesh and making it invisible
@@ -61,6 +62,9 @@ export default class Skeleton{
             }
             else if ( animations[i].name == "Skeleton_Attack"){
                 this.animationAttack = animations[i];         
+            }
+            else if ( animations[i].name == "Skeleton_Death"){
+                this.animationDeath = animations[i];   
             }
         }       
        
@@ -104,33 +108,20 @@ export default class Skeleton{
             }           
         }
        
-    }
-
-    shoot(){             
-        /*let scene = this.scene;       
-        let name = this.name;        
-        let mesh = this.mesh;
-        let timeNow = Date.now();        
-        
-        if(scene.getTransformNodeByName(name) != null){
-            // Checking if enemy's bullet is still in the scene
-            if(scene.getMeshByName("Bullet"+name) == null)
-            {  
-                // Enemy shoots every nth second
-                let timePassed = (timeNow - this.timeThen) / 1000;
-                let firingRate = 2;                                
-                if( timePassed >= firingRate){
-                    fireBullet(scene, mesh, name );
-                    this.timeThen = timeNow;
-                }              
-            }                
-        }*/         
-    }
+    } 
 
     destroy(sprayer){
         let mesh = this.mesh; 
-        let scene = this.scene;  
-        
-        mesh.dispose();       
+        let scene = this.scene;       
+        let animationIdle = this.animationIdle;
+        let animationRunning = this.animationRunning;
+        let animationAttack = this.animationAttack;
+        let animationDeath = this.animationDeath;     
+      
+
+        animationDeath.start();
+        animationDeath.onAnimationEndObservable.add(function(){
+            mesh.dispose();    
+        });          
     } 
 }
