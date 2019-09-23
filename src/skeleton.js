@@ -30,11 +30,7 @@ export default class Skeleton{
         this.collisionMesh.isVisible = false; 
         this.collisionMesh.checkCollisions = true;
         // The player of the game
-        this.player = player;
-
-       
-        
-        
+        this.player = player;        
     } 
     
     setup(){
@@ -64,7 +60,7 @@ export default class Skeleton{
                 this.animationAttack = animations[i];         
             }
             else if ( animations[i].name == "Skeleton_Death"){
-                this.animationDeath = animations[i];   
+                this.animationDeath = animations[i];         
             }
         }       
        
@@ -111,6 +107,7 @@ export default class Skeleton{
     } 
 
     destroy(sprayer){
+        let name = this.name;
         let mesh = this.mesh; 
         let scene = this.scene;       
         let animationIdle = this.animationIdle;
@@ -118,10 +115,14 @@ export default class Skeleton{
         let animationAttack = this.animationAttack;
         let animationDeath = this.animationDeath;     
       
-
-        animationDeath.start();
-        animationDeath.onAnimationEndObservable.add(function(){
-            mesh.dispose();    
-        });          
-    } 
+        if(scene.getTransformNodeByName(name)){   
+            animationDeath.start();
+            animationDeath.onAnimationEndObservable.add(function(){
+                animationAttack.stop();
+                animationIdle.stop();
+                animationRunning.stop();
+                mesh.dispose();    
+            });          
+        }       
+    }
 }

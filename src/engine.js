@@ -30,7 +30,7 @@ export default class Engine{
         this.camera.attachControl(this.canvas, true);        
         this.camera.speed = 0.2;
         // Collision box for the camera -- Deprecated after cannon.js usage !?      
-        this.camera.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5); 
+        this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); 
         this.camera.checkCollisions = true;
         this.camera.applyGravity = true; 
         // Enable collisions and gravity in scene
@@ -49,7 +49,7 @@ export default class Engine{
         this.cameraImpostor.visibility = 5;
         // Assigning the collision sphere to the camera
         this.cameraImpostor.parent = this.camera;
-        this.cameraImpostor.isPickable = false;       
+        this.cameraImpostor.isPickable = false;    
         // HUD setup
         this.hud = this.hudManager();
         // Particle system setup
@@ -63,7 +63,6 @@ export default class Engine{
 
         // Enable debugging tools;
         //this.scene.debugLayer.show();
-
     }
 
     assetManager(){
@@ -101,7 +100,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/models/", "test160.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test163.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");                   
@@ -177,7 +176,8 @@ export default class Engine{
                                 }
                                 // Destroy enemy    
                                 if(enemyList[i].health <= 0){                                                            
-                                    enemyList[i].destroy(particleSystem);
+                                    //enemyList[i].destroy(particleSystem);
+                                    enemyList[i].mesh.dispose();
                                     break;                               
                                 }    
                             }
@@ -297,8 +297,7 @@ function addPistol(player, scene, camera){
     player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 10, 5, 50);    
 }
 
-function addEnemy(enemyList, scene, player){
-    
+function addEnemy(enemyList, scene, player){   
 
     // Skulls
     enemyList.push(scene.getTransformNodeByName("skull"));
@@ -321,10 +320,12 @@ function addEnemy(enemyList, scene, player){
 function addCollectible(collectibleList, scene){
 
     collectibleList.push(scene.getMeshByName("healthPack"));
-    collectibleList.push(scene.getTransformNodeByName("energyPack")); 
+    collectibleList.push(scene.getMeshByName("energyPack")); 
+    collectibleList.push(scene.getMeshByName("healthPack1"));
 
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
-    collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);       
+    collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
+    collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
         scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            

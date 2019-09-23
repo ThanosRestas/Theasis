@@ -47,48 +47,35 @@ export default class Character{
         let health = this.health;        
         let cameraImpostor = this.cameraImpostor;
 
-        // Detect collision between player and enemy and damange health
+        // Detect collision between player and enemy and damange health        
         camera.onCollide = function (colMesh) {
-           
-            
-            if(colMesh.name != "ground"){
-                console.log("Collision detected");
-            }
-            // First check if there are any of the hitable meshes in the scene still and then check collision
-            /*if(scene.getMeshByName("skullCollision")!== null && colMesh.name == scene.getMeshByName("skullCollision").name ) {
-                console.log("Enemy hit");
-                // Health deprecation with every collision with an enemy
-                if(health >= 1){
-                    health -= 0.20;
-                }                           
-            }*/  
+            console.log(colMesh.name);
 
-            if(scene.getMeshByName("healthPack")!== null && colMesh.name == "healthPack"){
-                console.log("Health pack acquired");
-                // Remove the health pack from the scene and restore 10% health to the player
-                scene.getMeshByName(colMesh.name).dispose();
-                if(health < 20){
-                    health += 0.5;
-                }      
-            }           
-            else if(scene.getTransformNodeByName("energyPack")!== null && colMesh.parent.name == "energyPack"){
+            if(colMesh.name === "energyPack"){
                 console.log("Energy pack acquired");
                 // Remove the energy pack from the scene and restore 20% energy to the player
-                scene.getTransformNodeByName(colMesh.parent.name).dispose();
+                colMesh.dispose();
                 if(energy < 20){
                     energy += 30;
                     if(energy >= 20){
                         energy = 20;
                     }
-                }     
-            }  
-           
+                } 
+                energyHud.width = energy/100;                
+            } 
             
-            // Setting the health bar's width accordingly
-            //healthHud.width = health/100;
-            energyHud.width = energy/100;
+            if(colMesh.name === "healthPack" || colMesh.name === "healthPack1"){
+                console.log("Health pack acquired");
+                // Remove the health pack from the scene and restore 10% health to the player
+                colMesh.dispose();
+                if(health < 20){
+                    health += 0.5;
+                } 
+                healthHud.width = health/100;         
+            }          
         }
         
+        // Canon physics for detecting collission with skull enemy projectile
         cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
             //console.log("Bullet collision with : " + t.object.name);
             // Check for "Bullet" substring inside of collision t object name
@@ -97,10 +84,9 @@ export default class Character{
                 t.object.dispose();
             }            
             health -= 1;
-            healthHud.width = health/100;
-           
+            healthHud.width = health/100;          
         }
-        
+
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {
             this._keys = []

@@ -11,22 +11,21 @@ export default class Collectible{
         this.name = name;
         this.mesh = mesh;
         
-        this.mesh.checkCollisions = true;        
-        // When the type of mesh is of TransformNode 
-        // get submeshes and enable collision on each
-        this.subMeshes = this.mesh.getChildren();
-        this.setup();      
-    } 
-    
-    setup(){
-        for(let i = 0; i<this.subMeshes.length ; i++){
-            this.subMeshes[i].checkCollisions = true;
-        }
-    }
+        this.mesh.checkCollisions = true;
+        //this.mesh.isVisible = false;        
+           
+    }     
+
     
     rotate(){
-        if(this.mesh != null){
-            this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);           
+        if(this.scene.getMeshByName(this.name)){
+            if(this.name == "energyPack"){
+                this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
+            }
+            else{
+                this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);   
+            }
+            
         } 
     } 
       
