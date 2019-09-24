@@ -76,7 +76,7 @@ export default class Character{
         }
         
         // Canon physics for detecting collission with skull enemy projectile
-        cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
+        /*cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
             //console.log("Bullet collision with : " + t.object.name);
             // Check for "Bullet" substring inside of collision t object name
             if(t.object.name.substring(0, 6) == "Bullet"){
@@ -85,7 +85,7 @@ export default class Character{
             }            
             health -= 1;
             healthHud.width = health/100;          
-        }
+        }*/
 
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {

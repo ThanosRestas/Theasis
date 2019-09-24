@@ -6,8 +6,8 @@ import "@babylonjs/loaders/glTF";
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
 import * as GUI from "@babylonjs/gui";
 // Physics
-import * as cannon from "CANNON";
-import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
+//import * as cannon from "CANNON";
+//import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
 // Utilities 
 import Weapon from "./weapon";
 import Enemy from "./enemy";
@@ -37,19 +37,19 @@ export default class Engine{
         this.scene.collisionsEnabled = true;
         this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);    
         // Enable physics        
-        this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
-        this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
+        //this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
+        //this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
         // Camera physics impostor
-        this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 2 }, this.scene);
-        this.cameraImpostor.physicsImpostor = new BABYLON.PhysicsImpostor(this.cameraImpostor, 
+        //this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 2 }, this.scene);
+        /*.cameraImpostor.physicsImpostor = new BABYLON.PhysicsImpostor(this.cameraImpostor, 
             BABYLON.PhysicsImpostor.SphereImpostor, 
             { mass: 0, friction: 0.5, restition: 0.3 },
-            this.scene);
+            this.scene);*/
         // Making the collision sphere invisible
-        this.cameraImpostor.visibility = 5;
+        //this.cameraImpostor.visibility = 5;
         // Assigning the collision sphere to the camera
-        this.cameraImpostor.parent = this.camera;
-        this.cameraImpostor.isPickable = false;    
+        //this.cameraImpostor.parent = this.camera;
+        //this.cameraImpostor.isPickable = false;    
         // HUD setup
         this.hud = this.hudManager();
         // Particle system setup
@@ -85,7 +85,7 @@ export default class Engine{
             ground.material = new GridMaterial("groundMaterial", scene);    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             ground.material.backFaceCulling = false;
-            ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+            //ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene, player);
             // Add the weapon meshes to the scene
