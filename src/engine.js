@@ -176,8 +176,7 @@ export default class Engine{
                                 }
                                 // Destroy enemy    
                                 if(enemyList[i].health <= 0){                                                            
-                                    //enemyList[i].destroy(particleSystem);
-                                    enemyList[i].mesh.dispose();
+                                    enemyList[i].destroy(particleSystem);                                    
                                     break;                               
                                 }    
                             }
@@ -321,11 +320,11 @@ function addCollectible(collectibleList, scene){
 
     collectibleList.push(scene.getMeshByName("healthPack"));
     collectibleList.push(scene.getMeshByName("energyPack")); 
-    collectibleList.push(scene.getMeshByName("healthPack1"));
+    //collectibleList.push(scene.getMeshByName("healthPack1"));
 
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
     collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
-    collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
+    //collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
         scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            

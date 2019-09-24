@@ -45,7 +45,7 @@ export default class Character{
         let ammoHud = this.hud[2];
 
         let health = this.health;        
-        let cameraImpostor = this.cameraImpostor;
+        //let cameraImpostor = this.cameraImpostor;
 
         // Detect collision between player and enemy and damange health        
         camera.onCollide = function (colMesh) {

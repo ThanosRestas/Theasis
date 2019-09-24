@@ -12,7 +12,9 @@ export default class Collectible{
         this.mesh = mesh;
         
         this.mesh.checkCollisions = true;
-        //this.mesh.isVisible = false;        
+        //this.mesh.isVisible = false;     
+        
+        this.clone();
            
     }     
 
@@ -28,6 +30,11 @@ export default class Collectible{
             
         } 
     } 
+
+    clone(){
+        var clonedCollectible = this.mesh.clone("healthPack1");
+        clonedCollectible.position.z += 10;
+    }
       
 }
 
