@@ -22,8 +22,7 @@ export default class Character{
     }
 
     damage(ammount){
-        //let health = this.health;
-
+        
         if(this.health >=1){
             this.health -= ammount;
             this.hud[0].width = this.health/100;
@@ -36,10 +35,7 @@ export default class Character{
         let camera = this.camera;
         let energy = this.energy;
         let scene = this.scene;
-        let gunLoadout = this.gunLoadout;
-        //let healthHud = hud[0];
-        //let energyHud = hud[1];
-        //let ammoHud = hud[2];   
+        let gunLoadout = this.gunLoadout;        
         let healthHud = this.hud[0];
         let energyHud = this.hud[1];
         let ammoHud = this.hud[2];
@@ -49,7 +45,7 @@ export default class Character{
 
         // Detect collision between player and enemy and damange health        
         camera.onCollide = function (colMesh) {
-            console.log(colMesh.name);
+            console.log(colMesh.name);           
 
             if(colMesh.name === "energyPack"){
                 console.log("Energy pack acquired");
@@ -72,7 +68,7 @@ export default class Character{
                     health += 0.5;
                 } 
                 healthHud.width = health/100;         
-            }          
+            }        
         }
         
         // Canon physics for detecting collission with skull enemy projectile

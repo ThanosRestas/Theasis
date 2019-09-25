@@ -66,21 +66,21 @@ export default class Engine{
     }
 
     assetManager(){
-        var camera = this.camera;
-        var scene = this.scene;
-        var player = this.player;
-        var enemyList = this.enemyList;
-        var collectibleList = this.collectibleList;
+        let camera = this.camera;
+        let  scene = this.scene;
+        let  player = this.player;
+        let  enemyList = this.enemyList;
+        let  collectibleList = this.collectibleList;
         // Add lights to the scene
-        var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
+        let  light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 50, 0), scene);
         light4.intensity = 2;
         // Asset loading
-        var assetsManager = new BABYLON.AssetsManager(scene);     
+        let  assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
             //console.log("task successful", task);
             // Setting ground material
-            var ground = scene.getMeshByName("ground");
+            let  ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;           
             ground.material = new GridMaterial("groundMaterial", scene);    
             ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
@@ -100,7 +100,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test163.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test164.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");                   
@@ -161,10 +161,6 @@ export default class Engine{
                     let ray = camera.getForwardRay(currentWeapon.range);
                     let hit = scene.pickWithRay(ray);
                     let model = hit.pickedMesh;
-
-                    /*if(model!=null){
-                        console.log(model.parent.name);
-                    }*/                    
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0 ){
                         for(let i = 0; i < enemyList.length ; i++){
@@ -176,12 +172,13 @@ export default class Engine{
                                 }
                                 // Destroy enemy    
                                 if(enemyList[i].health <= 0){                                                            
-                                    enemyList[i].destroy(particleSystem);                                    
+                                    enemyList[i].destroy(); 
+                                                                                                
                                     break;                               
                                 }    
                             }
                         }                      
-                    }                               
+                    }                   
                 }                               
             }                                           
             // Update HUD
@@ -316,15 +313,15 @@ function addEnemy(enemyList, scene, player){
     }    
 }
 
-function addCollectible(collectibleList, scene){
+function addCollectible(collectibleList, scene){ 
 
     collectibleList.push(scene.getMeshByName("healthPack"));
     collectibleList.push(scene.getMeshByName("energyPack")); 
-    //collectibleList.push(scene.getMeshByName("healthPack1"));
+    collectibleList.push(scene.getMeshByName("healthPack1"));
 
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
     collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
-    //collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
+    collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
         scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            

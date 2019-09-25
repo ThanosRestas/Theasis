@@ -30,7 +30,9 @@ export default class Skeleton{
         this.collisionMesh.isVisible = false; 
         this.collisionMesh.checkCollisions = true;
         // The player of the game
-        this.player = player;        
+        this.player = player;    
+        
+        
     } 
     
     setup(){
@@ -76,7 +78,9 @@ export default class Skeleton{
         let animationRunning = this.animationRunning; 
         let animationAttack = this.animationAttack;   
 
-        if(scene.getTransformNodeByName(name)){           
+
+        
+        if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
             let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
@@ -106,23 +110,33 @@ export default class Skeleton{
        
     } 
 
-    destroy(sprayer){
+    destroy(){
         let name = this.name;
         let mesh = this.mesh; 
-        let scene = this.scene;       
+        let scene = this.scene; 
+        let health = this.health;      
         let animationIdle = this.animationIdle;
         let animationRunning = this.animationRunning;
         let animationAttack = this.animationAttack;
         let animationDeath = this.animationDeath;     
       
-        if(scene.getTransformNodeByName(name)){   
+        /*if(scene.getTransformNodeByName(name)){   
             animationDeath.start();
             animationDeath.onAnimationEndObservable.add(function(){
                 animationAttack.stop();
                 animationIdle.stop();
                 animationRunning.stop();
-                mesh.dispose();    
-            });          
-        }       
+                mesh.dispose(); 
+                  
+            }); 
+                     
+        }*/
+        
+       
+        
+
+        mesh.setEnabled(false); // Works
+        //mesh.dispose();
+      
     }
 }
