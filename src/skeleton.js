@@ -30,18 +30,15 @@ export default class Skeleton{
         this.collisionMesh.isVisible = false; 
         this.collisionMesh.checkCollisions = true;
         // The player of the game
-        this.player = player;    
-        
-        
+        this.player = player; 
     } 
     
     setup(){
-
-        let scene = this.scene;
-        let mesh = this.mesh;
+        let scene = this.scene;        
         let animations = this.animations;       
-        let name = this.name;
-        let player = this.player;
+        let name = this.name;    
+        
+        //console.log(scene.animationGroups);
 
         for(let i = 0; i < scene.animationGroups.length; i++){             
             var targetMesh = scene.animationGroups[i]._targetedAnimations[0].target.parent.name;
@@ -64,28 +61,29 @@ export default class Skeleton{
             else if ( animations[i].name == "Skeleton_Death"){
                 this.animationDeath = animations[i];         
             }
-        }       
+        }    
+        
        
     }
     
     move(){        
-        let mesh = this.mesh; 
-        let name = this.name;      
+        let mesh = this.mesh;          
         let scene = this.scene;
         let camera = scene.activeCamera; 
         let player = this.player;       
         let animationIdle = this.animationIdle;
         let animationRunning = this.animationRunning; 
-        let animationAttack = this.animationAttack;   
+        let animationAttack = this.animationAttack;
 
-
-        
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
             let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
             let targetVec = camera.position.subtract(initVec);
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
+
+            // Enemy always faces the player                   
+            mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead
             if(distVec < 15 && distVec >=5){
                 distVec -= 0.05;
@@ -94,14 +92,12 @@ export default class Skeleton{
                 // Running animation play
                 animationRunning.start();                                      
             }
-
+            // Idle animation play distance
             if(distVec >= 15){
-                // Idle animation play
+                
                 animationIdle.start();
-            }           
-            // Enemy always faces the player                   
-            mesh.lookAt(camera.position, Math.PI);
-
+            }     
+            // Attack animation play distance
             if(distVec < 5){
                 animationAttack.start();
                 player.damage(0.05);              
@@ -113,30 +109,21 @@ export default class Skeleton{
     destroy(){
         let name = this.name;
         let mesh = this.mesh; 
-        let scene = this.scene; 
-        let health = this.health;      
+        let scene = this.scene;
+            
         let animationIdle = this.animationIdle;
         let animationRunning = this.animationRunning;
         let animationAttack = this.animationAttack;
         let animationDeath = this.animationDeath;     
       
-        /*if(scene.getTransformNodeByName(name)){   
+        if(scene.getTransformNodeByName(name)){   
             animationDeath.start();
             animationDeath.onAnimationEndObservable.add(function(){
                 animationAttack.stop();
                 animationIdle.stop();
                 animationRunning.stop();
-                mesh.dispose(); 
-                  
-            }); 
-                     
-        }*/
-        
-       
-        
-
-        mesh.setEnabled(false); // Works
-        //mesh.dispose();
-      
+                mesh.setEnabled(false); // Works cause mesh.dispose() breaks collisions                  
+            });                    
+        }
     }
 }

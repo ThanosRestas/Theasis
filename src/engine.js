@@ -12,6 +12,7 @@ import * as GUI from "@babylonjs/gui";
 import Weapon from "./weapon";
 import Enemy from "./enemy";
 import Skeleton from "./skeleton";
+import Dragon from "./dragon";
 import Collectible from "./collectible";
 import { cpus } from "os";
 
@@ -100,10 +101,11 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test164.glb");
-        assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test165.glb");
+        assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
-        assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");                   
+        assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
+        assetsManager.addMeshTask("task5", "", "../assets/models/", "Dragon.glb");                      
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -163,8 +165,9 @@ export default class Engine{
                     let model = hit.pickedMesh;
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0 ){
+                        //console.log(model.parent.parent.name);
                         for(let i = 0; i < enemyList.length ; i++){
-                            if(enemyList[i].name == model.parent.name){ 
+                            if(enemyList[i].name == model.parent.name || enemyList[i].name == model.parent.parent.name){ 
                                 // Damage enemy                          
                                 if(enemyList[i].health > 0){                                
                                     enemyList[i].health -= currentWeapon.damage;
@@ -306,6 +309,8 @@ function addEnemy(enemyList, scene, player){
     
     enemyList[3] = new Skeleton(scene, "Skeleton1", scene.getTransformNodeByName("Skeleton1").parent, scene.getTransformNodeByName("SkeletonPosition1").position, player);
     enemyList[4] = new Skeleton(scene, "Skeleton2", scene.getTransformNodeByName("Skeleton2").parent, scene.getTransformNodeByName("SkeletonPosition2").position, player);
+    enemyList[5] = new Dragon(scene, "DragonArmature", scene.getTransformNodeByName("DragonArmature").parent, scene.getTransformNodeByName("DragonPosition1").position, player);
+
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});

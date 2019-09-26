@@ -9,16 +9,10 @@ export default class Collectible{
         this.scene = scene;
         // Weapon properties
         this.name = name;
-        this.mesh = mesh;
-        
+        this.mesh = mesh;        
         this.mesh.checkCollisions = true;
-        //this.mesh.isVisible = false;     
-        
-        //this.clone();
-           
-    }     
-
-    
+    }
+       
     rotate(){
         if(this.scene.getMeshByName(this.name)){
             if(this.name == "energyPack"){
@@ -27,14 +21,7 @@ export default class Collectible{
             else{
                 this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);   
             }
-            
         } 
-    } 
-
-    /*clone(){
-        var clonedCollectible = this.mesh.clone("healthPack1");
-        clonedCollectible.position.z += 10;
-    }*/
-      
+    }       
 }
 
