@@ -15,9 +15,9 @@
     "@babylonjs/loaders": "^4.0.3",
     "@babylonjs/materials": "^4.0.3",
     "browser-sync-webpack-plugin": "^2.2.2",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.1",
-    "webpack-dev-server": "^3.3.1"
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
     "@babylonjs/gui": "^4.0.3",
