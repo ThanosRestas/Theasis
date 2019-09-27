@@ -1,8 +1,5 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
-import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
-
-
 
 export default class Dragon{
     constructor(scene, name, mesh, position, player){

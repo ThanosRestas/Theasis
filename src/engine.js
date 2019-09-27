@@ -2,8 +2,6 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { GridMaterial } from "@babylonjs/materials";
 import "@babylonjs/loaders/glTF";
-
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
 import * as GUI from "@babylonjs/gui";
 // Physics
 //import * as cannon from "CANNON";
@@ -14,7 +12,6 @@ import Enemy from "./enemy";
 import Skeleton from "./skeleton";
 import Dragon from "./dragon";
 import Collectible from "./collectible";
-import { cpus } from "os";
 
 export default class Engine{
     constructor(){
@@ -79,7 +76,7 @@ export default class Engine{
         let  assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
-            //console.log("task successful", task);
+            console.log("Tasks completed : ", task);
             // Setting ground material
             let  ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;           
@@ -97,7 +94,10 @@ export default class Engine{
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
             var errors = tasks.filter(function(task) {return task.taskState === BABYLON.AssetTaskState.ERROR;});
-            var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR;}); 
+            var successes = tasks.filter(function(task) {return task.taskState !== BABYLON.AssetTaskState.ERROR;});
+            
+            console.log("Errors: " + errors);
+            console.log(successes);
         });
         // We add single tasks to the assetsManager
         // Level design load        
@@ -118,7 +118,7 @@ export default class Engine{
         let hud = this.hud;
         let isLocked = false;
         let enemyList = this.enemyList;
-        let particleSystem = this.particleSystem;
+        //let particleSystem = this.particleSystem;
         let animationRunning = this.animationRunning;        
         let animation = null;
         // Mouse input manager   
