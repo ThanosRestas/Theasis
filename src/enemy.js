@@ -21,7 +21,6 @@ export default class Enemy{
     } 
     
     setup(){
-
         for(let i = 0; i<this.subMeshes.length ; i++){
             this.subMeshes[i].checkCollisions = true;
         }
@@ -78,10 +77,8 @@ export default class Enemy{
         let mesh = this.mesh;
         let destroyed = this.destroyed;    
 
-        mesh.setEnabled(false);
-        //mesh.dispose();             
-        destroyed = true;       
-            
+        mesh.setEnabled(false); // mesh.dispose() breaks collisions                
+        destroyed = true;            
     }  
 }
 

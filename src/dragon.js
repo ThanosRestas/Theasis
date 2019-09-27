@@ -29,7 +29,6 @@ export default class Dragon{
 
         for(let i = 0; i < scene.animationGroups.length; i++){             
             var targetMesh = scene.animationGroups[i]._targetedAnimations[0].target.parent.parent.name;
-            
             if(targetMesh == name){                
                 animations.push(scene.animationGroups[i]);
             }
@@ -56,8 +55,6 @@ export default class Dragon{
         let animationIdle = this.animationIdle;        
         let animationAttack = this.animationAttack;
 
-        
-
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
@@ -72,9 +69,7 @@ export default class Dragon{
                 distVec -= 0.05;
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
                 mesh.position.y = 0;
-                animationIdle.start(); 
-               
-
+                animationIdle.start();
             }
             // Idle animation play distance
             if(distVec >= 15){                
@@ -88,11 +83,9 @@ export default class Dragon{
         }
        
     } 
-
+    
     destroy(){       
         let mesh = this.mesh;                              
         mesh.setEnabled(false); // Works cause mesh.dispose() breaks collisions          
-    }                  
-     
-   
+    }    
 }

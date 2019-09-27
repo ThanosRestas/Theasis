@@ -164,10 +164,9 @@ export default class Engine{
                     let hit = scene.pickWithRay(ray);
                     let model = hit.pickedMesh;
                     // Exempt ground from the be shot at
-                    if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0 ){
-                        //console.log(model.parent.parent.name);
+                    if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0 ){                        
                         for(let i = 0; i < enemyList.length ; i++){
-                            if(enemyList[i].name == model.parent.name || enemyList[i].name == model.parent.parent.name){ 
+                            if(enemyList[i].name == model.parent.name || (model.parent.parent && enemyList[i].name == model.parent.parent.name)){ 
                                 // Damage enemy                          
                                 if(enemyList[i].health > 0){                                
                                     enemyList[i].health -= currentWeapon.damage;
@@ -175,8 +174,7 @@ export default class Engine{
                                 }
                                 // Destroy enemy    
                                 if(enemyList[i].health <= 0){                                                            
-                                    enemyList[i].destroy(); 
-                                                                                                
+                                    enemyList[i].destroy();                                                                                               
                                     break;                               
                                 }    
                             }

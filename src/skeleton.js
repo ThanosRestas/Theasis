@@ -2,8 +2,6 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
 
-
-
 export default class Skeleton{
     constructor(scene, name, mesh, position, player){
         // Game properties        
@@ -36,9 +34,7 @@ export default class Skeleton{
     setup(){
         let scene = this.scene;        
         let animations = this.animations;       
-        let name = this.name;    
-        
-        //console.log(scene.animationGroups);
+        let name = this.name;        
 
         for(let i = 0; i < scene.animationGroups.length; i++){             
             var targetMesh = scene.animationGroups[i]._targetedAnimations[0].target.parent.name;
@@ -47,8 +43,7 @@ export default class Skeleton{
             }
         }
 
-        for(let i = 0; i < animations.length ; i++){
-            //console.log(animations[i].name);
+        for(let i = 0; i < animations.length ; i++){            
             if(animations[i].name == "Skeleton_Idle"){                
                 this.animationIdle = animations[i];
             }
@@ -94,7 +89,6 @@ export default class Skeleton{
             }
             // Idle animation play distance
             if(distVec >= 15){
-                
                 animationIdle.start();
             }     
             // Attack animation play distance

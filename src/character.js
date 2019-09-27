@@ -43,7 +43,7 @@ export default class Character{
 
         // Detect collision between player and enemy and damange health        
         camera.onCollide = function (colMesh) {
-            console.log(colMesh.name);           
+            //console.log(colMesh.name);           
 
             if(colMesh.name === "energyPack"){
                 console.log("Energy pack acquired");
