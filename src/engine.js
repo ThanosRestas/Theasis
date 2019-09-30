@@ -1,6 +1,7 @@
 // Babylon
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { GridMaterial } from "@babylonjs/materials";
+import { FireMaterial } from  "@babylonjs/materials";
 import "@babylonjs/loaders/glTF";
 import * as GUI from "@babylonjs/gui";
 // Physics
@@ -78,7 +79,7 @@ export default class Engine{
         assetsManager.onTaskSuccessObservable.add(function(task) {        
             console.log("Tasks completed : ", task);
             // Setting ground material
-            let  ground = scene.getMeshByName("ground");
+            let ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;           
             //ground.material = new GridMaterial("groundMaterial", scene);    
             //ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
@@ -101,11 +102,11 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test166.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test169.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
-        assetsManager.addMeshTask("task5", "", "../assets/models/", "Dragon.glb");                      
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");                      
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -264,7 +265,8 @@ function addPistol(player, scene, camera){
     player.gunLoadout.push(scene.getTransformNodeByName("PistolArmature").parent);     
     //player.gunLoadout.push(mesh2.parent);
     player.gunLoadout.push(scene.getTransformNodeByName("shotgun"));
-    player.gunLoadout.push(scene.getTransformNodeByName("ak47"));   
+    player.gunLoadout.push(scene.getTransformNodeByName("ak47"));  
+     
     
     // Set pistol's attributes for proper positioning
     player.gunLoadout[0].parent = camera;
@@ -320,11 +322,24 @@ function addCollectible(collectibleList, scene){
 
     collectibleList.push(scene.getMeshByName("healthPack"));
     collectibleList.push(scene.getMeshByName("energyPack")); 
-    collectibleList.push(scene.getMeshByName("healthPack1"));
+    //collectibleList.push(scene.getMeshByName("healthPack1"));
+
+    var fireMaterial = new FireMaterial("fireMaterial", scene);
+    fireMaterial.diffuseTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
+    fireMaterial.distortionTexture = new BABYLON.Texture("../assets/textures/distortion.png", scene);
+    fireMaterial.opacityTexture = new BABYLON.Texture("../assets/textures/candleOpacity.png", scene);
+    fireMaterial.speed = 5.0;
+
+    var plane = BABYLON.Mesh.CreatePlane("fireplane", 3.0, scene);
+    plane.scaling.y = 3;
+    plane.material = fireMaterial;
+    plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;
+    plane.position.x = -scene.getTransformNodeByName("campFire").position.x;
+    plane.position.z = scene.getTransformNodeByName("campFire").position.z;
 
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
     collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
-    collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
+    //collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
         scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            
