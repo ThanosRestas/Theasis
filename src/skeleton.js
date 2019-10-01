@@ -96,8 +96,7 @@ export default class Skeleton{
                 animationAttack.start();
                 player.damage(0.05);              
             }           
-        }
-       
+        }       
     } 
 
     destroy(){
