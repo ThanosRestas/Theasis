@@ -102,7 +102,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test169.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test171.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -329,13 +329,14 @@ function addCollectible(collectibleList, scene){
     fireMaterial.distortionTexture = new BABYLON.Texture("../assets/textures/distortion.png", scene);
     fireMaterial.opacityTexture = new BABYLON.Texture("../assets/textures/candleOpacity.png", scene);
     fireMaterial.speed = 5.0;
-
     var plane = BABYLON.Mesh.CreatePlane("fireplane", 3.0, scene);
+    
     plane.scaling.y = 3;
     plane.material = fireMaterial;
     plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;
     plane.position.x = -scene.getTransformNodeByName("campFire").position.x;
     plane.position.z = scene.getTransformNodeByName("campFire").position.z;
+    scene.getTransformNodeByName("campFire").isPickable = false;
 
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
     collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
