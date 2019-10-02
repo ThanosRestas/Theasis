@@ -80,7 +80,11 @@ export default class Engine{
             console.log("Tasks completed : ", task);
             // Setting ground material
             let ground = scene.getMeshByName("ground");
-            ground.checkCollisions = true;           
+            ground.checkCollisions = true; 
+
+            let forest = scene.getMeshByName("forest_primitive0");
+            forest.checkCollisions = true;
+
             //ground.material = new GridMaterial("groundMaterial", scene);    
             //ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);
             //ground.material.backFaceCulling = false;
@@ -102,7 +106,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test171.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test172.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
