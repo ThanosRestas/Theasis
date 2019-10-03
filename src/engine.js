@@ -86,9 +86,28 @@ export default class Engine{
             let lakeGround = scene.getMeshByName("lakeGround");
             lakeGround.checkCollisions = true;
 
-            /*let waterMesh = scene.getMeshByName("lake");
+            // Skybox setup
+            var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/cartoon", scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skybox.material = skyboxMaterial;  
+
+            let waterPosition = scene.getMeshByName("lake");
+            waterPosition.isVisible = false;
+
+            let waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
+            waterMesh.position = waterPosition.position.clone();
+            waterMesh.position.y -=1;
+            waterMesh.scaling.x = 0.03;
+            waterMesh.scaling.y = 0.03;
+            waterMesh.scaling.z = 0.03;
+            //waterMesh.y+= 1;
             let water = new WaterMaterial("water", scene);
-            water.bumpTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
+            water.bumpTexture = new BABYLON.Texture("../assets/textures/waterbump.png", scene);
             // Water properties
             water.windForce = -15;
             water.waveHeight = 1.3;
@@ -99,22 +118,16 @@ export default class Engine{
             water.waveLength = 0.1;
             // Add skybox and ground to the reflection and refraction            
             water.addToRenderList(ground);
-            // Assign the water material
-            waterMesh.material = water;*/
+            water.addToRenderList(skybox);
             
-            var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
-            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-            skyboxMaterial.backFaceCulling = false;
-            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/cartoon", scene);
-            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-            skybox.material = skyboxMaterial;
+            // Assign the water material
+            waterMesh.material = water;
+
+
+
+             
 
            
-
-
-
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
                 entry.checkCollisions = true;
