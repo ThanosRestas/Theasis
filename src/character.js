@@ -58,7 +58,7 @@ export default class Character{
                 energyHud.width = energy/100;                
             } 
             
-            if(colMesh.name === "healthPack" || colMesh.name === "healthPack1"){
+            if(colMesh.name === "healthPack"){
                 console.log("Health pack acquired");
                 // Remove the health pack from the scene and restore 10% health to the player
                 colMesh.dispose();

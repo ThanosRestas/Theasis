@@ -2,6 +2,7 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { GridMaterial } from "@babylonjs/materials";
 import { FireMaterial } from  "@babylonjs/materials";
+import { WaterMaterial } from  "@babylonjs/materials";
 import "@babylonjs/loaders/glTF";
 import * as GUI from "@babylonjs/gui";
 // Physics
@@ -82,6 +83,26 @@ export default class Engine{
             let ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;
 
+            let lakeGround = scene.getMeshByName("lakeGround");
+            lakeGround.checkCollisions = true;
+
+            let waterMesh = scene.getMeshByName("lake");
+            let water = new WaterMaterial("water", scene);
+            water.bumpTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
+            // Water properties
+            water.windForce = -15;
+            water.waveHeight = 1.3;
+            water.windDirection = new BABYLON.Vector2(1, 1);
+            water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
+            water.colorBlendFactor = 0.3;
+            water.bumpHeight = 0.1;
+            water.waveLength = 0.1;
+            // Add skybox and ground to the reflection and refraction            
+            water.addToRenderList(ground);
+            // Assign the water material
+	        waterMesh.material = water;
+
+
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
                 entry.checkCollisions = true;
@@ -103,7 +124,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test173.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test174.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
