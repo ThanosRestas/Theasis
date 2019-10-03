@@ -78,7 +78,7 @@ export default class Engine{
         let  assetsManager = new BABYLON.AssetsManager(scene);     
         // Called when a single task has been sucessfull
         assetsManager.onTaskSuccessObservable.add(function(task) {        
-            console.log("Tasks completed : ", task);
+            //console.log("Tasks completed : ", task);
             // Enabling collisions on all ground sub sections
             let ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;
@@ -86,7 +86,7 @@ export default class Engine{
             let lakeGround = scene.getMeshByName("lakeGround");
             lakeGround.checkCollisions = true;
 
-            let waterMesh = scene.getMeshByName("lake");
+            /*let waterMesh = scene.getMeshByName("lake");
             let water = new WaterMaterial("water", scene);
             water.bumpTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
             // Water properties
@@ -100,7 +100,19 @@ export default class Engine{
             // Add skybox and ground to the reflection and refraction            
             water.addToRenderList(ground);
             // Assign the water material
-	        waterMesh.material = water;
+            waterMesh.material = water;*/
+            
+            var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/skyBox2w", scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skybox.material = skyboxMaterial;
+
+           
+
 
 
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
