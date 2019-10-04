@@ -55,14 +55,10 @@ export default class Character{
         } 
     }
     
-    characterController () { 
-          
-        let camera = this.camera;
-        //let energy = this.energy;
+    characterController () {     
+        
         let scene = this.scene;
-        let gunLoadout = this.gunLoadout;        
-        let healthHud = this.hud[0];
-        let energyHud = this.hud[1];
+        let gunLoadout = this.gunLoadout;
         let ammoHud = this.hud[2];       
         
         /*scene.onKeyboardObservable.add((kbInfo) => {
@@ -98,8 +94,7 @@ export default class Character{
             switch (kbInfo.type) {
             case BABYLON.KeyboardEventTypes.KEYDOWN:                
                 switch (movementKeys.includes(kbInfo.event.key.toString())) {                    
-                case true:
-                    console.log(kbInfo.event.key);                    
+                case true:                                    
                     this.energyDown();                           
                     break;                
                 }
@@ -145,15 +140,7 @@ export default class Character{
                         if (!noPreventDefault) {
                             evt.preventDefault();
                         }                       
-
-                        /*// Energy Deprecation with each movement
-                        if(this.energy >= 1){
-                            this.energy -= 0.02;
-                        }
-                        // Setting the energy bar's width accordingly
-                       this.hud[1].width = this.energy/100;
-                        // Lessen camera speed because of the fatigue - Disabled for tasting purposes
-                        //camera.speed = energy/100;  */                 
+                
                     }
                 };
                 this._onKeyUp = function (evt) {
@@ -215,8 +202,7 @@ export default class Character{
                     }
                     else if (this.keysForward.indexOf(keyCode) !== -1){
                         this.camera._localDirection.copyFromFloats(0, 0, +speed);
-                        //console.log(this.camera.position.z);
-                        
+                        //console.log(this.camera.position.z);                        
                     }
                
                     if (this.camera.getScene().useRightHandedSystem) {
