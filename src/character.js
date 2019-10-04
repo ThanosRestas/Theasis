@@ -19,36 +19,32 @@ export default class Character{
         this.hud = game.hud;
     }
 
-    damage(ammount){
-        
-        if(this.health >=1){
-            this.health -= ammount;
-            this.hud[0].width = this.health/100;
-        }
-        
-    }  
    
     healthUp(){
         console.log("Health Up");
-
         if(this.health < 20){
             this.health += 0.5;
             this.hud[0].width = this.health/100;
-        } 
-        
+        }       
     }   
 
-    energyUp(){
-        
+    healthDown(ammount){        
+        if(this.health >=1){
+            this.health -= ammount;
+            this.hud[0].width = this.health/100;
+        }        
+    }   
+
+    energyUp(){        
         console.log("Energy Up");
         if(this.energy < 20){
-            this.energy += 10;
+            this.energy += 5;
             this.hud[1].width = this.energy/100;            
         } 
     }
 
     energyDown(){
-        console.log("Energy Down");
+        //console.log("Energy Down");
         if(this.energy > 1){
             this.energy -= 0.1;
             this.hud[1].width = this.energy/100;            

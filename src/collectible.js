@@ -23,8 +23,7 @@ export default class Collectible{
 
         if(this.name == "healthPack"){
             this.mesh.onDisposeObservable.add(function(){
-                player.healthUp();       
-                //player.energyUp();         
+                player.healthUp();                      
             }); 
         }
         
@@ -43,15 +42,13 @@ export default class Collectible{
 
         let mesh = this.mesh;
         let scene = this.scene;
-        let camera = scene.activeCamera; 
-        let player = this.player;             
+        let camera = scene.activeCamera;                  
         
         let distVec = BABYLON.Vector3.Distance( camera.position, mesh.absolutePosition);  
         
         if(mesh != null){
             // Remove collectible from the scene
-            if(distVec <= 4){
-                console.log("Collectible Pick up");
+            if(distVec <= 4){                
                 //mesh.setEnabled(false);   
                 mesh.dispose();           
             } 

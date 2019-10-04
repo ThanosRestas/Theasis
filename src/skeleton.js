@@ -94,7 +94,7 @@ export default class Skeleton{
             // Attack animation play distance
             if(distVec < 5){
                 animationAttack.start();
-                player.damage(0.05);              
+                player.healthDown(0.05);              
             }           
         }       
     } 
