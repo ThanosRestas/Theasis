@@ -26,49 +26,58 @@ export default class Character{
             this.hud[0].width = this.health/100;
         }
         
+    }  
+   
+    healthUp(){
+        console.log("Health Up");
+
+        if(this.health < 20){
+            this.health += 0.5;
+            this.hud[0].width = this.health/100;
+        } 
+        
+    }   
+
+    energyUp(){
+        
+        console.log("Energy Up");
+        if(this.energy < 20){
+            this.energy += 10;
+            this.hud[1].width = this.energy/100;            
+        } 
+    }
+
+    energyDown(){
+        console.log("Energy Down");
+        if(this.energy > 1){
+            this.energy -= 0.1;
+            this.hud[1].width = this.energy/100;            
+        } 
     }
     
     characterController () { 
           
         let camera = this.camera;
-        let energy = this.energy;
+        //let energy = this.energy;
         let scene = this.scene;
-        let gunLoadout = this.gunLoadout;        
-        let healthHud = this.hud[0];
-        let energyHud = this.hud[1];
-        let ammoHud = this.hud[2];
-
-        let health = this.health;        
-        //let cameraImpostor = this.cameraImpostor;
-
-        // Detect collision between player and enemy and damange health        
-        camera.onCollide = function (colMesh) {
-            //console.log(colMesh.name);           
-
-            if(colMesh.name === "energyPack"){
-                console.log("Energy pack acquired");
-                // Remove the energy pack from the scene and restore 20% energy to the player
-                colMesh.dispose();
-                if(energy < 20){
-                    energy += 30;
-                    if(energy >= 20){
-                        energy = 20;
-                    }
-                } 
-                energyHud.width = energy/100;                
-            } 
-            
-            if(colMesh.name === "healthPack"){
-                console.log("Health pack acquired");
-                // Remove the health pack from the scene and restore 10% health to the player
-                colMesh.dispose();
-                if(health < 20){
-                    health += 0.5;
-                } 
-                healthHud.width = health/100;         
-            }        
-        };
+        let gunLoadout = this.gunLoadout;
         
+        let ammoHud = this.hud[2]; 
+        
+        let movementKeys = ["w", "a", "s", "d"];
+        scene.onKeyboardObservable.add((kbInfo) => {
+            switch (kbInfo.type) {
+            case BABYLON.KeyboardEventTypes.KEYDOWN:                
+                switch (movementKeys.includes(kbInfo.event.key.toString())) {                    
+                case true:
+                    console.log(kbInfo.event.key);                    
+                    this.energyDown();                           
+                    break;                
+                }
+                break;
+            }
+        });
+
         // Canon physics for detecting collission with skull enemy projectile
         /*cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
             //console.log("Bullet collision with : " + t.object.name);
@@ -106,16 +115,16 @@ export default class Character{
                         }
                         if (!noPreventDefault) {
                             evt.preventDefault();
-                        }
+                        }                       
 
-                        // Energy Deprecation with each movement
-                        if(energy >= 1){
-                            energy -= 0.02;
+                        /*// Energy Deprecation with each movement
+                        if(this.energy >= 1){
+                            this.energy -= 0.02;
                         }
                         // Setting the energy bar's width accordingly
-                        energyHud.width = energy/100;
+                       this.hud[1].width = this.energy/100;
                         // Lessen camera speed because of the fatigue - Disabled for tasting purposes
-                        //camera.speed = energy/100;                   
+                        //camera.speed = energy/100;  */                 
                     }
                 };
                 this._onKeyUp = function (evt) {

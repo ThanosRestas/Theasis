@@ -4,24 +4,59 @@ import "@babylonjs/core/Meshes/meshBuilder";
 
 
 export default class Collectible{
-    constructor(scene, name, mesh){
+    constructor(scene, name, mesh, player){
         // World properties
         this.scene = scene;
         // Weapon properties
         this.name = name;
-        this.mesh = mesh;        
-        this.mesh.checkCollisions = true;
+        this.mesh = mesh;
+        this.player = player;        
+
+        this.setup();
+         
+    }
+
+    setup(){
+
+        let player = this.player;
+       
+
+        if(this.name == "healthPack"){
+            this.mesh.onDisposeObservable.add(function(){
+                player.healthUp();       
+                //player.energyUp();         
+            }); 
+        }
+        
+        if(this.name == "energyPack"){
+            this.mesh.onDisposeObservable.add(function(){
+                player.energyUp();                
+            });
+        }
     }
        
-    rotate(){
-        if(this.scene.getMeshByName(this.name)){
-            if(this.name == "energyPack"){
-                this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
-            }
-            else{
-                this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);   
-            }
+    rotate(){        
+        this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);
+    } 
+
+    destroy(){
+
+        let mesh = this.mesh;
+        let scene = this.scene;
+        let camera = scene.activeCamera; 
+        let player = this.player;             
+        
+        let distVec = BABYLON.Vector3.Distance( camera.position, mesh.absolutePosition);  
+        
+        if(mesh != null){
+            // Remove collectible from the scene
+            if(distVec <= 4){
+                console.log("Collectible Pick up");
+                //mesh.setEnabled(false);   
+                mesh.dispose();           
+            } 
         } 
-    }       
+    }
+    
 }
 

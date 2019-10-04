@@ -76,7 +76,7 @@ export default class Skeleton{
             let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
             let targetVec = camera.position.subtract(initVec);
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
-
+            
             // Enemy always faces the player                   
             mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead

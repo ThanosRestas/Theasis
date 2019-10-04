@@ -18,6 +18,7 @@ export default class Enemy{
         // get submeshes and enable collision on each
         this.subMeshes = this.mesh.getChildren();
         //this.setup();       
+        
     } 
     
     setup(){
@@ -31,6 +32,8 @@ export default class Enemy{
         let scene = this.scene;
         let camera = scene.activeCamera;     
 
+        
+
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
@@ -43,6 +46,8 @@ export default class Enemy{
                 distVec -= 0.05;
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);                     
             }*/
+
+            //console.log(distVec);
             
             // Enemy always faces the player
             mesh.setParent(null);

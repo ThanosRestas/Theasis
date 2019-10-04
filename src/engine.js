@@ -101,10 +101,10 @@ export default class Engine{
 
             let waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
             waterMesh.position = waterPosition.position.clone();
-            waterMesh.position.y -=1;
-            waterMesh.scaling.x = 0.03;
-            waterMesh.scaling.y = 0.03;
-            waterMesh.scaling.z = 0.03;
+            //waterMesh.position.y -=1;
+            waterMesh.scaling.x = 0.2;
+            waterMesh.scaling.y = 0.2;
+            waterMesh.scaling.z = 0.2;
             //waterMesh.y+= 1;
             let water = new WaterMaterial("water", scene);
             water.bumpTexture = new BABYLON.Texture("../assets/textures/waterbump.png", scene);
@@ -123,10 +123,6 @@ export default class Engine{
             // Assign the water material
             waterMesh.material = water;
 
-
-
-             
-
            
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
@@ -137,7 +133,7 @@ export default class Engine{
             // Add the weapon meshes to the scene
             addPistol(player, scene, camera);
             // Add the collectible meshes to the scene
-            addCollectible(collectibleList, scene);           
+            addCollectible(collectibleList, scene, player);           
         });         
         // Called when all tasks in the assetsManger are done
         assetsManager.onTasksDoneObservable.add(function(tasks) {
@@ -149,7 +145,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test174.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test175.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -306,15 +302,11 @@ export default class Engine{
     }
 }
 
-function addPistol(player, scene, camera){       
-
-    // Getting the gun models from the scene and load them into the loadout    
+function addPistol(player, scene, camera){    // Getting the gun models from the scene and load them into the loadout    
     player.gunLoadout.push(scene.getTransformNodeByName("PistolArmature").parent);     
     //player.gunLoadout.push(mesh2.parent);
     player.gunLoadout.push(scene.getTransformNodeByName("shotgun"));
-    player.gunLoadout.push(scene.getTransformNodeByName("ak47"));  
-     
-    
+    player.gunLoadout.push(scene.getTransformNodeByName("ak47"));    
     // Set pistol's attributes for proper positioning
     player.gunLoadout[0].parent = camera;
     player.gunLoadout[0].scaling.x  *= 0.10;
@@ -340,7 +332,7 @@ function addPistol(player, scene, camera){
     // Setting up the weapon's object on the player            
     player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10);
-    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 10, 5, 50);    
+    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 10, 5, 50); 
 }
 
 function addEnemy(enemyList, scene, player){   
@@ -365,7 +357,7 @@ function addEnemy(enemyList, scene, player){
     }    
 }
 
-function addCollectible(collectibleList, scene){ 
+function addCollectible(collectibleList, scene, player){ 
 
     collectibleList.push(scene.getMeshByName("healthPack"));
     collectibleList.push(scene.getMeshByName("energyPack")); 
@@ -385,12 +377,13 @@ function addCollectible(collectibleList, scene){
     plane.position.z = scene.getTransformNodeByName("campFire").position.z;
     scene.getTransformNodeByName("campFire").isPickable = false;
 
-    collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0]);  
-    collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1]);
+    collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0], player);  
+    collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1], player);
     //collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
-        scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();});            
+        scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();}); 
+        scene.onBeforeRenderObservable.add(function(){collectibleList[i].destroy();});                   
     }  
 }
 

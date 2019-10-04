@@ -58,10 +58,12 @@ export default class Dragon{
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
-            let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
+            let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);  
+                         
             let targetVec = camera.position.subtract(initVec);
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
 
+            //console.log(distVec); 
             // Enemy always faces the player                   
             mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead
