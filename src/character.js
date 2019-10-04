@@ -60,10 +60,39 @@ export default class Character{
         let camera = this.camera;
         //let energy = this.energy;
         let scene = this.scene;
-        let gunLoadout = this.gunLoadout;
+        let gunLoadout = this.gunLoadout;        
+        let healthHud = this.hud[0];
+        let energyHud = this.hud[1];
+        let ammoHud = this.hud[2];       
         
-        let ammoHud = this.hud[2]; 
-        
+        /*scene.onKeyboardObservable.add((kbInfo) => {
+            switch (kbInfo.type) {
+            case BABYLON.KeyboardEventTypes.KEYDOWN:
+                switch (kbInfo.event.key) {                    
+                case "w":
+                    console.log("w");                    
+                    this.energyDown();                           
+                    break;
+
+                case "a":
+                    console.log("a");  
+                    this.energyDown();                              
+                    break;
+                
+                case "s":
+                    console.log("s");  
+                    this.energyDown();                              
+                    break; 
+
+                case "d":
+                    console.log("d");  
+                    this.energyDown();                              
+                    break; 
+                }
+                break;
+            }
+        });*/    
+
         let movementKeys = ["w", "a", "s", "d"];
         scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {
@@ -76,8 +105,8 @@ export default class Character{
                 }
                 break;
             }
-        });
-
+        });      
+        
         // Canon physics for detecting collission with skull enemy projectile
         /*cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
             //console.log("Bullet collision with : " + t.object.name);
