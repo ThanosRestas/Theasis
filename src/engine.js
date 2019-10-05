@@ -91,6 +91,7 @@ export default class Engine{
             var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
             skyboxMaterial.backFaceCulling = false;
             skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/cartoon", scene);
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/TropicalSunnyDay", scene);
             skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
             skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
             skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -100,17 +101,20 @@ export default class Engine{
             waterPosition.isVisible = false;
 
             let waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
-            waterMesh.position = waterPosition.position.clone();
+            //waterMesh.position = waterPosition.position.clone();
+            waterMesh.position.x = 0.12;
+            waterMesh.position.y = -4;
+            waterMesh.position.z = -111.59;
             //waterMesh.position.y -=1;
-            waterMesh.scaling.x = 0.2;
+            waterMesh.scaling.x = 0.15;
             waterMesh.scaling.y = 0.2;
-            waterMesh.scaling.z = 0.2;
+            waterMesh.scaling.z = 0.15;
             //waterMesh.y+= 1;
             let water = new WaterMaterial("water", scene);
             water.bumpTexture = new BABYLON.Texture("../assets/textures/waterbump.png", scene);
             // Water properties
-            water.windForce = -15;
-            water.waveHeight = 1.3;
+            water.windForce = -50;
+            water.waveHeight = 1.8;
             water.windDirection = new BABYLON.Vector2(1, 1);
             water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
             water.colorBlendFactor = 0.3;
@@ -145,7 +149,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test175.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test176.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");

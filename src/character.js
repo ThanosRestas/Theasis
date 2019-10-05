@@ -23,7 +23,7 @@ export default class Character{
     healthUp(){
         console.log("Health Up");
         if(this.health < 20){
-            this.health += 0.5;
+            this.health += 5;
             this.hud[0].width = this.health/100;
         }       
     }   
