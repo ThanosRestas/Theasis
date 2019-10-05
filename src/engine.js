@@ -91,14 +91,14 @@ export default class Engine{
             var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
             skyboxMaterial.backFaceCulling = false;
             skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/cartoon", scene);
-            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/TropicalSunnyDay", scene);
+            //skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../assets/textures/skybox/TropicalSunnyDay", scene);
             skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
             skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
             skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
             skybox.material = skyboxMaterial;  
 
             let waterPosition = scene.getMeshByName("lake");
-            waterPosition.isVisible = false;
+            
 
             let waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
             //waterMesh.position = waterPosition.position.clone();
@@ -113,15 +113,15 @@ export default class Engine{
             let water = new WaterMaterial("water", scene);
             water.bumpTexture = new BABYLON.Texture("../assets/textures/waterbump.png", scene);
             // Water properties
-            water.windForce = -50;
-            water.waveHeight = 1.8;
+            water.windForce = -20;
+            water.waveHeight = 0.5;
             water.windDirection = new BABYLON.Vector2(1, 1);
             water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
             water.colorBlendFactor = 0.3;
             water.bumpHeight = 0.1;
-            water.waveLength = 0.1;
+            water.waveLength = 0.7;
             // Add skybox and ground to the reflection and refraction            
-            water.addToRenderList(ground);
+            water.addToRenderList(waterPosition);
             water.addToRenderList(skybox);
             
             // Assign the water material
