@@ -25,8 +25,8 @@ export default class Skeleton{
         this.subMeshes = this.mesh.getChildren();
         this.subMeshes = this.subMeshes[0].getChildren();
         this.collisionMesh = this.subMeshes[1];        
-        this.collisionMesh.isVisible = false; 
-        this.collisionMesh.checkCollisions = true;
+        this.collisionMesh.isVisible = false;         
+        this.collisionMesh.isPickable = false;
         // The player of the game
         this.player = player; 
     } 

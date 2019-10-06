@@ -169,6 +169,13 @@ export default class Engine{
         //let particleSystem = this.particleSystem;
         let animationRunning = this.animationRunning;        
         let animation = null;
+
+        // crosshair
+        var aim = BABYLON.Mesh.CreateSphere("aim1", 16, 0.01, scene);
+        aim.parent = camera;
+        aim.position.z = 2; 
+        aim.isPickable = false;
+        
         // Mouse input manager   
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
@@ -287,7 +294,7 @@ export default class Engine{
 
         // Ammo bar
         var ammoBar = new GUI.TextBlock();
-        ammoBar.color = "white";
+        ammoBar.color = "black";
         ammoBar.fontSize = 24;
         ammoBar.top = 350;
         ammoBar.left = -500;
@@ -336,7 +343,7 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
     // Setting up the weapon's object on the player            
     player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10);
-    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 10, 5, 50); 
+    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 100, 1, 50); 
 }
 
 function addEnemy(enemyList, scene, player){   
