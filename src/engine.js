@@ -214,12 +214,17 @@ export default class Engine{
                     if(currentWeapon.ammo > 0){
                         currentWeapon.ammo -= 1;                      
                     }
+
+                    var predicate = function(mesh) {
+
+                        return mesh.isPickable && mesh.isEnabled();
+                    }
                     // Shoot at camera's ray target according to each weapon's range    
                     let ray = camera.getForwardRay(currentWeapon.range);
-                    let hit = scene.pickWithRay(ray);
-                    let model = hit.pickedMesh;
+                    let hit = scene.pickWithRay(ray, predicate);                  
+                    let model = hit.pickedMesh;                    
                     // Exempt ground from the be shot at
-                    if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0 ){                        
+                    if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0){                        
                         for(let i = 0; i < enemyList.length ; i++){
                             if(enemyList[i].name == model.parent.name || (model.parent.parent && enemyList[i].name == model.parent.parent.name)){ 
                                 // Damage enemy                          
@@ -340,6 +345,8 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
         group.reset();
     });  
         
+    
+
     // Setting up the weapon's object on the player            
     player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10);
