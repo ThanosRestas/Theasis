@@ -1,13 +1,14 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 export default class Weapon{
-    constructor(name, mesh, ammo, damage, range){
+    constructor(name, mesh, ammo, damage, range, scene){
            
         // Weapon properties
         this.name = name;
         this.mesh = mesh;
         this.ammo = ammo;
         this.damage = damage;
-        this.range = range;        
+        this.range = range;    
+        this.scene = scene;    
         // Making mesh invisible
         this.mesh.setEnabled(false);
         // Animation properties
@@ -16,6 +17,7 @@ export default class Weapon{
         this.animationSpeed = 1.5;      
         // Create the proper animation per gun upon object creation
         this.setAnimations();       
+        //console.log(scene.activeCamera.getChildren()[0]);       
     }
     setAnimations(){        
         // Setting the end position of the animation(usually the same as the start)

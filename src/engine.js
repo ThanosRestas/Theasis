@@ -98,8 +98,6 @@ export default class Engine{
             skybox.material = skyboxMaterial;  
 
             let waterPosition = scene.getMeshByName("lake");
-            
-
             let waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
             //waterMesh.position = waterPosition.position.clone();
             waterMesh.position.x = 0.12;
@@ -122,11 +120,15 @@ export default class Engine{
             water.waveLength = 0.7;
             // Add skybox and ground to the reflection and refraction            
             water.addToRenderList(waterPosition);
-            water.addToRenderList(skybox);
-            
+            water.addToRenderList(skybox);            
             // Assign the water material
             waterMesh.material = water;
 
+            //Buildings setup
+            let barn = scene.getTransformNodeByName("Barn").getChildMeshes();
+            barn.forEach(function(entry){
+                entry.checkCollisions = true;
+            });
            
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
@@ -149,7 +151,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test176.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test177.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -337,7 +339,9 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
     player.gunLoadout[1].position = new BABYLON.Vector3(1, -1, 3);
     // Set ak47's attributes for proper positioning
     player.gunLoadout[2].parent = camera;    
-    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -0.75, 2.5);   
+    player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -0.75, 2.5);
+    
+    
     
     // Stoping all animations from autoplaying on scene loading
     scene.animationGroups.forEach(group => {
@@ -347,10 +351,11 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
         
     
 
+
     // Setting up the weapon's object on the player            
-    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25);
-    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10);
-    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 100, 1, 50); 
+    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25, scene);
+    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10, scene);
+    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 100, 1, 50, scene); 
 }
 
 function addEnemy(enemyList, scene, player){   
