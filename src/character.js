@@ -18,7 +18,6 @@ export default class Character{
         // Hud
         this.hud = game.hud;
     }
-
    
     healthUp(){
         console.log("Health Up");
@@ -99,16 +98,16 @@ export default class Character{
         });      
         
         // Canon physics for detecting collission with skull enemy projectile
-        /*cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
+        this.cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
             //console.log("Bullet collision with : " + t.object.name);
             // Check for "Bullet" substring inside of collision t object name
             if(t.object.name.substring(0, 6) == "Bullet"){
                 
                 t.object.dispose();
-            }            
-            health -= 1;
-            healthHud.width = health/100;          
-        }*/
+            }  
+
+            this.healthDown(3);          
+        }
 
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {

@@ -85,6 +85,10 @@ export default class Dragon{
         }
        
     } 
+
+    shoot(){
+        
+    }
     
     destroy(){       
         let mesh = this.mesh;                              

@@ -6,8 +6,8 @@ import { WaterMaterial } from  "@babylonjs/materials";
 import "@babylonjs/loaders/glTF";
 import * as GUI from "@babylonjs/gui";
 // Physics
-//import * as cannon from "CANNON";
-//import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
+import * as cannon from "CANNON";
+import CannonJSPlugin from "@babylonjs/core/Legacy/legacy";
 // Utilities 
 import Weapon from "./weapon";
 import Enemy from "./enemy";
@@ -37,19 +37,19 @@ export default class Engine{
         this.scene.collisionsEnabled = true;
         this.scene.gravity = new BABYLON.Vector3(0, -0.1, 0);    
         // Enable physics        
-        //this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
-        //this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
+        this.physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon);
+        this.scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), this.physicsPlugin);
         // Camera physics impostor
-        //this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 2 }, this.scene);
-        /*.cameraImpostor.physicsImpostor = new BABYLON.PhysicsImpostor(this.cameraImpostor, 
+        this.cameraImpostor = BABYLON.MeshBuilder.CreateSphere("CameraImpostor", { segments: 3, diameter: 2 }, this.scene);
+        this.cameraImpostor.physicsImpostor = new BABYLON.PhysicsImpostor(this.cameraImpostor, 
             BABYLON.PhysicsImpostor.SphereImpostor, 
             { mass: 0, friction: 0.5, restition: 0.3 },
-            this.scene);*/
+            this.scene);
         // Making the collision sphere invisible
-        //this.cameraImpostor.visibility = 5;
+        this.cameraImpostor.visibility = 5;
         // Assigning the collision sphere to the camera
-        //this.cameraImpostor.parent = this.camera;
-        //this.cameraImpostor.isPickable = false;    
+        this.cameraImpostor.parent = this.camera;
+        this.cameraImpostor.isPickable = false;    
         // HUD setup
         this.hud = this.hudManager();
         // Particle system setup
@@ -86,6 +86,12 @@ export default class Engine{
             let lakeGround = scene.getMeshByName("lakeGround");
             lakeGround.checkCollisions = true;
 
+            scene.getMeshByName("Fence").checkCollisions = true;
+            scene.getMeshByName("Fence.001").checkCollisions = true;
+            scene.getMeshByName("Fence.002").checkCollisions = true;
+            scene.getMeshByName("Fence.003").checkCollisions = true;
+            scene.getMeshByName("Fence.004").checkCollisions = true;
+
             // Skybox setup
             var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
             var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
@@ -98,6 +104,7 @@ export default class Engine{
             skybox.material = skyboxMaterial;  
 
             let waterPosition = scene.getMeshByName("lake");
+            waterPosition.checkCollisions = true;
             let waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
             //waterMesh.position = waterPosition.position.clone();
             waterMesh.position.x = 0.12;
@@ -376,7 +383,7 @@ function addEnemy(enemyList, scene, player){
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
-        //scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
+        scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
     }    
 }
 

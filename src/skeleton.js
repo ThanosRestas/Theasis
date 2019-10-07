@@ -100,6 +100,11 @@ export default class Skeleton{
         }       
     } 
 
+    
+    shoot(){
+        
+    }
+
     destroy(){
         let name = this.name;
         let mesh = this.mesh; 
