@@ -83,6 +83,11 @@ export default class Engine{
             let ground = scene.getMeshByName("ground");
             ground.checkCollisions = true;
 
+            let dessert = scene.getMeshByName("dessert");
+            dessert.checkCollisions = true;
+            
+            
+
             let lakeGround = scene.getMeshByName("lakeGround");
             lakeGround.checkCollisions = true;
 
@@ -158,7 +163,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test177.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test179.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -383,7 +388,7 @@ function addEnemy(enemyList, scene, player){
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
         scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
-        scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
+        //scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
     }    
 }
 

@@ -1,6 +1,8 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
+import "@babylonjs/loaders/glTF";
+
 
 export default class Skeleton{
     constructor(scene, name, mesh, position, player){
@@ -59,7 +61,7 @@ export default class Skeleton{
             }
         }    
         
-       
+        scene.getMeshBy
     }
     
     move(){        
