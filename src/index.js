@@ -8,7 +8,7 @@ import "@babylonjs/loaders/OBJ";
 import Engine from "./engine";
 import Character from "./character";
 
-let game, player;
+var game, player;
 
 function main(){    
     game = new Engine();

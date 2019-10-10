@@ -1,5 +1,6 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 
+
 export default class Character{
     constructor(game){
         // World info
@@ -107,7 +108,7 @@ export default class Character{
             }  
 
             this.healthDown(3);          
-        }
+        };
 
         // Create our own manager:
         var FreeCameraKeyboardRotateInput = function () {

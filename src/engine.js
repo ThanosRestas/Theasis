@@ -85,11 +85,15 @@ export default class Engine{
 
             let dessert = scene.getMeshByName("dessert");
             dessert.checkCollisions = true;
-            
-            
+
+            let forest = scene.getMeshByName("forest");
+            forest.checkCollisions = true;
 
             let lakeGround = scene.getMeshByName("lakeGround");
             lakeGround.checkCollisions = true;
+
+            let village = scene.getMeshByName("village");
+            village.checkCollisions = true;
 
             scene.getMeshByName("Fence").checkCollisions = true;
             scene.getMeshByName("Fence.001").checkCollisions = true;
@@ -163,7 +167,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test179.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test180.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -232,7 +236,7 @@ export default class Engine{
                     var predicate = function(mesh) {
 
                         return mesh.isPickable && mesh.isEnabled();
-                    }
+                    };
                     // Shoot at camera's ray target according to each weapon's range    
                     let ray = camera.getForwardRay(currentWeapon.range);
                     let hit = scene.pickWithRay(ray, predicate);                  
