@@ -18,7 +18,7 @@ export default class Weapon{
         // Create the proper animation per gun upon object creation
         this.setAnimations();       
         //console.log(scene.activeCamera.getChildren()[0]);   
-        this.mesh.renderingGroupId = 4;    
+        //this.mesh.renderingGroupId = 4;    
     }
     setAnimations(){        
         // Setting the end position of the animation(usually the same as the start)
@@ -37,7 +37,7 @@ export default class Weapon{
             this.animationSpeed = 5;      
         }
         
-        if(this.name!== "pistol"){
+        if(this.name!== "pistol" ){
             // Setting up keys based on start-end values
             var keys = [{frame: 0,value: this.start},{frame: 10,value: end},{frame: 100,value: this.start}];
             // Setting up the animation object
@@ -52,6 +52,21 @@ export default class Weapon{
 
             this.mesh.animations.push(display);
             console.log("Animations Created for: " + this.name);
+        }
+
+        
+        if(this.name == "rayGun"){
+            //this.damage = 2.5;
+            //this.range = 10;
+            end.x -= Math.PI/20;
+            this.animationSpeed = 5;
+        }
+
+        if(this.name == "lightingGun"){
+            //this.damage = 2.5;
+            //this.range = 10;
+            end.x -= Math.PI/20;
+            this.animationSpeed = 5;
         }
 
     }  

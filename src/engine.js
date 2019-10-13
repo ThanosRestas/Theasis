@@ -171,7 +171,9 @@ export default class Engine{
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
-        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");                      
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");   
+        assetsManager.addMeshTask("task3", "", "../assets/models/", "RayGun.glb"); 
+        assetsManager.addMeshTask("task3", "", "../assets/models/", "LightningGun.glb");                            
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -337,10 +339,11 @@ export default class Engine{
 }
 
 function addPistol(player, scene, camera){    // Getting the gun models from the scene and load them into the loadout    
-    player.gunLoadout.push(scene.getTransformNodeByName("PistolArmature").parent);     
-    //player.gunLoadout.push(mesh2.parent);
+    player.gunLoadout.push(scene.getTransformNodeByName("PistolArmature").parent);   
     player.gunLoadout.push(scene.getTransformNodeByName("shotgun"));
     player.gunLoadout.push(scene.getTransformNodeByName("ak47"));    
+    player.gunLoadout.push(scene.getTransformNodeByName("RayGun").parent);
+    player.gunLoadout.push(scene.getTransformNodeByName("Lightning Gun").parent);    
     // Set pistol's attributes for proper positioning
     player.gunLoadout[0].parent = camera;
     player.gunLoadout[0].scaling.x  *= 0.10;
@@ -356,22 +359,32 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
     // Set ak47's attributes for proper positioning
     player.gunLoadout[2].parent = camera;    
     player.gunLoadout[2].position = new BABYLON.Vector3(0.7, -0.75, 2.5);
-    
-    
-    
+    // Set Ray Gun's attributes
+    player.gunLoadout[3].parent = camera;
+    player.gunLoadout[3].scaling.x  *= 0.20;
+    player.gunLoadout[3].scaling.y  *= 0.20;  
+    player.gunLoadout[3].scaling.z  *= 0.20;
+    player.gunLoadout[3].position = new BABYLON.Vector3(0.3, -0.5, 1.5);    
+    player.gunLoadout[3].rotationQuaternion = null;
+    // Set Ray Gun's attributes
+    player.gunLoadout[4].parent = camera;
+    player.gunLoadout[4].scaling.x  *= 0.10;
+    player.gunLoadout[4].scaling.y  *= 0.10;  
+    player.gunLoadout[4].scaling.z  *= 0.10;
+    player.gunLoadout[4].position = new BABYLON.Vector3(0.3, -0.5, 1.5);    
+    player.gunLoadout[4].rotationQuaternion = null;
+    //player.gunLoadout[4].rotation.y =  - 2 * Math.PI / 6;    
     // Stoping all animations from autoplaying on scene loading
     scene.animationGroups.forEach(group => {
         group.stop();
         group.reset();
-    });  
-        
-    
-
-
+    });
     // Setting up the weapon's object on the player            
     player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25, scene);
     player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10, scene);
     player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 100, 1, 50, scene); 
+    player.gunLoadout[3] = new Weapon("rayGun",  player.gunLoadout[3], 100, 1, 50, scene); 
+    player.gunLoadout[4] = new Weapon("lightingGun",  player.gunLoadout[4], 100, 1, 50, scene); 
 }
 
 function addEnemy(enemyList, scene, player){   

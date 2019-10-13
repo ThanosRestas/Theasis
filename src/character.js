@@ -249,7 +249,21 @@ export default class Character{
                     this.currentWeapon = 2;
                     ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
                     weaponSwitch(gunLoadout,  this.currentWeapon);
-                    break;     
+                    break;
+
+                case "4":
+                    console.log("RayGun selected");
+                    this.currentWeapon = 3;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    break;
+                    
+                case "5":
+                    console.log("LightningGun selected");
+                    this.currentWeapon = 4;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    break;   
                 }
                 break;
             }
