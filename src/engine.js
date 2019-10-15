@@ -13,6 +13,7 @@ import Weapon from "./weapon";
 import Enemy from "./enemy";
 import Skeleton from "./skeleton";
 import Dragon from "./dragon";
+import Zombie from "./zombie";
 import Collectible from "./collectible";
 
 export default class Engine{
@@ -167,13 +168,14 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test180.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test181.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
         assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");   
         assetsManager.addMeshTask("task3", "", "../assets/models/", "RayGun.glb"); 
-        assetsManager.addMeshTask("task3", "", "../assets/models/", "LightningGun.glb");                            
+        assetsManager.addMeshTask("task3", "", "../assets/models/", "LightningGun.glb");
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie1.glb");                               
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -242,7 +244,8 @@ export default class Engine{
                     // Shoot at camera's ray target according to each weapon's range    
                     let ray = camera.getForwardRay(currentWeapon.range);
                     let hit = scene.pickWithRay(ray, predicate);                  
-                    let model = hit.pickedMesh;                    
+                    let model = hit.pickedMesh;      
+                    //console.log(model);              
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0){                        
                         for(let i = 0; i < enemyList.length ; i++){
@@ -401,6 +404,7 @@ function addEnemy(enemyList, scene, player){
     enemyList[3] = new Skeleton(scene, "Skeleton1", scene.getTransformNodeByName("Skeleton1").parent, scene.getTransformNodeByName("SkeletonPosition1").position, player);
     enemyList[4] = new Skeleton(scene, "Skeleton2", scene.getTransformNodeByName("Skeleton2").parent, scene.getTransformNodeByName("SkeletonPosition2").position, player);
     enemyList[5] = new Dragon(scene, "DragonArmature", scene.getTransformNodeByName("DragonArmature").parent, scene.getTransformNodeByName("DragonPosition1").position, player);
+    enemyList[6] = new Zombie(scene, "Zombie", scene.getTransformNodeByName("Zombie").parent, scene.getTransformNodeByName("ZombiePosition1").position, player);
 
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
