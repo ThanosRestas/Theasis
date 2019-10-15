@@ -21,6 +21,13 @@ export default class Zombie{
         this.setup();        
         // The player of the game
         this.player = player; 
+        // Setting up the collision mesh and making it invisible
+        this.subMeshes = this.mesh.getChildren();
+        this.subMeshes = this.subMeshes[0].getChildren();
+        this.collisionMesh = this.subMeshes[1];        
+        this.collisionMesh.isVisible = false;
+        this.collisionMesh.setEnabled(true); 
+        this.collisionMesh.isPickable = true;   
     } 
     
     setup(){

@@ -175,7 +175,7 @@ export default class Engine{
         assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");   
         assetsManager.addMeshTask("task3", "", "../assets/models/", "RayGun.glb"); 
         assetsManager.addMeshTask("task3", "", "../assets/models/", "LightningGun.glb");
-        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie1.glb");                               
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie2.glb");                               
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
