@@ -16,9 +16,7 @@ export default class Weapon{
         this.animation = null;
         this.animationSpeed = 1.5;      
         // Create the proper animation per gun upon object creation
-        this.setAnimations();       
-        //console.log(scene.activeCamera.getChildren()[0]);   
-        //this.mesh.renderingGroupId = 4;    
+        this.setAnimations();        
     }
     setAnimations(){        
         // Setting the end position of the animation(usually the same as the start)
@@ -69,5 +67,6 @@ export default class Weapon{
             this.animationSpeed = 5;
         }
 
-    }  
+    } 
 }
+

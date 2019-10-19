@@ -63,7 +63,13 @@ export default class Engine{
         this.animationRunning = false;
 
         // Enable debugging tools;
-        //this.scene.debugLayer.show();
+        this.scene.debugLayer.show();
+
+
+        // Particles for weapon
+        this.weaponParticle = setParticle(this.scene);
+
+        console.log(this.weaponParticle);
     }
 
     assetManager(){
@@ -175,7 +181,7 @@ export default class Engine{
         assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");   
         assetsManager.addMeshTask("task3", "", "../assets/models/", "RayGun.glb"); 
         assetsManager.addMeshTask("task3", "", "../assets/models/", "LightningGun.glb");
-        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie2.glb");                               
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie3.glb");                               
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -192,17 +198,34 @@ export default class Engine{
         let animationRunning = this.animationRunning;        
         let animation = null;
 
-        // crosshair
+        let orbMesh = this.weaponParticle[0];
+        let sparkMesh = this.weaponParticle[1];
+
+        // Crosshair
         var aim = BABYLON.Mesh.CreateSphere("aim1", 16, 0.01, scene);
         aim.parent = camera;
         aim.position.z = 2; 
         aim.isPickable = false;
+
+        // Point of weapon's particle origin
+        var barrel = BABYLON.Mesh.CreateSphere("barell", 16, 0.05, scene);       
+        barrel.parent = camera;
+        barrel.position.x = 0.66;
+        barrel.position.y = -0.68;
+        barrel.position.z = 3.18; 
+        barrel.isVisible = false;
+        barrel.isPickable = false;
+
+
         
         // Mouse input manager   
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
             let currentWeapon = player.currentWeapon;
             currentWeapon = player.gunLoadout[currentWeapon];
+
+            
+            
 
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
@@ -245,7 +268,11 @@ export default class Engine{
                     let ray = camera.getForwardRay(currentWeapon.range);
                     let hit = scene.pickWithRay(ray, predicate);                  
                     let model = hit.pickedMesh;      
-                    //console.log(model);              
+                    //console.log(model); 
+                    // Show particle effect
+                    var particleStartPosition = barrel.getAbsolutePosition();
+                   
+                    makeRayMesh( particleStartPosition, hit.pickedPoint, sparkMesh, orbMesh);             
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0){                        
                         for(let i = 0; i < enemyList.length ; i++){
@@ -435,7 +462,7 @@ function addCollectible(collectibleList, scene, player){
 
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0], player);  
     collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1], player);
-    //collectibleList[2] = new Collectible(scene, "healthPack1",  collectibleList[2]);    
+    
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
         scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();}); 
@@ -443,3 +470,98 @@ function addCollectible(collectibleList, scene, player){
     }  
 }
 
+
+
+function setParticle(scene){
+
+    var particleArray = [];
+
+    var orbTexture = new BABYLON.Texture("../assets/textures/orb.png", scene);
+    var orbMesh = BABYLON.MeshBuilder.CreatePlane("orb", { size: 1 }, scene);
+    var orbMat = new BABYLON.StandardMaterial("orbMat", scene);
+    orbMat.disableLighting = true;
+    orbMat.emissiveTexture = orbTexture;
+    orbMat.opacityTexture = orbTexture;
+    orbMesh.material = orbMat;
+    orbMesh.scaling.scaleInPlace(1.2);
+
+    var sparkMesh = BABYLON.MeshBuilder.CreatePlane("orb", { size: 1, sideOrientation: BABYLON.VertexData.DOUBLESIDE }, scene);
+    var sparkMat = new BABYLON.StandardMaterial("sparkMat", scene);
+    sparkMat.disableLighting = true;
+    sparkMesh.material = sparkMat;
+
+    sparkMesh.position.x = -0.5;
+    sparkMesh.bakeCurrentTransformIntoVertices();
+    sparkMesh.rotation.y = Math.PI / 2;
+    sparkMesh.bakeCurrentTransformIntoVertices();
+
+    sparkMesh.lookAt(BABYLON.Vector3.UpReadOnly);
+
+    orbMesh.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+
+    orbMesh.isVisible = false;
+    sparkMesh.isVisible = false;
+
+    particleArray.push(orbMesh);
+    particleArray.push(sparkMesh);
+
+    return particleArray;
+}
+
+function makeRayMesh(org, dest, sparkMesh, orbMesh, scene){
+    var dist = BABYLON.Vector3.Distance(org, dest);
+    var orb1 = orbMesh.clone("orb1");
+    var orb2 = orbMesh.clone("orb2");
+
+    orb1.isVisible = true;
+    orb2.isVisible = true;
+
+    var spark1 = sparkMesh.clone("spark");
+    spark1.material.emissiveTexture = getSparkTexture(256, 128, scene);
+    spark1.material.opacityTexture = spark1.material.emissiveTexture;
+    spark1.isVisible = true;
+    spark1.scaling.z = dist;
+    spark1.position = org.clone();
+    spark1.lookAt(dest);
+
+    spark1.registerBeforeRender(function(){
+        orb1.visibility -= 0.015;
+        orb2.visibility -= 0.015;
+        spark1.visibility -= 0.015;
+        if(spark1.visibility <= 0){
+            orb1.dispose();
+            orb2.dispose();
+            spark1.dispose();
+        }
+    });
+
+    orb1.position = org.clone();
+    orb2.position = dest.clone();
+}
+
+function getSparkTexture(width, height, scene){
+    var texture = new BABYLON.DynamicTexture("spark", { width: width, height: height }, scene);   
+    var ctx = texture.getContext();
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#5767AF";
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.moveTo(0, height / 2);
+    var s = 25;
+    for(var i=0; i<1000; i++){
+    	ctx.lineTo(i / 99 * width, height / 2 + Math.random() * s - Math.random() * s);
+    }
+    ctx.stroke();
+    
+    //ctx.beginPath();
+    ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.moveTo(0, height / 2);
+    for(var i=0; i<1000; i++){
+    	ctx.lineTo(i / 99 * width, height / 2 + Math.random() * 4 - Math.random() * 4);
+    }
+    ctx.stroke();
+    texture.update();
+    return texture;
+}
