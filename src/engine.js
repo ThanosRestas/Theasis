@@ -15,6 +15,7 @@ import Skeleton from "./skeleton";
 import Dragon from "./dragon";
 import Zombie from "./zombie";
 import Collectible from "./collectible";
+import {makeSparkRayMesh,etSparkTexture} from './weapon.js';
 
 export default class Engine{
     constructor(){
@@ -61,15 +62,10 @@ export default class Engine{
         // Animations
         this.scene.animationsEnabled = true;
         this.animationRunning = false;
-
         // Enable debugging tools;
-        this.scene.debugLayer.show();
-
-
-        // Particles for weapon
-        this.weaponParticle = setParticle(this.scene);
-
-        console.log(this.weaponParticle);
+        //this.scene.debugLayer.show();
+        // Particle effects for weapon
+        this.sparkParticle = setSparkParticle(this.scene);
     }
 
     assetManager(){
@@ -198,8 +194,8 @@ export default class Engine{
         let animationRunning = this.animationRunning;        
         let animation = null;
 
-        let orbMesh = this.weaponParticle[0];
-        let sparkMesh = this.weaponParticle[1];
+        let orbMesh = this.sparkParticle[0];
+        let sparkMesh = this.sparkParticle[1];
 
         // Crosshair
         var aim = BABYLON.Mesh.CreateSphere("aim1", 16, 0.01, scene);
@@ -216,16 +212,11 @@ export default class Engine{
         barrel.isVisible = false;
         barrel.isPickable = false;
 
-
-        
         // Mouse input manager   
         scene.onPointerDown = function (evt) {            
             // Getting the current weapon and setting the ammo info
             let currentWeapon = player.currentWeapon;
             currentWeapon = player.gunLoadout[currentWeapon];
-
-            
-            
 
             if (document.pointerLockElement !== canvas) {
                 console.log("Was Already locked: ", document.pointerLockElement === canvas);
@@ -267,12 +258,10 @@ export default class Engine{
                     // Shoot at camera's ray target according to each weapon's range    
                     let ray = camera.getForwardRay(currentWeapon.range);
                     let hit = scene.pickWithRay(ray, predicate);                  
-                    let model = hit.pickedMesh;      
-                    //console.log(model); 
+                    let model = hit.pickedMesh; 
                     // Show particle effect
-                    var particleStartPosition = barrel.getAbsolutePosition();
-                   
-                    makeRayMesh( particleStartPosition, hit.pickedPoint, sparkMesh, orbMesh);             
+                    var particleStartPosition = barrel.getAbsolutePosition();                   
+                    makeSparkRayMesh(particleStartPosition, hit.pickedPoint, sparkMesh, orbMesh);  
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0){                        
                         for(let i = 0; i < enemyList.length ; i++){
@@ -472,7 +461,7 @@ function addCollectible(collectibleList, scene, player){
 
 
 
-function setParticle(scene){
+function setSparkParticle(scene){
 
     var particleArray = [];
 
@@ -508,7 +497,7 @@ function setParticle(scene){
     return particleArray;
 }
 
-function makeRayMesh(org, dest, sparkMesh, orbMesh, scene){
+/*function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){
     var dist = BABYLON.Vector3.Distance(org, dest);
     var orb1 = orbMesh.clone("orb1");
     var orb2 = orbMesh.clone("orb2");
@@ -564,4 +553,4 @@ function getSparkTexture(width, height, scene){
     ctx.stroke();
     texture.update();
     return texture;
-}
+}*/

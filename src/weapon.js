@@ -70,3 +70,62 @@ export default class Weapon{
     } 
 }
 
+export function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){  
+      
+    var dist = BABYLON.Vector3.Distance(org, dest);
+   
+    var orb1 = orbMesh.clone("orb1");
+    var orb2 = orbMesh.clone("orb2");
+
+    orb1.isVisible = true;
+    orb2.isVisible = true;
+
+    var spark1 = sparkMesh.clone("spark");
+    spark1.material.emissiveTexture = getSparkTexture(256, 128, scene);
+    spark1.material.opacityTexture = spark1.material.emissiveTexture;
+    spark1.isVisible = true;
+    spark1.scaling.z = dist;
+    spark1.position = org.clone();
+    spark1.lookAt(dest);
+
+    spark1.registerBeforeRender(function(){
+        orb1.visibility -= 0.015;
+        orb2.visibility -= 0.015;
+        spark1.visibility -= 0.015;
+        if(spark1.visibility <= 0){
+            orb1.dispose();
+            orb2.dispose();
+            spark1.dispose();
+        }
+    });
+
+    orb1.position = org.clone();
+    orb2.position = dest.clone();
+}
+
+export function getSparkTexture(width, height, scene){
+    var texture = new BABYLON.DynamicTexture("spark", { width: width, height: height }, scene);   
+    var ctx = texture.getContext();
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#5767AF";
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.moveTo(0, height / 2);
+    var s = 25;
+    for(var i=0; i<1000; i++){
+    	ctx.lineTo(i / 99 * width, height / 2 + Math.random() * s - Math.random() * s);
+    }
+    ctx.stroke();
+    
+    //ctx.beginPath();
+    ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.moveTo(0, height / 2);
+    for(var i=0; i<1000; i++){
+    	ctx.lineTo(i / 99 * width, height / 2 + Math.random() * 4 - Math.random() * 4);
+    }
+    ctx.stroke();
+    texture.update();
+    return texture;
+}
