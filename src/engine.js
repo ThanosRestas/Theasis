@@ -473,10 +473,14 @@ function setSparkParticle(scene){
     orbMesh.material = orbMat;
     orbMesh.scaling.scaleInPlace(1.2);
 
+    orbMesh.isPickable = false;
+
     var sparkMesh = BABYLON.MeshBuilder.CreatePlane("orb", { size: 1, sideOrientation: BABYLON.VertexData.DOUBLESIDE }, scene);
     var sparkMat = new BABYLON.StandardMaterial("sparkMat", scene);
     sparkMat.disableLighting = true;
     sparkMesh.material = sparkMat;
+
+    sparkMesh.isPickable = false;
 
     sparkMesh.position.x = -0.5;
     sparkMesh.bakeCurrentTransformIntoVertices();

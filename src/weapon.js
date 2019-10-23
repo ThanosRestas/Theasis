@@ -80,6 +80,9 @@ export default class Weapon{
 
 function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){  
 
+    if(dest == null){
+        dest = org;
+    }
     var dist = BABYLON.Vector3.Distance(org, dest);
    
     var orb1 = orbMesh.clone("orb1");
@@ -98,7 +101,7 @@ function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){
     spark1.scaling.z = dist;
     spark1.position = org.clone();
     spark1.lookAt(dest);
-    
+
     spark1.isPicKable = false;
 
     spark1.registerBeforeRender(function(){
