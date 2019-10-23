@@ -14,9 +14,11 @@ export default class Weapon{
         // Animation properties
         this.start = this.mesh.rotation;
         this.animation = null;
-        this.animationSpeed = 1.5;      
+        this.animationSpeed = 1.5;
+        //this.shootingEffect = null;      
         // Create the proper animation per gun upon object creation
-        this.setAnimations();        
+        this.setAnimations(); 
+             
     }
     setAnimations(){        
         // Setting the end position of the animation(usually the same as the start)
@@ -68,10 +70,16 @@ export default class Weapon{
         }
 
     } 
+
+    shootingEffect(org, dest, sparkMesh, orbMesh, scene){
+        if(this.name == "rayGun"){
+            makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene);
+        }
+    }
 }
 
-export function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){  
-      
+function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){  
+
     var dist = BABYLON.Vector3.Distance(org, dest);
    
     var orb1 = orbMesh.clone("orb1");
@@ -80,6 +88,9 @@ export function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){
     orb1.isVisible = true;
     orb2.isVisible = true;
 
+    orb1.isPicKable = false;
+    orb2.isPicKable = false;
+
     var spark1 = sparkMesh.clone("spark");
     spark1.material.emissiveTexture = getSparkTexture(256, 128, scene);
     spark1.material.opacityTexture = spark1.material.emissiveTexture;
@@ -87,6 +98,8 @@ export function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){
     spark1.scaling.z = dist;
     spark1.position = org.clone();
     spark1.lookAt(dest);
+    
+    spark1.isPicKable = false;
 
     spark1.registerBeforeRender(function(){
         orb1.visibility -= 0.015;
@@ -103,7 +116,7 @@ export function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){
     orb2.position = dest.clone();
 }
 
-export function getSparkTexture(width, height, scene){
+function getSparkTexture(width, height, scene){
     var texture = new BABYLON.DynamicTexture("spark", { width: width, height: height }, scene);   
     var ctx = texture.getContext();
     ctx.shadowBlur = 10;

@@ -260,8 +260,7 @@ export default class Engine{
                     let hit = scene.pickWithRay(ray, predicate);                  
                     let model = hit.pickedMesh; 
                     // Show particle effect
-                    var particleStartPosition = barrel.getAbsolutePosition();                   
-                    makeSparkRayMesh(particleStartPosition, hit.pickedPoint, sparkMesh, orbMesh);  
+                    currentWeapon.shootingEffect(barrel.getAbsolutePosition(), hit.pickedPoint, sparkMesh, orbMesh); 
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0){                        
                         for(let i = 0; i < enemyList.length ; i++){

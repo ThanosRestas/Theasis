@@ -61,7 +61,7 @@ export default class Skeleton{
             }
         }    
         
-        scene.getMeshBy
+        
     }
     
     move(){        
