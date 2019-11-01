@@ -16,6 +16,7 @@ import Dragon from "./dragon";
 import Zombie from "./zombie";
 import Collectible from "./collectible";
 import {makeSparkRayMesh,etSparkTexture} from './weapon.js';
+import { Vec3 } from "cannon";
 
 export default class Engine{
     constructor(){
@@ -62,7 +63,7 @@ export default class Engine{
         // Animations
         this.scene.animationsEnabled = true;
         this.animationRunning = false;
-        // Enable debugging tools;
+        // Enable debugging tools;        
         //this.scene.debugLayer.show();
         // Particle effects for weapon
         this.sparkParticle = setSparkParticle(this.scene);
@@ -203,14 +204,12 @@ export default class Engine{
         aim.position.z = 2; 
         aim.isPickable = false;
 
-        // Point of weapon's particle origin
-        var barrel = BABYLON.Mesh.CreateSphere("barell", 16, 0.05, scene);       
-        barrel.parent = camera;
-        barrel.position.x = 0.66;
-        barrel.position.y = -0.68;
-        barrel.position.z = 3.18; 
-        barrel.isVisible = false;
-        barrel.isPickable = false;
+        /*// Point of weapon's particle origin
+        var bar = BABYLON.Mesh.CreateSphere("barell", 16, 0.05, scene);       
+        bar.parent = camera;        
+        bar.setPositionWithLocalVector(new BABYLON.Vector3(0.56, -0.64, 5.27));
+        bar.isVisible = false;
+        bar.isPickable = false;*/
 
         // Mouse input manager   
         scene.onPointerDown = function (evt) {            
@@ -239,7 +238,7 @@ export default class Engine{
                 if(animationRunning == false){
                     // Shoot only when an animation has ended
                     //console.log("Animation running");
-                    animation = scene.beginAnimation( currentWeapon.mesh, 0, 100, false, currentWeapon.animationSpeed);
+                    animation = scene.beginAnimation(currentWeapon.mesh, 0, 100, false, currentWeapon.animationSpeed);
                     scene.animationGroups[1].start(false, 2); // Pistol      
                     animationRunning = true;
                     animation.onAnimationEndObservable.add(function(){
@@ -260,7 +259,8 @@ export default class Engine{
                     let hit = scene.pickWithRay(ray, predicate);                  
                     let model = hit.pickedMesh; 
                     // Show particle effect
-                    currentWeapon.shootingEffect(barrel.getAbsolutePosition(), hit.pickedPoint, sparkMesh, orbMesh); 
+                    currentWeapon.shootingEffect(currentWeapon.bar.getAbsolutePosition(), hit.pickedPoint, sparkMesh, orbMesh); 
+                    //currentWeapon.shootingEffect(hit.pickedPoint, sparkMesh, orbMesh);
                     // Exempt ground from the be shot at
                     if(hit !== null && model !== null && model.name != "ground" && currentWeapon.ammo > 0){                        
                         for(let i = 0; i < enemyList.length ; i++){

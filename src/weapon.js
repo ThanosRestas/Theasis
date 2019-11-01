@@ -8,16 +8,23 @@ export default class Weapon{
         this.ammo = ammo;
         this.damage = damage;
         this.range = range;    
-        this.scene = scene;    
+        this.scene = scene;
+        // Weapon barrel
+        this.bar = new BABYLON.Mesh.CreateSphere("bar", 16, 0.05, this.scene);
+        this.bar.parent = this.scene.activeCamera;
+        this.bar.isVisible = false;
+        this.bar.isPickable = false;
         // Making mesh invisible
         this.mesh.setEnabled(false);
         // Animation properties
         this.start = this.mesh.rotation;
         this.animation = null;
-        this.animationSpeed = 1.5;
-        //this.shootingEffect = null;      
+        this.animationSpeed = 1.5;          
         // Create the proper animation per gun upon object creation
-        this.setAnimations(); 
+        this.setAnimations();
+        
+        
+
              
     }
     setAnimations(){        
@@ -34,7 +41,9 @@ export default class Weapon{
             //this.damage = 5;
             //this.range = 50;
             end.x -= Math.PI/100; 
-            this.animationSpeed = 5;      
+            this.animationSpeed = 5;  
+            
+            this.bar.setPositionWithLocalVector(new BABYLON.Vector3(0.59, -0.64, 2.90));
         }
         
         if(this.name!== "pistol" ){
@@ -60,6 +69,7 @@ export default class Weapon{
             //this.range = 10;
             end.x -= Math.PI/20;
             this.animationSpeed = 5;
+            this.bar.setPositionWithLocalVector(new BABYLON.Vector3(0.56, -0.64, 5.27));           
         }
 
         if(this.name == "lightingGun"){
@@ -67,12 +77,13 @@ export default class Weapon{
             //this.range = 10;
             end.x -= Math.PI/20;
             this.animationSpeed = 5;
+            
         }
 
     } 
 
     shootingEffect(org, dest, sparkMesh, orbMesh, scene){
-        if(this.name == "rayGun"){
+        if(this.name == "rayGun" || this.name == "ak47" ){            
             makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene);
         }
     }
