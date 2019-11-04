@@ -82,6 +82,7 @@ export default class Weapon{
 
     } 
 
+    // Shooting setup
     shootingEffect(org, dest, sparkMesh, orbMesh, scene){
         if(this.name == "rayGun" || this.name == "ak47" ){            
             makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene);
