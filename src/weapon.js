@@ -61,6 +61,8 @@ export default class Weapon{
 
             this.mesh.animations.push(display);
             console.log("Animations Created for: " + this.name);
+
+            this.bar.setPositionWithLocalVector(new BABYLON.Vector3(0.59, -0.64, 2.90));
         }
 
         
@@ -76,20 +78,39 @@ export default class Weapon{
             //this.damage = 2.5;
             //this.range = 10;
             end.x -= Math.PI/20;
-            this.animationSpeed = 5;
-            
+            this.animationSpeed = 5;            
         }
 
     } 
 
     // Shooting setup
     shootingEffect(org, dest, sparkMesh, orbMesh, scene){
-        if(this.name == "rayGun" || this.name == "ak47" ){            
+        if(this.name == "rayGun"){            
             makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene);
         }
+        else if (this.name == "ak47"){            
+            var ak47Texture = new BABYLON.Texture("../assets/textures/explosion.png", scene);
+            var ak47Mesh = BABYLON.MeshBuilder.CreatePlane("ak47", { size: 1 }, scene);
+            var ak47Mat = new BABYLON.StandardMaterial("ak47Mat", scene);
+            ak47Mat.disableLighting = true;
+            ak47Mat.emissiveTexture = ak47Texture;
+            ak47Mat.opacityTexture = ak47Texture;
+            ak47Mesh.material = ak47Mat;
+            ak47Mesh.scaling.scaleInPlace(0.2);
+            ak47Mesh.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+            ak47Mesh.isVisible = false;
+            ak47Mesh.isPickable = false;
+
+            muzzle(org, dest, ak47Mesh, scene);
+            ak47Mesh.dispose();      
+        }
+
+
     }
 }
 
+
+// Ray gun effect
 function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){  
 
     if(dest == null){
@@ -156,4 +177,35 @@ function getSparkTexture(width, height, scene){
     ctx.stroke();
     texture.update();
     return texture;
+}
+
+// Pistol, Shotgun, Ak47 effect
+function muzzle(org, dest, orbMesh){    
+
+    if(dest == null){
+        dest = org;
+    }
+    
+    var orb1 = orbMesh.clone("orb1");
+    var orb2 = orbMesh.clone("orb2");
+
+    orb1.isVisible = true;
+    orb2.isVisible = true;
+
+    orb1.isPicKable = false;
+    orb2.isPicKable = false;
+
+    orb1.registerBeforeRender(function(){
+        orb1.visibility -= 0.015;
+        orb2.visibility -= 0.015;
+       
+        if(orb1.visibility <= 0 || orb2.visibility <= 0){
+            orb1.dispose();
+            orb2.dispose();            
+        }
+    });
+
+
+    orb1.position = org.clone();
+    orb2.position = dest.clone();
 }

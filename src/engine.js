@@ -15,8 +15,7 @@ import Skeleton from "./skeleton";
 import Dragon from "./dragon";
 import Zombie from "./zombie";
 import Collectible from "./collectible";
-import {makeSparkRayMesh,etSparkTexture} from './weapon.js';
-import { Vec3 } from "cannon";
+
 
 export default class Engine{
     constructor(){
@@ -198,18 +197,13 @@ export default class Engine{
         let orbMesh = this.sparkParticle[0];
         let sparkMesh = this.sparkParticle[1];
 
+
         // Crosshair
         var aim = BABYLON.Mesh.CreateSphere("aim1", 16, 0.01, scene);
         aim.parent = camera;
         aim.position.z = 2; 
         aim.isPickable = false;
 
-        /*// Point of weapon's particle origin
-        var bar = BABYLON.Mesh.CreateSphere("barell", 16, 0.05, scene);       
-        bar.parent = camera;        
-        bar.setPositionWithLocalVector(new BABYLON.Vector3(0.56, -0.64, 5.27));
-        bar.isVisible = false;
-        bar.isPickable = false;*/
 
         // Mouse input manager   
         scene.onPointerDown = function (evt) {            
@@ -464,6 +458,7 @@ function setSparkParticle(scene){
 
     var particleArray = [];
 
+    // Raygun
     var orbTexture = new BABYLON.Texture("../assets/textures/orb.png", scene);
     var orbMesh = BABYLON.MeshBuilder.CreatePlane("orb", { size: 1 }, scene);
     var orbMat = new BABYLON.StandardMaterial("orbMat", scene);
@@ -472,25 +467,19 @@ function setSparkParticle(scene){
     orbMat.opacityTexture = orbTexture;
     orbMesh.material = orbMat;
     orbMesh.scaling.scaleInPlace(1.2);
-
     orbMesh.isPickable = false;
 
-    var sparkMesh = BABYLON.MeshBuilder.CreatePlane("orb", { size: 1, sideOrientation: BABYLON.VertexData.DOUBLESIDE }, scene);
+    var sparkMesh = BABYLON.MeshBuilder.CreatePlane("spark", { size: 1, sideOrientation: BABYLON.VertexData.DOUBLESIDE }, scene);
     var sparkMat = new BABYLON.StandardMaterial("sparkMat", scene);
     sparkMat.disableLighting = true;
     sparkMesh.material = sparkMat;
-
     sparkMesh.isPickable = false;
-
     sparkMesh.position.x = -0.5;
     sparkMesh.bakeCurrentTransformIntoVertices();
     sparkMesh.rotation.y = Math.PI / 2;
     sparkMesh.bakeCurrentTransformIntoVertices();
-
     sparkMesh.lookAt(BABYLON.Vector3.UpReadOnly);
-
     orbMesh.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-
     orbMesh.isVisible = false;
     sparkMesh.isVisible = false;
 
@@ -499,61 +488,3 @@ function setSparkParticle(scene){
 
     return particleArray;
 }
-
-/*function makeSparkRayMesh(org, dest, sparkMesh, orbMesh, scene){
-    var dist = BABYLON.Vector3.Distance(org, dest);
-    var orb1 = orbMesh.clone("orb1");
-    var orb2 = orbMesh.clone("orb2");
-
-    orb1.isVisible = true;
-    orb2.isVisible = true;
-
-    var spark1 = sparkMesh.clone("spark");
-    spark1.material.emissiveTexture = getSparkTexture(256, 128, scene);
-    spark1.material.opacityTexture = spark1.material.emissiveTexture;
-    spark1.isVisible = true;
-    spark1.scaling.z = dist;
-    spark1.position = org.clone();
-    spark1.lookAt(dest);
-
-    spark1.registerBeforeRender(function(){
-        orb1.visibility -= 0.015;
-        orb2.visibility -= 0.015;
-        spark1.visibility -= 0.015;
-        if(spark1.visibility <= 0){
-            orb1.dispose();
-            orb2.dispose();
-            spark1.dispose();
-        }
-    });
-
-    orb1.position = org.clone();
-    orb2.position = dest.clone();
-}
-
-function getSparkTexture(width, height, scene){
-    var texture = new BABYLON.DynamicTexture("spark", { width: width, height: height }, scene);   
-    var ctx = texture.getContext();
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = "#5767AF";
-    ctx.strokeStyle = "white";
-    ctx.beginPath();
-    ctx.lineWidth = 5;
-    ctx.moveTo(0, height / 2);
-    var s = 25;
-    for(var i=0; i<1000; i++){
-    	ctx.lineTo(i / 99 * width, height / 2 + Math.random() * s - Math.random() * s);
-    }
-    ctx.stroke();
-    
-    //ctx.beginPath();
-    ctx.stroke();
-    ctx.lineWidth = 2;
-    ctx.moveTo(0, height / 2);
-    for(var i=0; i<1000; i++){
-    	ctx.lineTo(i / 99 * width, height / 2 + Math.random() * 4 - Math.random() * 4);
-    }
-    ctx.stroke();
-    texture.update();
-    return texture;
-}*/
