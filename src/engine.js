@@ -378,14 +378,15 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
     player.gunLoadout[3].scaling.z  *= 0.20;
     player.gunLoadout[3].position = new BABYLON.Vector3(0.3, -0.5, 1.5);    
     player.gunLoadout[3].rotationQuaternion = null;
-    // Set Ray Gun's attributes
+    // Set Lightning Gun's attributes
     player.gunLoadout[4].parent = camera;
     player.gunLoadout[4].scaling.x  *= 0.10;
     player.gunLoadout[4].scaling.y  *= 0.10;  
     player.gunLoadout[4].scaling.z  *= 0.10;
     player.gunLoadout[4].position = new BABYLON.Vector3(0.3, -0.5, 1.5);    
-    player.gunLoadout[4].rotationQuaternion = null;
-    //player.gunLoadout[4].rotation.y =  - 2 * Math.PI / 6;    
+    player.gunLoadout[4].parent.rotationQuaternion = null;
+    //player.gunLoadout[4].rotate(BABYLON.Axis.Y, 1.5, BABYLON.Space.LOCAL);
+
     // Stoping all animations from autoplaying on scene loading
     scene.animationGroups.forEach(group => {
         group.stop();
