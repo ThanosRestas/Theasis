@@ -8,8 +8,7 @@ export default class Zombie{
         // Enemy properties
         this.name = name;
         this.mesh = mesh;
-        this.mesh.position = position;
-        this.mesh.position.y = 0;        
+        this.mesh.setAbsolutePosition(-position.x, 0, position.y); 
         this.destroyed = false;                  
         this.health = 10;       
         // Animation properties

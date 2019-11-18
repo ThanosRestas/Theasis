@@ -170,14 +170,18 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test183.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test184.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
         assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");   
         assetsManager.addMeshTask("task3", "", "../assets/models/", "RayGun.glb"); 
         assetsManager.addMeshTask("task3", "", "../assets/models/", "LightningGun.glb");
-        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie3.glb");                               
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie1.glb");        
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie2.glb"); 
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie3.glb");     
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie4.glb");     
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie5.glb");                                        
         // Now let the assetsManager load/excecute every task
         assetsManager.load();
     }
@@ -414,7 +418,12 @@ function addEnemy(enemyList, scene, player){
     enemyList[3] = new Skeleton(scene, "Skeleton1", scene.getTransformNodeByName("Skeleton1").parent, scene.getTransformNodeByName("SkeletonPosition1").position, player);
     enemyList[4] = new Skeleton(scene, "Skeleton2", scene.getTransformNodeByName("Skeleton2").parent, scene.getTransformNodeByName("SkeletonPosition2").position, player);
     enemyList[5] = new Dragon(scene, "DragonArmature", scene.getTransformNodeByName("DragonArmature").parent, scene.getTransformNodeByName("DragonPosition1").position, player);
-    enemyList[6] = new Zombie(scene, "Zombie", scene.getTransformNodeByName("Zombie").parent, scene.getTransformNodeByName("ZombiePosition1").position, player);
+    enemyList[6] = new Zombie(scene, "Zombie1", scene.getTransformNodeByName("Zombie1").parent, scene.getTransformNodeByName("ZombiePosition1").position, player);    
+    enemyList[7] = new Zombie(scene, "Zombie2", scene.getTransformNodeByName("Zombie2").parent, scene.getTransformNodeByName("ZombiePosition2").position, player);
+    enemyList[8] = new Zombie(scene, "Zombie3", scene.getTransformNodeByName("Zombie3").parent, scene.getTransformNodeByName("ZombiePosition3").position, player);
+    enemyList[9] = new Zombie(scene, "Zombie4", scene.getTransformNodeByName("Zombie4").parent, scene.getTransformNodeByName("ZombiePosition4").position, player);
+    enemyList[10] = new Zombie(scene, "Zombie5", scene.getTransformNodeByName("Zombie5").parent, scene.getTransformNodeByName("ZombiePosition5").position, player);
+   
 
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
