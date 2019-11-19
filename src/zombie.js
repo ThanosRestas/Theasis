@@ -8,7 +8,8 @@ export default class Zombie{
         // Enemy properties
         this.name = name;
         this.mesh = mesh;
-        this.mesh.setAbsolutePosition(-position.x, 0, position.y); 
+        // Blender to Babylon scene positioning
+        this.mesh.setPositionWithLocalVector(position);
         this.destroyed = false;                  
         this.health = 10;       
         // Animation properties
