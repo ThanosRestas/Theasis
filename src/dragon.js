@@ -20,6 +20,8 @@ export default class Dragon{
         this.setup();        
         // The player of the game
         this.player = player; 
+
+        this.mesh.checkCollisions = true;
     } 
     
     setup(){
@@ -72,6 +74,9 @@ export default class Dragon{
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
                 mesh.position.y = 0;
                 animationIdle.start();
+                // Keeping enemy at the same height as the player
+                // For use at the dessert level
+                mesh.position.y = camera.position.y;
             }
             // Idle animation play distance
             if(distVec >= 15){                
