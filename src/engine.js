@@ -66,6 +66,11 @@ export default class Engine{
         //this.scene.debugLayer.show();
         // Particle effects for weapon
         this.sparkParticle = setSparkParticle(this.scene);
+
+        this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
+        this.scene.fogDensity = 0.01;
+
+
     }
 
     assetManager(){

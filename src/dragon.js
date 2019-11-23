@@ -79,7 +79,9 @@ export default class Dragon{
                 mesh.position.y = camera.position.y;
             }
             // Idle animation play distance
-            if(distVec >= 15){                
+            if(distVec >= 15){
+                // Lower to the ground       
+                     
                 animationIdle.start();
             }     
             // Attack animation play distance
