@@ -67,8 +67,8 @@ export default class Engine{
         // Particle effects for weapon
         this.sparkParticle = setSparkParticle(this.scene);
 
-        this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
-        this.scene.fogDensity = 0.01;
+        //this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
+        //this.scene.fogDensity = 0.01;
 
 
     }
@@ -103,11 +103,12 @@ export default class Engine{
             let village = scene.getMeshByName("village");
             village.checkCollisions = true;
 
-            scene.getMeshByName("Fence").checkCollisions = true;
-            scene.getMeshByName("Fence.001").checkCollisions = true;
-            scene.getMeshByName("Fence.002").checkCollisions = true;
-            scene.getMeshByName("Fence.003").checkCollisions = true;
-            scene.getMeshByName("Fence.004").checkCollisions = true;
+            
+            for(let i = 0; i <= 8 ; i++){
+                scene.getMeshByName("Fence.00"+i).checkCollisions = true;
+            }
+
+           
 
             // Skybox setup
             var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
@@ -175,7 +176,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test185.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test186.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");

@@ -42,10 +42,11 @@ export default class Enemy{
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
 
             // Move enemy towards the player and stops slightly ahead
-            /*if(distVec < 15){
-                distVec -= 0.05;
-                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);                     
-            }*/
+            if(distVec < 15){
+                //distVec -= 0.05;
+               //mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
+               this.shoot();                     
+            }
 
             //console.log(distVec);
             
