@@ -11,7 +11,7 @@ export default class Skeleton{
         // Enemy properties
         this.name = name;
         this.mesh = mesh;
-        //this.mesh.position = position;
+        
         this.mesh.setPositionWithLocalVector(position);
         this.mesh.position.y = 0;        
         this.destroyed = false;                  

@@ -63,7 +63,7 @@ export default class Engine{
         this.scene.animationsEnabled = true;
         this.animationRunning = false;
         // Enable debugging tools;        
-        this.scene.debugLayer.show();
+        //this.scene.debugLayer.show();
         // Particle effects for weapon
         this.sparkParticle = setSparkParticle(this.scene);
 
@@ -176,14 +176,17 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test186.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test187.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton3.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton4.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton5.glb");
-        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb");   
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon.glb"); 
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon2.glb"); 
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon3.glb");    
+        assetsManager.addMeshTask("task6", "", "../assets/models/", "Dragon4.glb");        
         assetsManager.addMeshTask("task3", "", "../assets/models/", "RayGun.glb"); 
         assetsManager.addMeshTask("task3", "", "../assets/models/", "LightningGun.glb");
         assetsManager.addMeshTask("task6", "", "../assets/models/", "Zombie1.glb");        
@@ -435,6 +438,9 @@ function addEnemy(enemyList, scene, player){
     enemyList[11] = new Skeleton(scene, "Skeleton3", scene.getTransformNodeByName("Skeleton3").parent, scene.getTransformNodeByName("SkeletonPosition3").position, player);
     enemyList[12] = new Skeleton(scene, "Skeleton4", scene.getTransformNodeByName("Skeleton4").parent, scene.getTransformNodeByName("SkeletonPosition4").position, player);
     enemyList[13] = new Skeleton(scene, "Skeleton5", scene.getTransformNodeByName("Skeleton5").parent, scene.getTransformNodeByName("SkeletonPosition5").position, player);
+    enemyList[14] = new Dragon(scene, "DragonArmature2", scene.getTransformNodeByName("DragonArmature2").parent, scene.getTransformNodeByName("DragonPosition2").position, player);
+    enemyList[15] = new Dragon(scene, "DragonArmature3", scene.getTransformNodeByName("DragonArmature3").parent, scene.getTransformNodeByName("DragonPosition3").position, player);
+    enemyList[16] = new Dragon(scene, "DragonArmature4", scene.getTransformNodeByName("DragonArmature4").parent, scene.getTransformNodeByName("DragonPosition4").position, player);
 
 
     //Adding up the move() functions of each enemy to the render ovservable
