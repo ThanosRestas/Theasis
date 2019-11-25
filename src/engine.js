@@ -63,7 +63,7 @@ export default class Engine{
         this.scene.animationsEnabled = true;
         this.animationRunning = false;
         // Enable debugging tools;        
-        //this.scene.debugLayer.show();
+        this.scene.debugLayer.show();
         // Particle effects for weapon
         this.sparkParticle = setSparkParticle(this.scene);
 
