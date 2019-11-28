@@ -154,6 +154,11 @@ export default class Engine{
             buildings.forEach(function(entry){
                 entry.checkCollisions = true;
             });
+            
+            let villageWalls = scene.getTransformNodeByName("villageWalls").getChildMeshes();
+            villageWalls.forEach(function(entry){
+                entry.checkCollisions = true;
+            });
            
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
@@ -176,7 +181,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test187.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test188.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");

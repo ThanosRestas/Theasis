@@ -79,7 +79,7 @@ export default class Skeleton{
         let animationRunning = this.animationRunning; 
         let animationAttack = this.animationAttack;
 
-        if(mesh.isEnabled()){           
+        if(mesh.isEnabled() && check(mesh, scene) == false){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
             let distVec = BABYLON.Vector3.Distance(camera.position, mesh.position);                
@@ -104,7 +104,18 @@ export default class Skeleton{
             if(distVec < 5){
                 animationAttack.start();
                 player.healthDown(0.05);             
-            }           
+            }  
+            
+            /*let buildings = scene.getTransformNodeByName("Buildings").getChildMeshes();
+            buildings.forEach(function(entry){                
+                if (mesh.intersectsMesh(entry, false)) {
+                    console.log("yoyoyoyoyo");
+                }
+            });*/
+
+            
+             
+
         }       
     } 
 
@@ -133,4 +144,22 @@ export default class Skeleton{
             });                    
         }
     }
+}
+
+
+function check(mesh, scene){
+    let collision = false;
+
+    let buildings = scene.getTransformNodeByName("Buildings").getChildMeshes();
+    buildings.forEach(function(entry){                
+        if (mesh.intersectsMesh(entry, false)) {        
+            collision =  true;
+            console.log("Enemy collides with surroundings");
+        }
+        else{
+            collision = false;
+        }
+    });
+
+    return collision;
 }
