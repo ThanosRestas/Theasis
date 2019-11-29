@@ -10,6 +10,7 @@ export default class Collectible{
         // Weapon properties
         this.name = name;
         this.mesh = mesh;
+        console.log(this.mesh.name);
         this.player = player;        
 
         this.setup();
@@ -35,7 +36,7 @@ export default class Collectible{
     }
        
     rotate(){        
-        this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);
+        this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
     } 
 
     destroy(){

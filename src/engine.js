@@ -181,7 +181,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test188.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test189.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -457,9 +457,11 @@ function addEnemy(enemyList, scene, player){
 
 function addCollectible(collectibleList, scene, player){ 
 
-    collectibleList.push(scene.getMeshByName("healthPack"));
-    collectibleList.push(scene.getMeshByName("energyPack")); 
-    //collectibleList.push(scene.getMeshByName("healthPack1"));
+    collectibleList.push(scene.getTransformNodeByName("healthPack1"));
+    collectibleList.push(scene.getTransformNodeByName("energyPack1")); 
+    collectibleList.push(scene.getTransformNodeByName("healthPack2"));
+    collectibleList.push(scene.getTransformNodeByName("energyPack2")); 
+    
 
     var fireMaterial = new FireMaterial("fireMaterial", scene);
     fireMaterial.diffuseTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
@@ -477,6 +479,8 @@ function addCollectible(collectibleList, scene, player){
 
     collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0], player);  
     collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1], player);
+    collectibleList[2] = new Collectible(scene, "healthPack", collectibleList[2], player);  
+    collectibleList[3] = new Collectible(scene, "energyPack",  collectibleList[3], player);
     
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
