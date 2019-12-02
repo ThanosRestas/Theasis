@@ -35,8 +35,14 @@ export default class Collectible{
         }
     }
        
-    rotate(){        
-        this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
+    rotate(){    
+        if(this.name == "healthPack"){
+            this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);
+        }
+        else if(this.name == "energyPack"){
+            this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
+        }    
+        
     } 
 
     destroy(){
