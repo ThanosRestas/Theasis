@@ -457,11 +457,6 @@ function addEnemy(enemyList, scene, player){
 
 function addCollectible(collectibleList, scene, player){ 
 
-    //collectibleList.push(scene.getTransformNodeByName("healthPack1"));
-    //collectibleList.push(scene.getTransformNodeByName("energyPack1")); 
-    //collectibleList.push(scene.getTransformNodeByName("healthPack2"));
-    //collectibleList.push(scene.getTransformNodeByName("energyPack2"));
-    
     for(let i=1; i<= 10; i++){
         collectibleList.push(scene.getTransformNodeByName("energyPack" + i)); 
     }
@@ -470,9 +465,13 @@ function addCollectible(collectibleList, scene, player){
         collectibleList[i-1] = new Collectible(scene, "energyPack",  collectibleList[i-1], player);
     }
 
+    for(let i=1; i<= 10; i++){
+        collectibleList.push(scene.getTransformNodeByName("healthPack" + i)); 
+    }
 
-
-    
+    for(let i=11; i<= 20; i++){
+        collectibleList[i-1] = new Collectible(scene, "healthPack",  collectibleList[i-1], player);
+    }   
 
     var fireMaterial = new FireMaterial("fireMaterial", scene);
     fireMaterial.diffuseTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
@@ -487,16 +486,6 @@ function addCollectible(collectibleList, scene, player){
     plane.position.x = -scene.getTransformNodeByName("campFire").position.x;
     plane.position.z = scene.getTransformNodeByName("campFire").position.z;
     scene.getTransformNodeByName("campFire").isPickable = false;
-
-    //collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0], player);  
-    //collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1], player);
-    //collectibleList[2] = new Collectible(scene, "healthPack", collectibleList[2], player);  
-    //collectibleList[3] = new Collectible(scene, "energyPack",  collectibleList[3], player);
-
-    //collectibleList[0] = new Collectible(scene, "healthPack", collectibleList[0], player);  
-    //collectibleList[1] = new Collectible(scene, "energyPack",  collectibleList[1], player);
-    //collectibleList[2] = new Collectible(scene, "healthPack", collectibleList[2], player);  
-    //collectibleList[3] = new Collectible(scene, "energyPack",  collectibleList[3], player);
     
     // Adding up the move() functions of each enemy to the render observable
     for(let i=0; i<collectibleList.length; i++){
