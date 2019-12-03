@@ -9,8 +9,10 @@ export default class Collectible{
         this.scene = scene;
         // Weapon properties
         this.name = name;
+        
         this.mesh = mesh;
         console.log(this.mesh.name);
+        
         this.player = player;        
 
         this.setup();
@@ -33,10 +35,18 @@ export default class Collectible{
                 player.energyUp();                
             });
         }
+
+        // TODO: Change for everyweapon via regex or something e.g Pistol+Ammo
+        if(this.name == "pistolAmmo"){
+            let name = this.name
+            this.mesh.onDisposeObservable.add(function(){
+                player.ammoUp(name);                              
+            });
+        }
     }
        
     rotate(){    
-        if(this.name == "healthPack"){
+        if(this.name == "healthPack"  || this.name == "pistolAmmo"){
             this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);
         }
         else if(this.name == "energyPack"){

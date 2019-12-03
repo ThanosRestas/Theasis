@@ -1,4 +1,5 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
+import { AmmoJSPlugin } from "@babylonjs/core/Legacy/legacy";
 
 
 export default class Character{
@@ -48,8 +49,51 @@ export default class Character{
         if(this.energy > 1){
             this.energy -= 0.1;
             this.hud[1].width = this.energy/100;            
-        } 
+        }       
     }
+    
+    ammoUp(weapon){
+        console.log(weapon);
+        //this.gunLoadout[this.currentWeapon].ammo += 10;
+        //this.hud[2].text =  String(this.gunLoadout[this.currentWeapon].ammo);  
+        
+        switch(weapon) {
+
+            case "pistolAmmo":
+                // code block
+                console.log("Pistol ammo gained"); 
+                this.gunLoadout[0].ammo += 10;
+                break;
+
+            case "shotgunAmmo":
+                // code block
+                console.log("Shotgun ammo gained")  
+                this.gunLoadout[1].ammo += 10;            
+                break; 
+            
+            case "ak47Ammo":
+                // code block
+                console.log("Ak47 ammo gained")   
+                this.gunLoadout[2].ammo += 10;           
+                break;  
+
+            case "laserAmmo":
+                 // code block
+                 console.log("Laser ammo gained"); 
+                 this.gunLoadout[3].ammo += 10;                
+                 break;
+
+             case "lightningAmmo":
+                 // code block
+                 console.log("Lightning ammo gained")   
+                 this.gunLoadout[4].ammo += 10;                
+                 break; 
+        }
+
+        this.hud[2].text =  String(this.gunLoadout[this.currentWeapon].ammo); 
+    }
+    
+
     
     characterController () {     
         

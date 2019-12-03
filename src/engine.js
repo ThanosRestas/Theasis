@@ -181,7 +181,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test189.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test190.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -472,6 +472,13 @@ function addCollectible(collectibleList, scene, player){
     for(let i=11; i<= 20; i++){
         collectibleList[i-1] = new Collectible(scene, "healthPack",  collectibleList[i-1], player);
     }   
+
+    collectibleList.push(scene.getTransformNodeByName("pistolAmmo")); 
+    collectibleList[20] = new Collectible(scene, "pistolAmmo",  collectibleList[20], player);
+
+    /*for(let i=0; i<collectibleList.length; i++){
+        console.log(collectibleList[i].name);              
+    }*/  
 
     var fireMaterial = new FireMaterial("fireMaterial", scene);
     fireMaterial.diffuseTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
