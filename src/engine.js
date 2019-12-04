@@ -473,13 +473,49 @@ function addCollectible(collectibleList, scene, player){
         collectibleList[i-1] = new Collectible(scene, "healthPack",  collectibleList[i-1], player);
     }   
 
-    collectibleList.push(scene.getTransformNodeByName("pistolAmmo")); 
+    collectibleList.push(scene.getTransformNodeByName("pistolAmmo"));
+    collectibleList.push(scene.getTransformNodeByName("pistolAmmo2"));
+
+    collectibleList.push(scene.getTransformNodeByName("ak47Ammo")); 
+    collectibleList.push(scene.getTransformNodeByName("ak47Ammo2"));
+    
+    collectibleList.push(scene.getTransformNodeByName("shotgunAmmo")); 
+    collectibleList.push(scene.getTransformNodeByName("shotgunAmmo2")); 
+    
+    collectibleList.push(scene.getTransformNodeByName("raygunAmmo")); 
+    collectibleList.push(scene.getTransformNodeByName("raygunAmmo2"));  
+
+    collectibleList.push(scene.getTransformNodeByName("lightninggunAmmo")); 
+    collectibleList.push(scene.getTransformNodeByName("lightninggunAmmo2"));  
+
+
+
+    
+    
+
     collectibleList[20] = new Collectible(scene, "pistolAmmo",  collectibleList[20], player);
+    collectibleList[21] = new Collectible(scene, "pistolAmmo",  collectibleList[21], player);
+    collectibleList[22] = new Collectible(scene, "ak47Ammo",  collectibleList[22], player);
+    collectibleList[23] = new Collectible(scene, "ak47Ammo",  collectibleList[23], player);
+    collectibleList[24] = new Collectible(scene, "shotgunAmmo",  collectibleList[24], player);
+    collectibleList[25] = new Collectible(scene, "shotgunAmmo",  collectibleList[25], player);
 
-    /*for(let i=0; i<collectibleList.length; i++){
-        console.log(collectibleList[i].name);              
-    }*/  
+    collectibleList[26] = new Collectible(scene, "raygunAmmo",  collectibleList[26], player);
+    collectibleList[27] = new Collectible(scene, "raygunAmmo",  collectibleList[27], player);
 
+    collectibleList[28] = new Collectible(scene, "lightninggunAmmo",  collectibleList[28], player);
+    collectibleList[29] = new Collectible(scene, "lightninggunAmmo",  collectibleList[29], player);
+
+
+
+    // Adding up the move() functions of each enemy to the render observable
+    for(let i=0; i<collectibleList.length; i++){
+        scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();}); 
+        scene.onBeforeRenderObservable.add(function(){collectibleList[i].destroy();});                   
+    }  
+
+
+    // Setting up the fire camp at the center of the village
     var fireMaterial = new FireMaterial("fireMaterial", scene);
     fireMaterial.diffuseTexture = new BABYLON.Texture("../assets/textures/fire.png", scene);
     fireMaterial.distortionTexture = new BABYLON.Texture("../assets/textures/distortion.png", scene);
@@ -492,13 +528,8 @@ function addCollectible(collectibleList, scene, player){
     plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;
     plane.position.x = -scene.getTransformNodeByName("campFire").position.x;
     plane.position.z = scene.getTransformNodeByName("campFire").position.z;
-    scene.getTransformNodeByName("campFire").isPickable = false;
+    scene.getTransformNodeByName("campFire").isPickable = false; 
     
-    // Adding up the move() functions of each enemy to the render observable
-    for(let i=0; i<collectibleList.length; i++){
-        scene.onBeforeRenderObservable.add(function(){collectibleList[i].rotate();}); 
-        scene.onBeforeRenderObservable.add(function(){collectibleList[i].destroy();});                   
-    }  
 }
 
 

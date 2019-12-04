@@ -77,13 +77,13 @@ export default class Character{
                 this.gunLoadout[2].ammo += 10;           
                 break;  
 
-            case "laserAmmo":
+            case "raygunAmmo":
                  // code block
                  console.log("Laser ammo gained"); 
                  this.gunLoadout[3].ammo += 10;                
                  break;
 
-             case "lightningAmmo":
+             case "lightninggunAmmo":
                  // code block
                  console.log("Lightning ammo gained")   
                  this.gunLoadout[4].ammo += 10;                

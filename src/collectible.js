@@ -34,24 +34,26 @@ export default class Collectible{
             this.mesh.onDisposeObservable.add(function(){
                 player.energyUp();                
             });
-        }
-
-        // TODO: Change for everyweapon via regex or something e.g Pistol+Ammo
-        if(this.name == "pistolAmmo"){
+        }        
+        
+        if(this.name.search("Ammo") ){
             let name = this.name
             this.mesh.onDisposeObservable.add(function(){
                 player.ammoUp(name);                              
             });
         }
     }
-       
+
     rotate(){    
-        if(this.name == "healthPack"  || this.name == "pistolAmmo"){
+        if(this.name == "healthPack"){
             this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);
+        }        
+        else if(this.name == "pistolAmmo" ){
+            this.mesh.rotate(BABYLON.Axis.X, 0.02, BABYLON.Space.LOCAL);
         }
-        else if(this.name == "energyPack"){
+        else{
             this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
-        }    
+        }        
         
     } 
 
