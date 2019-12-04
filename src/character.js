@@ -52,13 +52,8 @@ export default class Character{
         }       
     }
     
-    ammoUp(weapon){
-        console.log(weapon);
-        //this.gunLoadout[this.currentWeapon].ammo += 10;
-        //this.hud[2].text =  String(this.gunLoadout[this.currentWeapon].ammo);  
-        
+    ammoUp(weapon){       
         switch(weapon) {
-
             case "pistolAmmo":
                 // code block
                 console.log("Pistol ammo gained"); 
@@ -71,7 +66,7 @@ export default class Character{
                 this.gunLoadout[1].ammo += 10;            
                 break; 
             
-            case "ak47Ammo":
+            case "akAmmo":
                 // code block
                 console.log("Ak47 ammo gained")   
                 this.gunLoadout[2].ammo += 10;           
@@ -79,13 +74,13 @@ export default class Character{
 
             case "raygunAmmo":
                  // code block
-                 console.log("Laser ammo gained"); 
+                 console.log("Raygun ammo gained"); 
                  this.gunLoadout[3].ammo += 10;                
                  break;
 
              case "lightninggunAmmo":
                  // code block
-                 console.log("Lightning ammo gained")   
+                 console.log("Lightning gun ammo gained")   
                  this.gunLoadout[4].ammo += 10;                
                  break; 
         }

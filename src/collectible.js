@@ -11,7 +11,7 @@ export default class Collectible{
         this.name = name;
         
         this.mesh = mesh;
-        console.log(this.mesh.name);
+        //console.log(this.mesh.name);
         
         this.player = player;        
 
