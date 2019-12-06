@@ -159,11 +159,18 @@ export default class Engine{
             villageWalls.forEach(function(entry){
                 entry.checkCollisions = true;
             });
+
+            let trees = scene.getTransformNodeByName("trees").getChildMeshes();
+            trees.forEach(function(entry){
+                entry.checkCollisions = true;
+            });
            
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
                 entry.checkCollisions = true;
             });*/
+
+
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene, player);
             // Add the weapon meshes to the scene
@@ -181,7 +188,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test191.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test192.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
