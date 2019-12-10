@@ -164,7 +164,17 @@ export default class Engine{
             trees.forEach(function(entry){
                 entry.checkCollisions = true;
             });
-           
+
+            let cacti = scene.getTransformNodeByName("Cacti").getChildMeshes();
+            cacti.forEach(function(entry){
+                entry.checkCollisions = true;
+            });
+
+            let lakeBushes = scene.getTransformNodeByName("lakeBushes").getChildMeshes();
+            lakeBushes.forEach(function(entry){
+                entry.checkCollisions = true;
+            });
+
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
                 entry.checkCollisions = true;
@@ -188,7 +198,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test192.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test193.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
