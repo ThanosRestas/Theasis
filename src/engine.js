@@ -438,17 +438,11 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
     player.gunLoadout[4] = new Weapon("lightingGun",  player.gunLoadout[4], 100, 1, 50, scene); 
 }
 
-function addEnemy(enemyList, scene, player){   
-
-    // Skulls
-    enemyList.push(scene.getTransformNodeByName("skull"));
-    enemyList.push(scene.getTransformNodeByName("skull2"));
-    enemyList.push(scene.getTransformNodeByName("skull3"));
+function addEnemy(enemyList, scene, player){     
     
-    enemyList[0] = new Enemy(scene, "skull", enemyList[0]);
-    enemyList[1] = new Enemy(scene, "skull2", enemyList[1]);
-    enemyList[2] = new Enemy(scene, "skull3", enemyList[2]);
-    
+    enemyList[0] = new Enemy(scene, "skull", scene.getTransformNodeByName("skull"));
+    enemyList[1] = new Enemy(scene, "skull2", scene.getTransformNodeByName("skull2"));
+    enemyList[2] = new Enemy(scene, "skull3", scene.getTransformNodeByName("skull3"));    
     enemyList[3] = new Skeleton(scene, "Skeleton1", scene.getTransformNodeByName("Skeleton1").parent, scene.getTransformNodeByName("SkeletonPosition1").position, player);
     enemyList[4] = new Skeleton(scene, "Skeleton2", scene.getTransformNodeByName("Skeleton2").parent, scene.getTransformNodeByName("SkeletonPosition2").position, player);
     enemyList[5] = new Dragon(scene, "DragonArmature", scene.getTransformNodeByName("DragonArmature").parent, scene.getTransformNodeByName("DragonPosition1").position, player);
@@ -463,7 +457,8 @@ function addEnemy(enemyList, scene, player){
     enemyList[14] = new Dragon(scene, "DragonArmature2", scene.getTransformNodeByName("DragonArmature2").parent, scene.getTransformNodeByName("DragonPosition2").position, player);
     enemyList[15] = new Dragon(scene, "DragonArmature3", scene.getTransformNodeByName("DragonArmature3").parent, scene.getTransformNodeByName("DragonPosition3").position, player);
     enemyList[16] = new Dragon(scene, "DragonArmature4", scene.getTransformNodeByName("DragonArmature4").parent, scene.getTransformNodeByName("DragonPosition4").position, player);
-
+    enemyList[17] = new Enemy(scene, "skull4", scene.getTransformNodeByName("skull4"));
+    enemyList[18] = new Enemy(scene, "skull5", scene.getTransformNodeByName("skull5"));
 
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
