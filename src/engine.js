@@ -175,6 +175,29 @@ export default class Engine{
                 entry.checkCollisions = true;
             });
 
+            /*let villageDoor = scene.getTransformNodeByName("villageDoor");
+            let villageDoorHealth = 2
+            //villageDoor.setEnabled(false);
+
+            scene.onBeforeRenderObservable.add(function(){
+                for(let i=0; i<enemyList.length; i++){
+                    if(enemyList[i].constructor.name != "Skeleton"  && enemyList[i].destroyed == true){
+                        //villageDoor.setEnabled(false);
+
+                        villageDoorHealth--;
+                    }               
+                }  
+
+                if(villageDoorHealth <= 0){
+                    villageDoor.setEnabled(false);
+                }
+
+            });*/
+
+            
+
+
+
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
                 entry.checkCollisions = true;
@@ -198,7 +221,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test193.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test194.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");

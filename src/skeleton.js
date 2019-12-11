@@ -143,6 +143,8 @@ export default class Skeleton{
                 mesh.setEnabled(false); // Works cause mesh.dispose() breaks collisions                  
             });                    
         }
+
+        this.destroyed = true;  
     }
 }
 

@@ -81,10 +81,10 @@ export default class Enemy{
 
     destroy(){
         let mesh = this.mesh;
-        let destroyed = this.destroyed;    
+        this.destroyed = true;  
 
         mesh.setEnabled(false); // mesh.dispose() breaks collisions                
-        destroyed = true;            
+                   
     }  
 }
 

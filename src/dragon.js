@@ -98,7 +98,8 @@ export default class Dragon{
     }
     
     destroy(){       
-        let mesh = this.mesh;                              
+        let mesh = this.mesh;  
+        this.destroyed = true;                            
         mesh.setEnabled(false); // Works cause mesh.dispose() breaks collisions          
     }    
 }
