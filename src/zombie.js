@@ -11,7 +11,7 @@ export default class Zombie{
         // Blender to Babylon scene positioning
         this.mesh.setPositionWithLocalVector(position);
         this.destroyed = false;                  
-        this.health = 10;       
+        this.health = 1;       
         // Animation properties
         this.animations = [];
         this.animationIdle;        

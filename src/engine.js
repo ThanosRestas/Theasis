@@ -149,7 +149,7 @@ export default class Engine{
             // Assign the water material
             waterMesh.material = water;
 
-            //Buildings setup
+            // Setting up the collision detection for various world props
             let buildings = scene.getTransformNodeByName("Buildings").getChildMeshes();
             buildings.forEach(function(entry){
                 entry.checkCollisions = true;
@@ -175,35 +175,27 @@ export default class Engine{
                 entry.checkCollisions = true;
             });
 
-            /*let villageDoor = scene.getTransformNodeByName("villageDoor");
-            let villageDoorHealth = 2
-            //villageDoor.setEnabled(false);
-
+            let villageDoor = scene.getTransformNodeByName("villageDoor");
+            let villageDoorHealth = 14
             scene.onBeforeRenderObservable.add(function(){
                 for(let i=0; i<enemyList.length; i++){
                     if(enemyList[i].constructor.name != "Skeleton"  && enemyList[i].destroyed == true){
-                        //villageDoor.setEnabled(false);
-
                         villageDoorHealth--;
                     }               
                 }  
 
                 if(villageDoorHealth <= 0){
                     villageDoor.setEnabled(false);
+                    console.log("The gates have opened");
                 }
-
-            });*/
-
-            
-
-
-
+                else{
+                    villageDoorHealth = 14;
+                }
+            });    
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
             /*groundSections.forEach(function(entry) {
                 entry.checkCollisions = true;
             });*/
-
-
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene, player);
             // Add the weapon meshes to the scene

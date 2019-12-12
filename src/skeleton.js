@@ -15,7 +15,7 @@ export default class Skeleton{
         this.mesh.setPositionWithLocalVector(position);
         this.mesh.position.y = 0;        
         this.destroyed = false;                  
-        this.health = 10;       
+        this.health = 1;       
         // Animation properties
         this.animations = [];
         this.animationIdle;

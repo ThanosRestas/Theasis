@@ -11,7 +11,7 @@ export default class Enemy{
         this.mesh = mesh;
         this.destroyed = false;
         //this.mesh.visibility = false;        
-        this.health = 10;       
+        this.health = 1;       
         // Enemy shooting setup        
         this.timeThen = Date.now();
         // When the type of mesh is of TransformNode 
