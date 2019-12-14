@@ -176,7 +176,7 @@ export default class Engine{
             });
 
             let villageDoor = scene.getTransformNodeByName("villageDoor");
-            let villageDoorHealth = 14
+            let villageDoorHealth = 2
             scene.onBeforeRenderObservable.add(function(){
                 for(let i=0; i<enemyList.length; i++){
                     if(enemyList[i].constructor.name != "Skeleton"  && enemyList[i].destroyed == true){
@@ -189,7 +189,7 @@ export default class Engine{
                     console.log("The gates have opened");
                 }
                 else{
-                    villageDoorHealth = 14;
+                    villageDoorHealth = 2;
                 }
             });    
             //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
