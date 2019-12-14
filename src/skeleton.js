@@ -105,17 +105,6 @@ export default class Skeleton{
                 animationAttack.start();
                 player.healthDown(0.05);             
             }  
-            
-            /*let buildings = scene.getTransformNodeByName("Buildings").getChildMeshes();
-            buildings.forEach(function(entry){                
-                if (mesh.intersectsMesh(entry, false)) {
-                    console.log("yoyoyoyoyo");
-                }
-            });*/
-
-            
-             
-
         }       
     } 
 
