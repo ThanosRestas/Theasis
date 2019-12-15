@@ -275,7 +275,8 @@ export default class Character{
         scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {
             case BABYLON.KeyboardEventTypes.KEYDOWN:
-                switch (kbInfo.event.key) {                    
+                switch (kbInfo.event.key) {   
+                                   
                 case "1":
                     console.log("Pistol selected");
                     this.currentWeapon = 0;
@@ -309,11 +310,80 @@ export default class Character{
                     this.currentWeapon = 4;
                     ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
                     weaponSwitch(gunLoadout,  this.currentWeapon);
-                    break;   
-                }
+                    break;
+                    
+                case "Shift":
+                    console.log("Running");
+                    if(scene.activeCamera.speed == 0.2){
+                        scene.activeCamera.speed *= 2.5;
+                    }                    
+                    break;    
+                }                
                 break;
             }
-        });       
+
+            switch (kbInfo.type) {
+                case BABYLON.KeyboardEventTypes.KEYUP:
+                    switch (kbInfo.event.key) { 
+                    case "Shift":
+                        console.log("Walking");
+                        scene.activeCamera.speed = 0.2;
+                        break;    
+                    }                
+                    break;
+                }
+        });
+        
+        
+
+        /*scene.onKeyboardObservable.add((kbInfo) => {
+            switch (kbInfo.type) {
+            case BABYLON.KeyboardEventTypes.KEYDOWN:
+                switch (kbInfo.event.key) {   
+                                   
+                case "1":
+                    console.log("Pistol selected");
+                    this.currentWeapon = 0;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);                    
+                    break;
+
+                case "2":
+                    console.log("Shotgun selected");
+                    this.currentWeapon = 1;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);                    
+                    break;                
+                
+                case "3":
+                    console.log("Ak47 selected");
+                    this.currentWeapon = 2;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    break;
+
+                case "4":
+                    console.log("RayGun selected");
+                    this.currentWeapon = 3;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    break;
+                    
+                case "5":
+                    console.log("LightningGun selected");
+                    this.currentWeapon = 4;
+                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
+                    weaponSwitch(gunLoadout,  this.currentWeapon);
+                    break;
+                    
+                case "Shift":
+                    console.log("Shift Pressed");
+                    scene.activeCamera.speed *= 2;
+                    break;    
+                }                
+                break;
+            }
+        });*/
 
     }  
 }

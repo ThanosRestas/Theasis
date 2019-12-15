@@ -16,7 +16,6 @@ import Dragon from "./dragon";
 import Zombie from "./zombie";
 import Collectible from "./collectible";
 
-
 export default class Engine{
     constructor(){
         // Scene setup
