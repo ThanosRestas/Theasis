@@ -150,7 +150,7 @@ export default class Engine{
             waterMesh.material = water;
 
             // Setting up the collision detection for various world props
-            let buildings = scene.getTransformNodeByName("Buildings").getChildMeshes();
+            let buildings = scene.getTransformNodeByName("villageBuildings").getChildMeshes();
             buildings.forEach(function(entry){
                 entry.checkCollisions = true;
             });
@@ -213,7 +213,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test195.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test196.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
@@ -477,8 +477,7 @@ function addEnemy(enemyList, scene, player){
 
     //Adding up the move() functions of each enemy to the render ovservable
     for(let i=0; i<enemyList.length; i++){
-        scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});
-        //scene.onBeforeRenderObservable.add(function(){enemyList[i].shoot();});           
+        scene.onBeforeRenderObservable.add(function(){enemyList[i].move();});                   
     }    
 }
 
