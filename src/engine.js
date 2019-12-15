@@ -183,10 +183,11 @@ export default class Engine{
                         villageDoorHealth--;
                     }               
                 }
-                
+
                 if(villageDoorHealth <= 0){
                     villageDoor.setEnabled(false);
                     console.log("The gates have opened");
+                    scene.onBeforeRenderObservable.remove(this);
                 }
                 else{
                     villageDoorHealth = 2;
