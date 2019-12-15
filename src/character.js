@@ -29,10 +29,17 @@ export default class Character{
         }       
     }   
 
-    healthDown(ammount){        
+    healthDown(ammount){    
+        console.log(this.health);
+
         if(this.health >=1){
             this.health -= ammount;
             this.hud[0].width = this.health/100;
+        }
+        else if(this.health <= 0){
+            console.log("Game Over")
+            //alert("Game Over");
+            //location.reload();
         }        
     }   
 

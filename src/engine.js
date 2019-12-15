@@ -182,8 +182,8 @@ export default class Engine{
                     if(enemyList[i].constructor.name != "Skeleton"  && enemyList[i].destroyed == true){
                         villageDoorHealth--;
                     }               
-                }  
-
+                }
+                
                 if(villageDoorHealth <= 0){
                     villageDoor.setEnabled(false);
                     console.log("The gates have opened");
@@ -192,10 +192,8 @@ export default class Engine{
                     villageDoorHealth = 2;
                 }
             });    
-            //let groundSections = scene.getTransformNodeByName("ground").getChildMeshes();
-            /*groundSections.forEach(function(entry) {
-                entry.checkCollisions = true;
-            });*/
+           
+
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene, player);
             // Add the weapon meshes to the scene
@@ -213,7 +211,7 @@ export default class Engine{
         });
         // We add single tasks to the assetsManager
         // Level design load        
-        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test196.glb");
+        assetsManager.addMeshTask("task2", "", "../assets/scenes/", "test197.glb");
         assetsManager.addMeshTask("task3", "", "../assets/models/", "Pistol.glb");        
         assetsManager.addMeshTask("task4", "", "../assets/models/", "Skeleton1.glb");
         assetsManager.addMeshTask("task5", "", "../assets/models/", "Skeleton2.glb");
