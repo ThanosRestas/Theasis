@@ -54,7 +54,7 @@ export default class Character{
 
     energyDown(){
         //console.log("Energy Down");
-        if(this.energy >= 1){
+        if(this.energy >= 0){
             this.energy -= 0.1;
             this.hud[1].width = this.energy/100;
             
@@ -328,14 +328,13 @@ export default class Character{
                 }*/
         });
         
-        let movementKeys = ["w", "a", "s", "d"];
+        let movementKeys = ["w", "a", "s", "d", "W", "A", "S", "D"];
         scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {
-                case BABYLON.KeyboardEventTypes.KEYDOWN:                        
-                    switch (kbInfo.event.shiftKey) {                
+                case BABYLON.KeyboardEventTypes.KEYDOWN:
+                    switch ( kbInfo.event.shiftKey && movementKeys.includes(kbInfo.event.key.toString())) {                
                     case true:                        
                         while(this.energy > 0){
-                            this.running = true;
                             this.energyDown();                        
                             console.log("Running");
                             if(scene.activeCamera.speed == 0.2){
@@ -349,7 +348,6 @@ export default class Character{
                 case BABYLON.KeyboardEventTypes.KEYUP:
                     switch (kbInfo.event.key) { 
                     case "Shift":
-                        this.running = false;
                         console.log("Walking");
                         scene.activeCamera.speed = 0.2;
                         break;    
