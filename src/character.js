@@ -54,9 +54,11 @@ export default class Character{
 
     energyDown(){
         //console.log("Energy Down");
-        if(this.energy > 1){
+        if(this.energy >= 1){
             this.energy -= 0.1;
-            this.hud[1].width = this.energy/100;            
+            this.hud[1].width = this.energy/100;
+            
+            return true;
         }       
     }
     
@@ -304,17 +306,17 @@ export default class Character{
                     weaponSwitch(gunLoadout,  this.currentWeapon);
                     break;
                     
-                case "Shift":
+                /*case "Shift":
                     console.log("Running");
                     if(scene.activeCamera.speed == 0.2){
                         scene.activeCamera.speed *= 2.5;
                     }                    
-                    break;  
+                    break;*/  
                 }                
                 break;
             }
 
-            switch (kbInfo.type) {
+            /*switch (kbInfo.type) {
                 case BABYLON.KeyboardEventTypes.KEYUP:
                     switch (kbInfo.event.key) { 
                     case "Shift":
@@ -323,25 +325,39 @@ export default class Character{
                         break;    
                     }                
                     break;
-                }
+                }*/
         });
         
+        let movementKeys = ["w", "a", "s", "d"];
         scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {
-            case BABYLON.KeyboardEventTypes.KEYDOWN:                        
-                switch (kbInfo.event.shiftKey) {                
-                case true:                                    
-                    this.energyDown();                    
-                    break;                
-                }
-                break;
+                case BABYLON.KeyboardEventTypes.KEYDOWN:                        
+                    switch (kbInfo.event.shiftKey) {                
+                    case true:                        
+                        while(this.energy > 0){
+                            this.running = true;
+                            this.energyDown();                        
+                            console.log("Running");
+                            if(scene.activeCamera.speed == 0.2){
+                                scene.activeCamera.speed *= 2.5;
+                            }                    
+                            break;  
+                        }         
+                    }
+                    break;
+
+                case BABYLON.KeyboardEventTypes.KEYUP:
+                    switch (kbInfo.event.key) { 
+                    case "Shift":
+                        this.running = false;
+                        console.log("Walking");
+                        scene.activeCamera.speed = 0.2;
+                        break;    
+                        }                
+                    break; 
             }
         }); 
         
-        
-
-       
-
     }  
 }
 
