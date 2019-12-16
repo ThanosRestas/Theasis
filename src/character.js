@@ -12,7 +12,8 @@ export default class Character{
         // Player info
         this.gunLoadout = [];
         this.health = 20;
-        this.energy = 20;        
+        this.energy = 20;
+        this.running = false;        
         // Index marking weapon in use
         this.currentWeapon = 0;
         // Getting the camera's physics impostor
@@ -101,7 +102,8 @@ export default class Character{
         
         let scene = this.scene;
         let gunLoadout = this.gunLoadout;
-        let ammoHud = this.hud[2];       
+        let ammoHud = this.hud[2];  
+
         
         /*scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {
@@ -131,18 +133,8 @@ export default class Character{
             }
         });*/    
 
-        let movementKeys = ["w", "a", "s", "d"];
-        scene.onKeyboardObservable.add((kbInfo) => {
-            switch (kbInfo.type) {
-            case BABYLON.KeyboardEventTypes.KEYDOWN:                
-                switch (movementKeys.includes(kbInfo.event.key.toString())) {                    
-                case true:                                    
-                    this.energyDown();                           
-                    break;                
-                }
-                break;
-            }
-        });      
+       
+      
         
         // Canon physics for detecting collission with skull enemy projectile
         this.cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
@@ -317,7 +309,7 @@ export default class Character{
                     if(scene.activeCamera.speed == 0.2){
                         scene.activeCamera.speed *= 2.5;
                     }                    
-                    break;    
+                    break;  
                 }                
                 break;
             }
@@ -334,56 +326,21 @@ export default class Character{
                 }
         });
         
-        
-
-        /*scene.onKeyboardObservable.add((kbInfo) => {
+        scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {
-            case BABYLON.KeyboardEventTypes.KEYDOWN:
-                switch (kbInfo.event.key) {   
-                                   
-                case "1":
-                    console.log("Pistol selected");
-                    this.currentWeapon = 0;
-                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
-                    weaponSwitch(gunLoadout,  this.currentWeapon);                    
-                    break;
-
-                case "2":
-                    console.log("Shotgun selected");
-                    this.currentWeapon = 1;
-                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
-                    weaponSwitch(gunLoadout,  this.currentWeapon);                    
+            case BABYLON.KeyboardEventTypes.KEYDOWN:                        
+                switch (kbInfo.event.shiftKey) {                
+                case true:                                    
+                    this.energyDown();                    
                     break;                
-                
-                case "3":
-                    console.log("Ak47 selected");
-                    this.currentWeapon = 2;
-                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
-                    weaponSwitch(gunLoadout,  this.currentWeapon);
-                    break;
-
-                case "4":
-                    console.log("RayGun selected");
-                    this.currentWeapon = 3;
-                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
-                    weaponSwitch(gunLoadout,  this.currentWeapon);
-                    break;
-                    
-                case "5":
-                    console.log("LightningGun selected");
-                    this.currentWeapon = 4;
-                    ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
-                    weaponSwitch(gunLoadout,  this.currentWeapon);
-                    break;
-                    
-                case "Shift":
-                    console.log("Shift Pressed");
-                    scene.activeCamera.speed *= 2;
-                    break;    
-                }                
+                }
                 break;
             }
-        });*/
+        }); 
+        
+        
+
+       
 
     }  
 }
