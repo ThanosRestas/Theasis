@@ -51,7 +51,7 @@ export default class Weapon{
         if(this.name == "pistol"){
             //this.damage = 2.5;
             //this.range = 10;
-
+            this.mesh.setEnabled(true);
             this.bar.setPositionWithLocalVector(new BABYLON.Vector3(0.97, -0.78, 4.58));
         }
 
@@ -60,7 +60,7 @@ export default class Weapon{
             //this.range = 10;
             end.z -= Math.PI/20;
             this.animationSpeed = 1;
-
+            
             this.bar.setPositionWithLocalVector(new BABYLON.Vector3(0.99, -0.74, 5.11)); 
         }
         

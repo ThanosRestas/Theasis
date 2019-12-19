@@ -101,14 +101,10 @@ export default class Engine{
 
             let village = scene.getMeshByName("village");
             village.checkCollisions = true;
-
             
             for(let i = 0; i <= 8 ; i++){
                 scene.getMeshByName("Fence.00"+i).checkCollisions = true;
             }
-
-           
-
             // Skybox setup
             var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
             var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);

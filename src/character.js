@@ -13,7 +13,9 @@ export default class Character{
         this.gunLoadout = [];
         this.health = 20;
         this.energy = 20;
-        this.running = false;        
+        this.running = false;
+        this.walking = false;
+        this.standing = true;        
         // Index marking weapon in use
         this.currentWeapon = 0;
         // Getting the camera's physics impostor
@@ -59,7 +61,11 @@ export default class Character{
             this.hud[1].width = this.energy/100;
             
             return true;
-        }       
+        }
+        else{
+            return false;
+        }
+       
     }
     
     ammoUp(weapon){       
@@ -104,39 +110,11 @@ export default class Character{
         
         let scene = this.scene;
         let gunLoadout = this.gunLoadout;
-        let ammoHud = this.hud[2];  
-
-        
-        /*scene.onKeyboardObservable.add((kbInfo) => {
-            switch (kbInfo.type) {
-            case BABYLON.KeyboardEventTypes.KEYDOWN:
-                switch (kbInfo.event.key) {                    
-                case "w":
-                    console.log("w");                    
-                    this.energyDown();                           
-                    break;
-
-                case "a":
-                    console.log("a");  
-                    this.energyDown();                              
-                    break;
-                
-                case "s":
-                    console.log("s");  
-                    this.energyDown();                              
-                    break; 
-
-                case "d":
-                    console.log("d");  
-                    this.energyDown();                              
-                    break; 
-                }
-                break;
-            }
-        });*/    
-
-       
-      
+        let ammoHud = this.hud[2];
+        let player = this;
+        let walking = this.walking;  
+        let running = this.running;
+        let standing = this.standing;
         
         // Canon physics for detecting collission with skull enemy projectile
         this.cameraImpostor[0].physicsImpostor.onCollideEvent = (e, t) =>{
@@ -156,7 +134,7 @@ export default class Character{
             this.keysLeft = [65];// A
             this.keysRight = [68];// D
             this.keysForward = [87]; // W
-            this.keysBackward = [83]; // S       
+            this.keysBackward = [83]; // S              
         };
     
         // Hooking keyboard events
@@ -164,13 +142,19 @@ export default class Character{
             var _this = this;
             if (!this._onKeyDown) {
                 element.tabIndex = 1;
-                this._onKeyDown = function (evt) {                    
+                
+                this._onKeyDown = function (evt) {  
+                                    
                     if (_this.keysLeft.indexOf(evt.keyCode) !== -1 ||
                         _this.keysRight.indexOf(evt.keyCode) !== -1 || 
                         _this.keysForward.indexOf(evt.keyCode) !== -1 || 
-                        _this.keysBackward.indexOf(evt.keyCode) !== -1 ){
+                        _this.keysBackward.indexOf(evt.keyCode) !== -1){
                         var index = _this._keys.indexOf(evt.keyCode);
-                        if (index === -1) {
+
+                        player.walking = true;
+                        player.standing = false;  
+                        
+                        if (index === -1) {                            
                             _this._keys.push(evt.keyCode);
                         }
                         if (!noPreventDefault) {
@@ -180,12 +164,18 @@ export default class Character{
                     }
                 };
                 this._onKeyUp = function (evt) {
+                    
                     if (_this.keysLeft.indexOf(evt.keyCode) !== -1 ||
                         _this.keysRight.indexOf(evt.keyCode) !== -1 ||
                          _this.keysForward.indexOf(evt.keyCode) !== -1 || 
-                         _this.keysBackward.indexOf(evt.keyCode) !== -1) {
+                         _this.keysBackward.indexOf(evt.keyCode) !== -1 ) {
                         var index = _this._keys.indexOf(evt.keyCode);
+
+                        player.walking = false;
+                        player.standing = true;
+
                         if (index >= 0) {
+                            //walking = false;
                             _this._keys.splice(index, 1);
                         }
                         if (!noPreventDefault) {
@@ -221,24 +211,22 @@ export default class Character{
             
             if (this._onKeyDown) {
                 // Keyboard
+                //console.log(walking);
                 for (var index = 0; index < this._keys.length; index++) {
+                    //walking = true;
                     var keyCode = this._keys[index];
-                    var speed = this.camera._computeLocalCameraSpeed();                
+                    var speed = this.camera._computeLocalCameraSpeed();
                     if (this.keysLeft.indexOf(keyCode) !== -1) {                    
                         this.camera._localDirection.copyFromFloats(-speed, 0, 0);
-                        //console.log(this.camera.position.x);
                     }
                     else if (this.keysRight.indexOf(keyCode) !== -1) {
                         this.camera._localDirection.copyFromFloats(+speed, 0, 0);
-                        //console.log(this.camera.position.x);
                     }
                     else if (this.keysBackward.indexOf(keyCode) !== -1){
                         this.camera._localDirection.copyFromFloats(0, 0, -speed);
-                        //console.log(this.camera.position.z);
                     }
                     else if (this.keysForward.indexOf(keyCode) !== -1){
                         this.camera._localDirection.copyFromFloats(0, 0, +speed);
-                        //console.log(this.camera.position.z);                        
                     }
                
                     if (this.camera.getScene().useRightHandedSystem) {
@@ -305,57 +293,43 @@ export default class Character{
                     ammoHud.text = String(gunLoadout[this.currentWeapon].ammo);
                     weaponSwitch(gunLoadout,  this.currentWeapon);
                     break;
+
+                case "Shift":
+                    console.log("Shift presssed");
+                    player.running = true;
                     
-                /*case "Shift":
-                    console.log("Running");
-                    if(scene.activeCamera.speed == 0.2){
-                        scene.activeCamera.speed *= 2.5;
-                    }                    
-                    break;*/  
+                    break;
                 }                
                 break;
-            }
 
-            /*switch (kbInfo.type) {
-                case BABYLON.KeyboardEventTypes.KEYUP:
-                    switch (kbInfo.event.key) { 
-                    case "Shift":
-                        console.log("Walking");
-                        scene.activeCamera.speed = 0.2;
-                        break;    
+            case BABYLON.KeyboardEventTypes.KEYUP:
+                switch (kbInfo.event.key) {   
+                case "Shift":
+                    console.log("Shift Released");
+                        player.running = false;
+                        break;
                     }                
                     break;
-                }*/
+            }
         });
         
-        let movementKeys = ["w", "a", "s", "d", "W", "A", "S", "D"];
-        scene.onKeyboardObservable.add((kbInfo) => {
-            switch (kbInfo.type) {
-                case BABYLON.KeyboardEventTypes.KEYDOWN:
-                    switch ( kbInfo.event.shiftKey && movementKeys.includes(kbInfo.event.key.toString())) {                
-                    case true:                        
-                        while(this.energy > 0){
-                            this.energyDown();                        
-                            console.log("Running");
-                            if(scene.activeCamera.speed == 0.2){
-                                scene.activeCamera.speed *= 2.5;
-                            }                    
-                            break;  
-                        }         
-                    }
-                    break;
-
-                case BABYLON.KeyboardEventTypes.KEYUP:
-                    switch (kbInfo.event.key) { 
-                    case "Shift":
-                        console.log("Walking");
-                        scene.activeCamera.speed = 0.2;
-                        break;    
-                        }                
-                    break; 
-            }
-        }); 
         
+        scene.onBeforeRenderObservable.add(function(){
+            console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
+            if(player.running && !player.standing) {
+                if(player.energyDown()){
+                    //console.log("Running");
+                    player.camera.speed = 0.5;
+                }
+                else{
+                    //console.log("Not Running");
+                    player.camera.speed = 0.2;
+                }                   
+            } else {
+                //console.log("Not Running");
+                player.camera.speed = 0.2;
+            }
+        });
     }  
 }
 
