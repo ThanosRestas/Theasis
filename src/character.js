@@ -12,7 +12,7 @@ export default class Character{
         // Player info
         this.gunLoadout = [];
         this.health = 20;
-        this.energy = 20;
+        this.energy = 500;
         this.running = false;
         this.walking = false;
         this.standing = true;        
@@ -172,7 +172,10 @@ export default class Character{
                         var index = _this._keys.indexOf(evt.keyCode);
 
                         player.walking = false;
-                        player.standing = true;
+                        if(!player.walking){
+                            player.standing = true;
+                        }
+                        
 
                         if (index >= 0) {
                             //walking = false;
@@ -295,7 +298,7 @@ export default class Character{
                     break;
 
                 case "Shift":
-                    console.log("Shift presssed");
+                    //console.log("Shift presssed");
                     player.running = true;
                     
                     break;
@@ -305,7 +308,7 @@ export default class Character{
             case BABYLON.KeyboardEventTypes.KEYUP:
                 switch (kbInfo.event.key) {   
                 case "Shift":
-                    console.log("Shift Released");
+                        //console.log("Shift Released");
                         player.running = false;
                         break;
                     }                
@@ -315,8 +318,8 @@ export default class Character{
         
         
         scene.onBeforeRenderObservable.add(function(){
-            //console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
-            if(player.running && !player.standing && player.energyDown()) {
+            console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
+            if(player.running && !player.standing && player.walking && player.energyDown()) {
                 //console.log("Running");
                 player.camera.speed = 0.5;
             } 
