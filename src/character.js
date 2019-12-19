@@ -57,7 +57,7 @@ export default class Character{
     energyDown(){
         //console.log("Energy Down");
         if(this.energy >= 0){
-            this.energy -= 0.1;
+            this.energy -= 0.05;
             this.hud[1].width = this.energy/100;
             
             return true;
@@ -315,17 +315,12 @@ export default class Character{
         
         
         scene.onBeforeRenderObservable.add(function(){
-            console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
-            if(player.running && !player.standing) {
-                if(player.energyDown()){
-                    //console.log("Running");
-                    player.camera.speed = 0.5;
-                }
-                else{
-                    //console.log("Not Running");
-                    player.camera.speed = 0.2;
-                }                   
-            } else {
+            //console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
+            if(player.running && !player.standing && player.energyDown()) {
+                //console.log("Running");
+                player.camera.speed = 0.5;
+            } 
+            else{
                 //console.log("Not Running");
                 player.camera.speed = 0.2;
             }
