@@ -12,7 +12,7 @@ export default class Character{
         // Player info
         this.gunLoadout = [];
         this.health = 20;
-        this.energy = 500;
+        this.energy = 20;
         this.running = false;
         this.walking = false;
         this.standing = true;        
@@ -171,12 +171,9 @@ export default class Character{
                          _this.keysBackward.indexOf(evt.keyCode) !== -1 ) {
                         var index = _this._keys.indexOf(evt.keyCode);
 
-                        player.walking = false;
-                        if(!player.walking){
-                            player.standing = true;
-                        }
+                        player.walking = false;                        
+                        //player.standing = true;
                         
-
                         if (index >= 0) {
                             //walking = false;
                             _this._keys.splice(index, 1);
@@ -310,6 +307,7 @@ export default class Character{
                 case "Shift":
                         //console.log("Shift Released");
                         player.running = false;
+                        
                         break;
                     }                
                     break;
