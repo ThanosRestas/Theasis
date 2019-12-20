@@ -17,7 +17,9 @@ export default class Enemy{
         // When the type of mesh is of TransformNode 
         // get submeshes and enable collision on each
         this.subMeshes = this.mesh.getChildren();
-        //this.setup();       
+        //this.setup();     
+        
+        
         
     } 
     

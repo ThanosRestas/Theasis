@@ -29,7 +29,7 @@ export default class Engine{
         // Camera setup
         this.camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(-5, 2, 0), this.scene);        
         this.camera.attachControl(this.canvas, true);        
-        this.camera.speed = 0.2;
+        this.camera.speed = 0.4;
         // Collision box for the camera -- Deprecated after cannon.js usage !?      
         this.camera.ellipsoid = new BABYLON.Vector3(1, 1, 1); 
         this.camera.checkCollisions = true;

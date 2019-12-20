@@ -172,8 +172,8 @@ export default class Character{
                         var index = _this._keys.indexOf(evt.keyCode);
 
                         player.walking = false;                        
-                        //player.standing = true;
-                        
+                        player.standing = true;
+
                         if (index >= 0) {
                             //walking = false;
                             _this._keys.splice(index, 1);
@@ -319,11 +319,11 @@ export default class Character{
             console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
             if(player.running && !player.standing && player.walking && player.energyDown()) {
                 //console.log("Running");
-                player.camera.speed = 0.5;
+                player.camera.speed = 0.8;
             } 
             else{
                 //console.log("Not Running");
-                player.camera.speed = 0.2;
+                player.camera.speed = 0.4;
             }
         });
     }  

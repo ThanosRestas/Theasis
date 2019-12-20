@@ -22,6 +22,7 @@ export default class Dragon{
         this.player = player; 
 
         this.mesh.checkCollisions = true;
+        
     } 
     
     setup(){

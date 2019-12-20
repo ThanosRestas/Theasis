@@ -27,7 +27,8 @@ export default class Zombie{
         this.collisionMesh = this.subMeshes[1];        
         this.collisionMesh.isVisible = false;
         this.collisionMesh.setEnabled(true); 
-        this.collisionMesh.isPickable = true;   
+        this.collisionMesh.isPickable = true; 
+        
     } 
     
     setup(){
