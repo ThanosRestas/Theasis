@@ -22,6 +22,9 @@ export default class Character{
         this.cameraImpostor = this.camera.getChildren();
         // Hud
         this.hud = game.hud;
+        this.debug = false;
+
+        
     }
    
     healthUp(){
@@ -35,14 +38,14 @@ export default class Character{
     healthDown(ammount){    
         console.log(this.health);
 
-        if(this.health >=1){
+        if(this.health >0){
             this.health -= ammount;
             this.hud[0].width = this.health/100;
         }
         else if(this.health <= 0){
             console.log("Game Over")
             //alert("Game Over");
-            //location.reload();
+            location.reload();
         }        
     }   
 
@@ -297,7 +300,20 @@ export default class Character{
                 case "Shift":
                     //console.log("Shift presssed");
                     player.running = true;
-                    
+                    //this.scene.debugLayer.hide();
+                    break;
+
+                case "`":
+                    console.log("Debug mode enabled");
+                   
+                    if(this.debug){
+                        this.scene.debugLayer.hide();
+                        this.debug = false;
+                    }
+                    else{
+                        this.scene.debugLayer.show();
+                        this.debug = true;
+                    }
                     break;
                 }                
                 break;
@@ -307,7 +323,7 @@ export default class Character{
                 case "Shift":
                         //console.log("Shift Released");
                         player.running = false;
-                        
+                       
                         break;
                     }                
                     break;
@@ -316,7 +332,7 @@ export default class Character{
         
         
         scene.onBeforeRenderObservable.add(function(){
-            console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
+            //console.log("Standing : " + player.standing + " Walking : " + player.walking + " Running : " + player.running)
             if(player.running && !player.standing && player.walking && player.energyDown()) {
                 //console.log("Running");
                 player.camera.speed = 0.8;

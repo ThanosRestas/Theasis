@@ -47,12 +47,15 @@ export default class Collectible{
     rotate(){    
         if(this.name == "healthPack"){
             this.mesh.rotate(BABYLON.Axis.Y, 0.02, BABYLON.Space.LOCAL);
+            //this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
+            
         }        
         else if(this.name == "pistolAmmo" ){
             this.mesh.rotate(BABYLON.Axis.X, 0.02, BABYLON.Space.LOCAL);
         }
         else{
             this.mesh.rotate(BABYLON.Axis.Z, 0.02, BABYLON.Space.LOCAL);
+            
         }        
         
     } 

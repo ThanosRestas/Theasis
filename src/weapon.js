@@ -49,7 +49,7 @@ export default class Weapon{
         // Set properties of each weapon
 
         if(this.name == "pistol"){
-            //this.damage = 2.5;
+            this.damage = 10;
             //this.range = 10;
             this.mesh.setEnabled(true);
             this.bar.setPositionWithLocalVector(new BABYLON.Vector3(0.97, -0.78, 4.58));
@@ -313,6 +313,7 @@ function muzzle(org, dest, orbMesh){
     
     var orb1 = orbMesh.clone("orb1");
     var orb2 = orbMesh.clone("orb2");
+    //orb2.scaling.scaleInPlace(5);
 
     orb1.isVisible = true;
     orb2.isVisible = true;

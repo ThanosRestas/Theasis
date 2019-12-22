@@ -37,6 +37,8 @@ export default class Dragon{
             }
         }
 
+        
+
         for(let i = 0; i < animations.length ; i++){
 
             if(animations[i].name == "Dragon_Flying"){                
@@ -44,9 +46,14 @@ export default class Dragon{
             }
             else if( animations[i].name == "Dragon_Hit"){
                 this.animationAttack = animations[i];
+                
+                //console.log(this.animationAttack.targetedAnimations)
             }
            
-        }       
+        }     
+
+        //this.animationIdle = scene.getAnimationGroupByname("Dragon_Flying");
+        //this.animationAttack = scene.getAnimationGroupByname("Dragon_Hit");
               
     }
     

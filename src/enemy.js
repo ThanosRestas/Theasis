@@ -1,6 +1,8 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
+import * as GUI from "@babylonjs/gui";
+
 
 export default class Enemy{
     constructor(scene, name, mesh){
@@ -11,15 +13,17 @@ export default class Enemy{
         this.mesh = mesh;
         this.destroyed = false;
         //this.mesh.visibility = false;        
-        this.health = 1;       
+        this.health = 100;       
         // Enemy shooting setup        
         this.timeThen = Date.now();
         // When the type of mesh is of TransformNode 
         // get submeshes and enable collision on each
         this.subMeshes = this.mesh.getChildren();
-        //this.setup();     
+        //this.setup();
         
+        this.healthBar = enemyHUD(this.scene, this.subMeshes[1]);
         
+       
         
     } 
     
@@ -32,7 +36,10 @@ export default class Enemy{
     move(){        
         let mesh = this.mesh;       
         let scene = this.scene;
-        let camera = scene.activeCamera;     
+        let camera = scene.activeCamera;    
+        
+        let healthBar = this.healthBar;
+        healthBar.width = this.health/100;
 
         
 
@@ -85,7 +92,7 @@ export default class Enemy{
         let mesh = this.mesh;
         this.destroyed = true;  
 
-        mesh.setEnabled(false); // mesh.dispose() breaks collisions                
+        //mesh.setEnabled(false); // mesh.dispose() breaks collisions                
                    
     }  
 }
@@ -120,3 +127,28 @@ function fireBullet(scene, mesh, name){
 
     scene.onBeforeRenderObservable.add(bullet.step);   
 }
+
+
+function enemyHUD(scene, mesh){   
+
+        // GUI
+        var plane = BABYLON.Mesh.CreatePlane("plane", 2);
+        plane.parent = mesh;
+        plane.position.y = 0;
+        plane.position.z = -1;
+        plane.rotate(BABYLON.Axis.X, 1.5, BABYLON.Space.LOCAL)
+    
+        var advancedTexture = new GUI.AdvancedDynamicTexture.CreateForMesh(plane, 600, 600);
+    
+        var healthBar = new GUI.Rectangle("enemyHealthBar");
+        advancedTexture.addControl(healthBar);
+        healthBar.width = 2;
+        healthBar.height = "20px";
+        healthBar.cornerRadius = 20;
+        healthBar.color = "white";
+        healthBar.thickness = 2;
+        healthBar.background = "red";
+
+        return healthBar;
+    
+} 

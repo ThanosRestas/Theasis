@@ -69,6 +69,8 @@ export default class Engine{
         //this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
         //this.scene.fogDensity = 0.01;
 
+        
+
 
     }
 
@@ -280,7 +282,9 @@ export default class Engine{
                     // Shoot only when an animation has ended
                     //console.log("Animation running");
                     animation = scene.beginAnimation(currentWeapon.mesh, 0, 100, false, currentWeapon.animationSpeed);
-                    scene.animationGroups[1].start(false, 2); // Pistol      
+                    //scene.animationGroups[1].start(false, 2); // Pistol  
+                    scene.getAnimationGroupByName("Fire_PistolArmature.001").start(false, 2);
+                    //console.log( scene.animationGroups);   
                     animationRunning = true;
                     animation.onAnimationEndObservable.add(function(){
                         //console.log("Animation ended");
