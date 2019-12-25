@@ -173,7 +173,7 @@ export default class Engine{
             });
 
             let villageDoor = scene.getTransformNodeByName("villageDoor");
-            let villageDoorHealth = 2
+            let villageDoorHealth = 0
             scene.onBeforeRenderObservable.add(function(){
                 for(let i=0; i<enemyList.length; i++){
                     if(enemyList[i].constructor.name != "Skeleton"  && enemyList[i].destroyed == true){
@@ -444,11 +444,11 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
         group.reset();
     });
     // Setting up the weapon's object on the player            
-    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 30, 1, 25, scene);
-    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 20, 2.5, 10, scene);
-    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 100, 1, 50, scene); 
-    player.gunLoadout[3] = new Weapon("rayGun",  player.gunLoadout[3], 100, 1, 50, scene); 
-    player.gunLoadout[4] = new Weapon("lightingGun",  player.gunLoadout[4], 100, 1, 50, scene); 
+    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 300, 20, 25, scene);
+    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 200, 20, 10, scene);
+    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 100, 20, 20, scene); 
+    player.gunLoadout[3] = new Weapon("rayGun",  player.gunLoadout[3], 100, 20, 20, scene); 
+    player.gunLoadout[4] = new Weapon("lightingGun",  player.gunLoadout[4], 100, 20, 50, scene); 
 }
 
 function addEnemy(enemyList, scene, player){     

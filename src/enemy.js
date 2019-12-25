@@ -22,6 +22,7 @@ export default class Enemy{
         //this.setup();
         
         this.healthBar = enemyHUD(this.scene, this.subMeshes[1]);
+        //this.healthBar.isVisible = false;
         
        
         
@@ -41,8 +42,6 @@ export default class Enemy{
         let healthBar = this.healthBar;
         healthBar.width = this.health/100;
 
-        
-
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
@@ -52,9 +51,13 @@ export default class Enemy{
 
             // Move enemy towards the player and stops slightly ahead
             if(distVec < 15){
-                //distVec -= 0.05;
-               //mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
-               this.shoot();                     
+                distVec -= 0.05;
+               mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
+               this.shoot();
+               //this.healthBar.isVisible = true;                     
+            }
+            else{
+                //this.healthBar.isVisible = false;
             }
 
             //console.log(distVec);
@@ -92,7 +95,7 @@ export default class Enemy{
         let mesh = this.mesh;
         this.destroyed = true;  
 
-        //mesh.setEnabled(false); // mesh.dispose() breaks collisions                
+        mesh.setEnabled(false); // mesh.dispose() breaks collisions                
                    
     }  
 }

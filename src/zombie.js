@@ -1,5 +1,6 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
+import * as GUI from "@babylonjs/gui";
 
 export default class Zombie{
     constructor(scene, name, mesh, position, player){
@@ -11,7 +12,7 @@ export default class Zombie{
         // Blender to Babylon scene positioning
         this.mesh.setPositionWithLocalVector(position);
         this.destroyed = false;                  
-        this.health = 1;       
+        this.health = 100;       
         // Animation properties
         this.animations = [];
         this.animationIdle;        
@@ -28,13 +29,23 @@ export default class Zombie{
         this.collisionMesh.isVisible = false;
         this.collisionMesh.setEnabled(true); 
         this.collisionMesh.isPickable = true; 
+
+        
+        //this.testSubMesh = this.subMeshes[0];
+        //console.log(this.testSubMesh[0].name)
+        this.healthBar = enemyHUD(this.scene, this.subMeshes[1]);
+        //this.healthBar.isVisible = false;
+
+        
         
     } 
     
     setup(){
         let scene = this.scene;        
         let animations = this.animations;       
-        let name = this.name;         
+        let name = this.name;       
+        
+        
 
         for(let i = 0; i < scene.animationGroups.length; i++){             
             var targetMesh = scene.animationGroups[i]._targetedAnimations[0].target.parent.parent.name;
@@ -66,6 +77,8 @@ export default class Zombie{
         let animationAttack = this.animationAttack;
         let animationRunning = this.animationRunning;
         
+        let healthBar = this.healthBar;
+        healthBar.width = this.health/100;
 
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
@@ -79,6 +92,7 @@ export default class Zombie{
             mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead
             if(distVec < 15 && distVec >=5){
+                //this.healthBar.isVisible = true;
                 distVec -= 0.05;
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
                 mesh.position.y = 0; 
@@ -87,6 +101,7 @@ export default class Zombie{
             // Idle animation play distance
             if(distVec >= 15){                
                 animationIdle.start();
+                //this.healthBar.isVisible = false;
             }     
             // Attack animation play distance
             if(distVec < 5){
@@ -107,3 +122,32 @@ export default class Zombie{
         this.destroyed = true;         
     }    
 }
+
+
+
+function enemyHUD(scene, mesh){   
+
+    // GUI
+    var plane = BABYLON.Mesh.CreatePlane("plane2", 2);
+    plane.parent = mesh;
+    plane.position.y = 1.3;
+    plane.position.z = -1.65;
+    //plane.rotate(BABYLON.Axis.X, 1.5, BABYLON.Space.LOCAL)
+
+
+    //console.log(plane);
+    var advancedTexture = new GUI.AdvancedDynamicTexture.CreateForMesh(plane, 600, 600);
+
+    var healthBar = new GUI.Rectangle("enemyHealthBar2");
+    advancedTexture.addControl(healthBar);
+    healthBar.width = 10;
+    healthBar.height = "20px";
+    healthBar.cornerRadius = 20;
+    healthBar.color = "white";
+    healthBar.thickness = 2;
+    healthBar.background = "red";
+
+    return healthBar;
+
+} 
+

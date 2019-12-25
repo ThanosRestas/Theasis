@@ -2,6 +2,7 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
 import "@babylonjs/loaders/glTF";
+import * as GUI from "@babylonjs/gui";
 
 
 export default class Skeleton{
@@ -15,7 +16,7 @@ export default class Skeleton{
         this.mesh.setPositionWithLocalVector(position);
         this.mesh.position.y = 0;        
         this.destroyed = false;                  
-        this.health = 1;       
+        this.health = 100;       
         // Animation properties
         this.animations = [];
         this.animationIdle;
@@ -36,6 +37,8 @@ export default class Skeleton{
              
         // The player of the game
         this.player = player; 
+
+        this.healthBar = enemyHUD(this.scene, this.subMeshes[1]);
 
         
     } 
@@ -78,6 +81,10 @@ export default class Skeleton{
         let animationIdle = this.animationIdle;
         let animationRunning = this.animationRunning; 
         let animationAttack = this.animationAttack;
+
+        
+        let healthBar = this.healthBar;
+        healthBar.width = this.health/100;
 
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
@@ -136,3 +143,30 @@ export default class Skeleton{
         this.destroyed = true;  
     }
 }
+
+
+
+function enemyHUD(scene, mesh){   
+
+    //console.log("yoyoy");
+
+    // GUI
+    var plane = BABYLON.Mesh.CreatePlane("sdsdsdsd", 2);
+    plane.parent = mesh;
+    plane.position.y = 1.2;
+    plane.position.z = -1;
+    
+
+    var advancedTexture = new GUI.AdvancedDynamicTexture.CreateForMesh(plane, 600, 600);
+
+    var healthBar = new GUI.Rectangle("enemyHealthBar2");
+    advancedTexture.addControl(healthBar);
+    healthBar.width = 2;
+    healthBar.height = "20px";
+    healthBar.cornerRadius = 20;
+    healthBar.color = "white";
+    healthBar.thickness = 2;
+    healthBar.background = "red";
+
+    return healthBar;
+} 

@@ -45,7 +45,7 @@ export default class Character{
         else if(this.health <= 0){
             console.log("Game Over")
             //alert("Game Over");
-            location.reload();
+            //location.reload();
         }        
     }   
 

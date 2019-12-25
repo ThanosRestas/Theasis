@@ -1,5 +1,7 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
+import { MultiPointerScaleBehavior, Mesh } from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/core/Meshes/meshBuilder";
+import * as GUI from "@babylonjs/gui";
 
 export default class Dragon{
     constructor(scene, name, mesh, position, player){
@@ -11,7 +13,7 @@ export default class Dragon{
         this.mesh.setPositionWithLocalVector(position);
         this.mesh.position.y = 0;        
         this.destroyed = false;                  
-        this.health = 1;       
+        this.health = 100;       
         // Animation properties
         this.animations = [];
         this.animationIdle;        
@@ -21,8 +23,11 @@ export default class Dragon{
         // The player of the game
         this.player = player; 
 
-        this.mesh.checkCollisions = true;
+        //this.mesh.checkCollisions = true;
+        this.subMeshes = this.mesh.getChildMeshes();
+
         
+        this.healthBar = enemyHUD(this.scene,  this.subMeshes[0]);
     } 
     
     setup(){
@@ -65,6 +70,10 @@ export default class Dragon{
         let animationIdle = this.animationIdle;        
         let animationAttack = this.animationAttack;
 
+        let healthBar = this.healthBar;
+        healthBar.width = this.health/100;
+
+        
         if(mesh.isEnabled()){           
             // Calculating distances between the enemy and the player
             let initVec = mesh.position.clone();
@@ -78,6 +87,7 @@ export default class Dragon{
             mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead
             if(distVec < 15 && distVec >=5){
+                //this.healthBar.isVisible = true; 
                 distVec -= 0.05;
                 mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
                 mesh.position.y = 0;
@@ -91,6 +101,7 @@ export default class Dragon{
                 // Lower to the ground       
                 mesh.position.y = 0;     
                 animationIdle.start();
+                //this.healthBar.isVisible = false;
             }     
             // Attack animation play distance
             if(distVec < 5){
@@ -111,3 +122,31 @@ export default class Dragon{
         mesh.setEnabled(false); // Works cause mesh.dispose() breaks collisions          
     }    
 }
+
+
+function enemyHUD(scene, mesh){   
+
+    //console.log("yoyoy");
+
+    // GUI
+    var plane = BABYLON.Mesh.CreatePlane("sdsdsdsd", 2);
+    plane.parent = mesh;
+    plane.position.y = mesh.position.y + 4.5;
+    plane.position.z = -1;
+    
+
+    var advancedTexture = new GUI.AdvancedDynamicTexture.CreateForMesh(plane, 600, 600);
+
+    var healthBar = new GUI.Rectangle("enemyHealthBar2");
+    advancedTexture.addControl(healthBar);
+    healthBar.width = 2;
+    healthBar.height = "20px";
+    healthBar.cornerRadius = 20;
+    healthBar.color = "white";
+    healthBar.thickness = 2;
+    healthBar.background = "red";
+
+    return healthBar;
+} 
+
+
