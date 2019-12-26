@@ -76,7 +76,7 @@ export default class Character{
             case "pistolAmmo":
                 // code block
                 console.log("Pistol ammo gained"); 
-                this.gunLoadout[0].ammo += 10;
+                this.gunLoadout[0].ammo += 20;
                 break;
 
             case "shotgunAmmo":
@@ -94,13 +94,13 @@ export default class Character{
             case "raygunAmmo":
                  // code block
                  console.log("Raygun ammo gained"); 
-                 this.gunLoadout[3].ammo += 10;                
+                 this.gunLoadout[3].ammo += 15;                
                  break;
 
              case "lightninggunAmmo":
                  // code block
                  console.log("Lightning gun ammo gained")   
-                 this.gunLoadout[4].ammo += 10;                
+                 this.gunLoadout[4].ammo += 5;                
                  break; 
         }
 
@@ -128,7 +128,7 @@ export default class Character{
                 t.object.dispose();
             }  
 
-            this.healthDown(3);          
+            this.healthDown(2);          
         };
 
         // Create our own manager:

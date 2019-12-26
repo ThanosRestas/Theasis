@@ -16,7 +16,7 @@ export default class Skeleton{
         this.mesh.setPositionWithLocalVector(position);
         this.mesh.position.y = 0;        
         this.destroyed = false;                  
-        this.health = 100;       
+        this.health = 200;       
         // Animation properties
         this.animations = [];
         this.animationIdle;
@@ -96,21 +96,21 @@ export default class Skeleton{
             // Enemy always faces the player                   
             mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead
-            if(distVec < 15 && distVec >=5){
-                distVec -= 0.05;
-                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
+            if(distVec < 25 && distVec >=5){
+                distVec -= 0.06;
+                mesh.translate(targetVecNorm, 0.06, BABYLON.Space.WORLD);
                 mesh.position.y = 0;
                 // Running animation play
                 animationRunning.start();                                      
             }
             // Idle animation play distance
-            if(distVec >= 15){
+            if(distVec >= 25){
                 animationIdle.start();
             }     
             // Attack animation play distance
             if(distVec < 5){
                 animationAttack.start();
-                player.healthDown(0.05);             
+                player.healthDown(0.06);             
             }  
         }       
     } 

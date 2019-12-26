@@ -173,24 +173,48 @@ export default class Engine{
             });
 
             let villageDoor = scene.getTransformNodeByName("villageDoor");
-            let villageDoorHealth = 0
+            let villageDoorHealth = 14
             scene.onBeforeRenderObservable.add(function(){
                 for(let i=0; i<enemyList.length; i++){
                     if(enemyList[i].constructor.name != "Skeleton"  && enemyList[i].destroyed == true){
                         villageDoorHealth--;
                     }               
                 }
-
                 if(villageDoorHealth <= 0){
                     villageDoor.setEnabled(false);
-                    console.log("The gates have opened");
+                    console.log("The gates are now open");
+                    alert("The gates are now open");
                     scene.onBeforeRenderObservable.remove(this);
                 }
                 else{
-                    villageDoorHealth = 2;
+                    villageDoorHealth = 14;
                 }
-            });    
-           
+            }); 
+            
+            let gameCompleted = false;
+            scene.onBeforeRenderObservable.add(function(){
+                var enemiesDestroyed = 0;
+                for(let i=0; i<enemyList.length; i++){
+                    if(enemyList[i].destroyed == true){
+                        //gameCompleted = true;
+                        enemiesDestroyed++
+                    }
+                    
+                    if(enemiesDestroyed >= 19){
+                        gameCompleted = true;
+                        console.log("Congratulations. You saved the world !");
+                        alert("Thank you for playing ! ");
+                        scene.onBeforeRenderObservable.remove(this);
+                        location.reload();
+                        
+                    }
+                    else{
+                        gameCompleted = false;
+                    }
+
+
+                }
+            });          
 
             // Add enemy meshes to the scene
             addEnemy(enemyList, scene, player);
@@ -443,12 +467,13 @@ function addPistol(player, scene, camera){    // Getting the gun models from the
         group.stop();
         group.reset();
     });
-    // Setting up the weapon's object on the player            
-    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 300, 20, 25, scene);
-    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 200, 20, 10, scene);
-    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 100, 20, 20, scene); 
-    player.gunLoadout[3] = new Weapon("rayGun",  player.gunLoadout[3], 100, 20, 20, scene); 
-    player.gunLoadout[4] = new Weapon("lightingGun",  player.gunLoadout[4], 100, 20, 50, scene); 
+    // Setting up the weapon's object on the player   
+                                                               // ammo - damage - range         
+    player.gunLoadout[0] = new Weapon("pistol", player.gunLoadout[0], 50, 10, 15, scene);
+    player.gunLoadout[1] = new Weapon("shotgun",  player.gunLoadout[1], 25, 30, 20, scene);
+    player.gunLoadout[2] = new Weapon("ak47",  player.gunLoadout[2], 25, 15, 25, scene); 
+    player.gunLoadout[3] = new Weapon("rayGun",  player.gunLoadout[3], 30, 20, 30, scene); 
+    player.gunLoadout[4] = new Weapon("lightingGun",  player.gunLoadout[4], 10, 40, 25, scene); 
 }
 
 function addEnemy(enemyList, scene, player){     

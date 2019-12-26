@@ -13,7 +13,7 @@ export default class Dragon{
         this.mesh.setPositionWithLocalVector(position);
         this.mesh.position.y = 0;        
         this.destroyed = false;                  
-        this.health = 100;       
+        this.health = 50;       
         // Animation properties
         this.animations = [];
         this.animationIdle;        
@@ -86,10 +86,10 @@ export default class Dragon{
             // Enemy always faces the player                   
             mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead
-            if(distVec < 15 && distVec >=5){
+            if(distVec < 40 && distVec >=5){
                 //this.healthBar.isVisible = true; 
-                distVec -= 0.05;
-                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
+                distVec -= 0.1;
+                mesh.translate(targetVecNorm, 0.1, BABYLON.Space.WORLD);
                 mesh.position.y = 0;
                 animationIdle.start();
                 // Keeping enemy at the same height as the player
@@ -97,7 +97,7 @@ export default class Dragon{
                 mesh.position.y = camera.position.y;
             }
             // Idle animation play distance
-            if(distVec >= 15){
+            if(distVec >= 40){
                 // Lower to the ground       
                 mesh.position.y = 0;     
                 animationIdle.start();
@@ -106,7 +106,7 @@ export default class Dragon{
             // Attack animation play distance
             if(distVec < 5){
                 animationAttack.start();
-                player.healthDown(0.05);              
+                player.healthDown(0.09);              
             }           
         }
        

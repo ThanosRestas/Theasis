@@ -13,7 +13,7 @@ export default class Enemy{
         this.mesh = mesh;
         this.destroyed = false;
         //this.mesh.visibility = false;        
-        this.health = 100;       
+        this.health = 50;       
         // Enemy shooting setup        
         this.timeThen = Date.now();
         // When the type of mesh is of TransformNode 
@@ -50,7 +50,7 @@ export default class Enemy{
             let targetVecNorm = BABYLON.Vector3.Normalize(targetVec);
 
             // Move enemy towards the player and stops slightly ahead
-            if(distVec < 15){
+            if(distVec < 40){
                 distVec -= 0.05;
                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
                this.shoot();
@@ -82,7 +82,7 @@ export default class Enemy{
             {  
                 // Enemy shoots every nth second
                 let timePassed = (timeNow - this.timeThen) / 1000;
-                let firingRate = 2;                                
+                let firingRate = 1.5;                                
                 if( timePassed >= firingRate){
                     fireBullet(scene, mesh, name );
                     this.timeThen = timeNow;

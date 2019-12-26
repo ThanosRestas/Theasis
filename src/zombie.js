@@ -12,7 +12,7 @@ export default class Zombie{
         // Blender to Babylon scene positioning
         this.mesh.setPositionWithLocalVector(position);
         this.destroyed = false;                  
-        this.health = 100;       
+        this.health = 150;       
         // Animation properties
         this.animations = [];
         this.animationIdle;        
@@ -91,22 +91,22 @@ export default class Zombie{
             // Enemy always faces the player                   
             mesh.lookAt(camera.position, Math.PI);
             // Move enemy towards the player and stops slightly ahead
-            if(distVec < 15 && distVec >=5){
+            if(distVec < 40 && distVec >=5){
                 //this.healthBar.isVisible = true;
-                distVec -= 0.05;
-                mesh.translate(targetVecNorm, 0.05, BABYLON.Space.WORLD);
+                distVec -= 0.03;
+                mesh.translate(targetVecNorm, 0.03, BABYLON.Space.WORLD);
                 mesh.position.y = 0; 
                 animationAttack.start();               
             }
             // Idle animation play distance
-            if(distVec >= 15){                
+            if(distVec >= 40){                
                 animationIdle.start();
                 //this.healthBar.isVisible = false;
             }     
             // Attack animation play distance
             if(distVec < 5){
                 animationAttack.start();
-                player.healthDown(0.05);              
+                player.healthDown(0.6);              
             }           
         }
        
