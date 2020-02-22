@@ -1,9 +1,12 @@
 # Theasis
 A First Person Shooter game for the web created using the BabylonJS framework.
+![Screenshot1](https://github.com/ThanosRestas/Theasis/blob/master/github%20screenshot%201.JPG)
 
 # Demo
 
 [A live demo is available here](https://thanosrestas.github.io/Theasis/dist/index.html)
+
+[Gameplay Video](https://drive.google.com/open?id=10r6SZbTcQ63dBKE7KNvhankELhXPqxE9)
 
 Controls : WASD for movement, 1-5 for weapon selection, Shift for sprinting
 
