@@ -23,7 +23,7 @@ In Theasis your task is simple.
 
 # Features
 
-* 5 types of world sections : Starting Point, Lake, Forest, Lake, Gated Village
+* 5 types of world sections : Starting Point, Lake, Forest, Dessert, Gated Village
 * 5 available animated weapons : Pistol, Shotgun, AK, RayGun, LightningGun each with it's own fire effect
 * 4 types of animated enemies : Floating Skull, Slow moving Zombie, Flying Dragon, Giant Skeleton 
 * 2 types of consumables : Health Potion and Energy Potion
