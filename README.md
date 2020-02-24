@@ -1,6 +1,6 @@
 # Theasis
 A First Person Shooter game for the web created using the [BabylonJS framework](https://github.com/BabylonJS/Babylon.js).
-<img src="https://media.giphy.com/media/kEtt7VilqibIQxoviQ/giphy.gif" width="48">
+<img src="https://media.giphy.com/media/kEtt7VilqibIQxoviQ/giphy.gif">
 
 
 # Demo
