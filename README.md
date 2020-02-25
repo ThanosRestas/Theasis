@@ -41,7 +41,7 @@ In Theasis your task is simple.
 
 # Assets 
 
-[All models provided from Quaternius](https://quaternius.itch.io/)
+[All models provided from Quaternius](http://quaternius.com/)
 
 
 
